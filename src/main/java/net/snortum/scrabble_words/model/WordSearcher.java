@@ -2,10 +2,10 @@ package net.snortum.scrabble_words.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import javafx.scene.control.ProgressBar;
@@ -56,13 +56,16 @@ public class WordSearcher {
 
 		// Get valid words from dictionary
 		Dictionary dict = new Dictionary(data);
-		List<String> validWords = dict.getValidWords();
+		Map<String, String> validWords = dict.getValidWords();
 
 		// Get ready to sublist "tile" letters
 		List<String> lettersAsList = Arrays
 				.asList((data.getLetters() + data.getContains()).split(""));
 		Sublister<String> sublister = new Sublister<String>(lettersAsList);
 		Set<List<String>> sublists = sublister.sublist();
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Starting permutations");
+		}
 
 		// Loop thru sublists
 		double inc = 1 / (double) sublists.size();
@@ -77,14 +80,14 @@ public class WordSearcher {
 			if (thisList.size() >= 2) {
 
 				// Ready to permutate
-				String str = StringUtils.join(thisList, "");
+				String str = String.join("", thisList);
 				Permutator permutator = new Permutator(str);
 
 				// Loop thru permutations
 				for (String word : permutator.permutate()) {
 
 					// Must be in the dictionary
-					if (!validWords.contains(word)) {
+					if (!validWords.containsKey(word)) {
 						continue;
 					}
 

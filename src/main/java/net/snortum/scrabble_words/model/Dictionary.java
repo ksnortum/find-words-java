@@ -16,7 +16,8 @@ public class Dictionary {
 	private static final Logger LOG = Logger.getLogger(Dictionary.class);
 	static final String INPUTDATA_NULL = "Input Data cannot be null";
 	static final String DICTIONARY_NULL = "Dictionary name cannot be null";
-	private static Map<DictionaryName, List<String>> words = new HashMap<>();
+	
+	private static Map<DictionaryName, Map<String, String>> words = new HashMap<>();
 
 	private InputData data;
 
@@ -46,14 +47,14 @@ public class Dictionary {
 	 * entered at object creation. Dictionary name must be in the class path.
 	 * 
 	 * @return list of words from a text dictionary, or an empty list if any
-	 *         errors are encountered
+	 *         errors are encountered (use Map for faster access)
 	 */
-	public List<String> getValidWords() {
+	public Map<String, String> getValidWords() {
 		if (words.containsKey(data.getDictionaryName())) {
 			return words.get(data.getDictionaryName());
 		}
 
-		List<String> validWords = new ArrayList<>();
+		Map<String, String> validWords = new HashMap<>();
 		String dictionaryFile = "/" + data.getDictionaryName() + ".txt";
 		InputStream in = getClass().getResourceAsStream(dictionaryFile);
 
@@ -62,7 +63,7 @@ public class Dictionary {
 			String thisWord = null;
 
 			while ((thisWord = br.readLine()) != null) {
-				validWords.add(thisWord.toLowerCase());
+				validWords.put(thisWord.toLowerCase(), "");
 			}
 		} catch (FileNotFoundException e) {
 			LOG.error(e.getStackTrace());
