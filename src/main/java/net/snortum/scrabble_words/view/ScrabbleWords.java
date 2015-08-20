@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -20,7 +21,10 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -41,6 +45,10 @@ import net.snortum.scrabble_words.model.WordSearcher;
  */
 public class ScrabbleWords extends Application {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
+	private static final String CONTAINS_LETTERS = "Contains Letters:";
+	private static final String CONTAINS_RE = "Contains Regex:";
+	private static final String USE_LETTERS = "use letters";
+	private static final String USE_REGEX = "use regex";
 
 	public static void main(String[] args) {
 		launch(ScrabbleWords.class, args);
@@ -71,12 +79,46 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(letters, col, row);
 
+		final ToggleGroup group = new ToggleGroup();
+		RadioButton btnContains = new RadioButton("Contains these letters");
+		btnContains.setToggleGroup(group);
+		btnContains.setSelected(true);
+		btnContains.setUserData(USE_LETTERS);
 		col = 0;
 		row++;
-		grid.add(new Label("Contains Letters:"), col, row);
+		grid.add(btnContains, col, row);
+
+		RadioButton btnContainsRe = new RadioButton("Contains (with regex)");
+		btnContainsRe.setToggleGroup(group);
+		btnContainsRe.setUserData(USE_REGEX);
+		col = 0;
+		row++;
+		grid.add(btnContainsRe, col, row);
+
+		col = 0;
+		row++;
+		Label lblContains = new Label(CONTAINS_LETTERS);
+		grid.add(lblContains, col, row);
 		TextField contains = new TextField();
 		col = 1;
 		grid.add(contains, col, row);
+
+		// Set Contains label text based on radio button selection
+		group.selectedToggleProperty()
+				.addListener((ObservableValue<? extends Toggle> ov,
+						Toggle old_toggle, Toggle new_toggle) -> {
+					if (group.getSelectedToggle() != null) {
+						if (USE_LETTERS.equals(
+								group.getSelectedToggle().getUserData())) {
+							lblContains.setText(CONTAINS_LETTERS);
+						} else if (USE_REGEX.equals(
+								group.getSelectedToggle().getUserData())) {
+							lblContains.setText(CONTAINS_RE);
+						} else {
+							lblContains.setText("Unknown");
+						}
+					}
+				});
 
 		col = 0;
 		row++;
@@ -86,22 +128,13 @@ public class ScrabbleWords extends Application {
 		dictionary.setValue(DictionaryName.twl);
 		col = 1;
 		grid.add(dictionary, col, row);
-
+				
 		col = 0;
 		row++;
 		grid.add(new Label("Calculating: "), col, row);
 		col = 1;
 		final ProgressBar progress = new ProgressBar(0.0);
 		grid.add(progress, col, row);
-
-		// Validation errors label
-		col = 0;
-		row++;
-		colSpan = 2;
-		rowSpan = 4;
-		Label errorLabel = new Label();
-		errorLabel.setWrapText(true);
-		grid.add(errorLabel, col, row, colSpan, rowSpan);
 
 		// Submit button and action
 		HBox hbox = new HBox();
@@ -116,8 +149,15 @@ public class ScrabbleWords extends Application {
 			public void handle(ActionEvent event) {
 
 				// Get data a validate
+				String containsData = contains.getText();
+				String containsReData = "";
+				if ( containsIsRe(group) ) {
+					containsReData = containsData;
+					containsData = "";
+				}
 				InputData data = new InputData.Builder(letters.getText())
-						.contains(contains.getText())
+						.contains(containsData)
+						.containsRe(containsReData)
 						.dictionaryName(dictionary.getValue())
 						.build();
 				Validator validator = new Validator(data);
@@ -127,7 +167,8 @@ public class ScrabbleWords extends Application {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug("Errors returned from validation");
 					}
-					displayErrors(errors, errorLabel);
+					//displayErrors(errors, errorLabel);
+					displayErrors(errors, stage);
 					return;
 				}
 
@@ -139,7 +180,8 @@ public class ScrabbleWords extends Application {
 						return ws.getWords();
 					}
 				};
-				searchWords.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+				searchWords
+						.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 					@Override
 					public void handle(WorkerStateEvent event) {
 						displayWords(searchWords.getValue(), stage);
@@ -149,7 +191,8 @@ public class ScrabbleWords extends Application {
 					@Override
 					public void handle(WorkerStateEvent event) {
 						LOG.error("Word Search Task got an error:");
-						LOG.error(event.getSource().getException().getStackTrace());
+						LOG.error(event.getSource().getException()
+								.getStackTrace());
 					}
 				});
 
@@ -170,10 +213,12 @@ public class ScrabbleWords extends Application {
 	}
 
 	/**
-	 * Display the set of Scrabble words and values 
+	 * Display the set of Scrabble words and values
 	 * 
-	 * @param words a set of {@link ScrabbleWord}s
-	 * @param stage JavaFx {@link Stage}
+	 * @param words
+	 *            a set of {@link ScrabbleWord}s
+	 * @param stage
+	 *            JavaFx {@link Stage}
 	 */
 	private void displayWords(Set<ScrabbleWord> words, Stage stage) {
 		if (LOG.isDebugEnabled()) {
@@ -201,17 +246,45 @@ public class ScrabbleWords extends Application {
 
 	/**
 	 * Display validation errors
-	 * @param errors a list of error strings
-	 * @param errorLabel the label to display the errors in
+	 * 
+	 * @param errors
+	 *            a list of error strings
+	 * @param stage
+	 *            the {@link Stage} to create the dialog in
 	 */
-	private void displayErrors(List<String> errors, Label errorLabel) {
+	private void displayErrors(List<String> errors, Stage stage) {
 		StringBuilder message = new StringBuilder();
+		
 		for (String error : errors) {
 			if (!message.toString().isEmpty()) {
 				message.append("\n");
 			}
 			message.append(error);
 		}
-		errorLabel.setText(message.toString());
+		
+		final Stage dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(stage);
+		dialog.setTitle("Errors");
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(10, 10, 10, 10));
+		
+		Text title = new Text("Please correct these errors");
+		title.setStyle("-fx-font-weight: bold;");
+		grid.add(title, 0, 0);
+
+		Label errorLabel = new Label(message.toString());
+		errorLabel.setWrapText(true);
+		grid.add(errorLabel, 0, 2);
+		
+		Scene dialogScene = new Scene(grid);
+		dialog.setScene(dialogScene);
+		dialog.show();
+	}
+	
+	private boolean containsIsRe(ToggleGroup group) {
+		return group.getSelectedToggle() != null &&
+				USE_REGEX.equals(group.getSelectedToggle().getUserData());
 	}
 }

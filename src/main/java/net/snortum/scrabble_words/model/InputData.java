@@ -4,6 +4,7 @@ public class InputData {
 	
 	private String letters;
 	private String contains;
+	private String containsRe;
 	private DictionaryName dictName;
 	
 	/**
@@ -18,6 +19,7 @@ public class InputData {
 		
 		// Optional, set default values
 		private String contains = "";
+		private String containsRe = "";
 		private DictionaryName dictName = DictionaryName.twl;
 		
 		/**
@@ -37,6 +39,11 @@ public class InputData {
 		 */
 		public Builder contains( String contains ) {
 			this.contains = contains.toLowerCase();
+			return this;
+		}
+		
+		public Builder containsRe( String containsRe ) {
+			this.containsRe = containsRe; 
 			return this;
 		}
 		
@@ -71,6 +78,7 @@ public class InputData {
 	private InputData( Builder builder ) {
 		this.letters = builder.letters;
 		this.contains = builder.contains;
+		this.containsRe = builder.containsRe;
 		this.dictName = builder.dictName;
 	}
 	
@@ -88,6 +96,7 @@ public class InputData {
 		
 		this.letters = data.letters;
 		this.contains = data.contains;
+		this.containsRe = data.containsRe;
 		this.dictName = data.dictName;
 	}
 
@@ -105,6 +114,13 @@ public class InputData {
 	 */
 	public String getContains() {
 		return contains;
+	}
+	
+	/**
+	 * @return the regex the suggested words must contain
+	 */
+	public String getContainsRe() {
+		return containsRe;
 	}
 	
 	/**

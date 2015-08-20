@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -57,6 +58,12 @@ public class WordSearcher {
 		// Get valid words from dictionary
 		Dictionary dict = new Dictionary(data);
 		Map<String, String> validWords = dict.getValidWords();
+		
+		// Compile regex once for speed
+		Pattern pattern = null;
+		if (!data.getContainsRe().isEmpty()) {
+			pattern = Pattern.compile(data.getContainsRe());
+		}
 
 		// Get ready to sublist "tile" letters
 		List<String> lettersAsList = Arrays
@@ -91,7 +98,13 @@ public class WordSearcher {
 						continue;
 					}
 
+					// Must contain these letters
 					if (!checkContains(word)) {
+						continue;
+					}
+					
+					// Must match this pattern
+					if (pattern != null && !pattern.matcher(word).find()) {
 						continue;
 					}
 
