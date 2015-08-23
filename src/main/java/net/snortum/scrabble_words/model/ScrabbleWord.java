@@ -7,10 +7,13 @@ import java.util.Map;
  * Holds a word and its Scrabble value. Immutable. Comparable.
  * 
  * @author Knute
- *
+ * @version 0.2
  */
 public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	private static final Map<Character, Integer> LETTER_VALUE;
+	private static final String WORD_NULL = "Word cannot be null";
+	private static final String WORD_EMPTY = "Word cannot be empty";
+	
 	private final String word;
 	private final int value;
 
@@ -48,11 +51,14 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	 * Create a Scrabble word and calculate its value
 	 * 
 	 * @param word
-	 *            cannot be null; will be lower cased
+	 *            cannot be null or empty; will be lower cased
 	 */
 	public ScrabbleWord(String word) {
 		if (word == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException(WORD_NULL);
+		}
+		if (word.isEmpty()) {
+			throw new IllegalArgumentException(WORD_EMPTY);
 		}
 
 		this.word = word.toLowerCase();
