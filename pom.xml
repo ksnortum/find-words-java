@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.snortum.scrabble_words</groupId>
   <artifactId>Scrabble-Words</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2</version>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,6 +41,7 @@
 		</configuration>
       </plugin>
       
+      <!-- Create an executable jar file -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -61,6 +62,20 @@
           </execution>
         </executions>
       </plugin>
+      
+      <!-- Create a target/dependency folder -->
+      <plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-dependency-plugin</artifactId>
+		  <version>2.4</version>
+		  <executions>
+		    <execution>
+		      <id>copy-dependencies</id>
+		      <phase>package</phase>
+		      <goals><goal>copy-dependencies</goal></goals>
+		    </execution>
+		  </executions>
+		</plugin>
     </plugins>
   </build>
   
