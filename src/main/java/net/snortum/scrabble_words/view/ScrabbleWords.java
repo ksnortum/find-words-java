@@ -168,7 +168,6 @@ public class ScrabbleWords extends Application {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug("Errors returned from validation");
 					}
-					//displayErrors(errors, errorLabel);
 					displayErrors(errors, stage);
 					return;
 				}

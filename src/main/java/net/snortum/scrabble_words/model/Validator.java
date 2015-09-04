@@ -10,10 +10,13 @@ import org.apache.log4j.Logger;
 
 public class Validator {
 	private static final String INVALID_REGEX = "The regex is invalid";
-	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = "Cannot have both Contains Letters and Contains Regex";
+	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = 
+			"Cannot have both Contains Letters and Contains Regex";
 	static final String TOO_FEW_LETTERS = "You must have at least three letters";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that five letters";
+	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
 	private static final Logger LOG = Logger.getLogger(Validator.class);
+	private static final String LETTERS_RE = "[a-z.]*";
 
 	private InputData data;
 	private String reError = "";
@@ -41,6 +44,9 @@ public class Validator {
 		StringBuilder errors = new StringBuilder();
 		if (data.getLetters().length() < 3) {
 			addErrorMessage(errors, TOO_FEW_LETTERS);
+		}
+		if (!data.getLetters().matches(LETTERS_RE)) {
+			addErrorMessage(errors, LETTERS_OR_DOT);
 		}
 		if (!data.getContains().isEmpty() && !data.getContainsRe().isEmpty()) {
 			addErrorMessage(errors, BOTH_CONTAINS_LETTERS_AND_REGEX);

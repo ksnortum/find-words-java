@@ -10,14 +10,14 @@ public class ValidatorTest {
 
 	@Test
 	public void testValidate() {
-		InputData data = new InputData.Builder( "abc" ).build();
+		InputData data = new InputData.Builder( "abc." ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 0 );
 	}
 
 	@Test
-	public void testValidatorLetterError() {
+	public void testValidatorTooFewLettersError() {
 		InputData data = new InputData.Builder( "ab" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
@@ -26,9 +26,18 @@ public class ValidatorTest {
 	}
 	
 	@Test
+	public void testValidatorNotLettersOrDotError() {
+		InputData data = new InputData.Builder( "abc5e" ).build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 1 );
+		assertEquals( message.get( 0 ), Validator.LETTERS_OR_DOT );
+	}
+	
+	@Test
 	public void testValidatorContainsError() {
 		InputData data = new InputData.Builder( "abc" )
-				.contains( "123456" )
+				.contains( "abcdef" )
 				.build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();

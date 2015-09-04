@@ -13,5 +13,13 @@ This project uses [Maven](http://maven.apache.org/) to build an executable jar f
 If you have Java in your PATH, you can execute the jar file from the command line:
 
 	java -jar Scrabble-Words-0.0.x.jar
+	
+## TODO ##
+
+* Validate that only one dot is in letters
+* Add ability to do two wild cards (dots)
+* Better progress bar when using wild cards
+* Add help and/or hover text
+* Add Starts With and Ends With options
 
 

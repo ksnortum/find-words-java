@@ -19,11 +19,12 @@ import net.snortum.utils.Sublister;
  * against the entered dictionary. Do other tests.
  * 
  * @author Knute
- * @version 1.0
+ * @version 1.1
  */
 public class WordSearcher {
 	private static final Logger LOG = Logger.getLogger(WordSearcher.class);
 	private static final int FINISHED = 1;
+	private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
 	private final InputData data;
 	private final Progressor progress;
@@ -32,7 +33,7 @@ public class WordSearcher {
 	 * Create a WordSearcher object
 	 * 
 	 * @param data
-	 *            the InputData to use
+	 *            the {@link InputData} to use
 	 */
 	public WordSearcher(InputData data) {
 		this.data = data;
@@ -58,27 +59,69 @@ public class WordSearcher {
 		// Get valid words from dictionary
 		Dictionary dict = new Dictionary(data);
 		Map<String, String> validWords = dict.getValidWords();
-		
+
 		// Compile regex once for speed
 		Pattern pattern = null;
 		if (!data.getContainsRe().isEmpty()) {
 			pattern = Pattern.compile(data.getContainsRe());
 		}
 
-		// Get ready to sublist "tile" letters
-		List<String> lettersAsList = Arrays
-				.asList((data.getLetters() + data.getContains()).split(""));
-		Sublister<String> sublister = new Sublister<String>(lettersAsList);
-		Set<List<String>> sublists = sublister.sublist();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Starting permutations");
-		}
-
-		// Loop thru sublists
-		double inc = 1 / (double) sublists.size();
-		double thusFar = 0.0;
 		Set<ScrabbleWord> words = new TreeSet<>();
 
+		// Do letters have a wild card?
+		if (data.getLetters().indexOf(".") == -1) {
+			String letters = data.getLetters() + data.getContains();
+			List<String> lettersAsList = Arrays.asList(letters.split(""));
+			Sublister<String> sublister = new Sublister<String>(lettersAsList);
+			Set<List<String>> sublists = sublister.sublist();
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Starting permutations");
+			}
+			words = permutateSublists(validWords, pattern, sublists, words);
+		} else {
+			String dataLetters = data.getLetters().replace(".", "");
+
+			// Wild card processing
+			for (String letter : ALPHABET.split("")) {
+				String allLetters = letter + dataLetters + data.getContains();
+				List<String> lettersAsList = Arrays
+						.asList(allLetters.split(""));
+				Sublister<String> sublister = new Sublister<String>(
+						lettersAsList);
+				Set<List<String>> sublists = sublister.sublist();
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Starting permutations for letter (" + letter
+							+ ")");
+				}
+				words = permutateSublists(validWords, pattern, sublists, words);
+			}
+		}
+
+		return words;
+	}
+
+	/**
+	 * Permutate a sublist of letters, checking for valid words.
+	 * 
+	 * @param validWords
+	 *            a list of dictionary words
+	 * @param pattern
+	 *            an optional pattern to find in the permutations
+	 * @param sublists
+	 *            a set of sublists of possible letters to permutate over
+	 * @param words
+	 *            a set of valid {@link ScrabbleWord}s to add to
+	 * @return a set of valid {@link ScrabbleWord}s
+	 */
+	private Set<ScrabbleWord> permutateSublists(Map<String, String> validWords,
+			Pattern pattern, Set<List<String>> sublists,
+			Set<ScrabbleWord> words) {
+
+		// Setup for progress bar
+		double inc = 1 / (double) sublists.size();
+		double thusFar = 0.0;
+
+		// Loop thru sublists
 		for (List<String> thisList : sublists) {
 			progress.showProgress(thusFar);
 			thusFar += inc;
@@ -102,20 +145,18 @@ public class WordSearcher {
 					if (!checkContains(word)) {
 						continue;
 					}
-					
+
 					// Must match this pattern
 					if (pattern != null && !pattern.matcher(word).find()) {
 						continue;
 					}
-
-					// TODO: other tests
 
 					words.add(new ScrabbleWord(word));
 				}
 			}
 		}
 		progress.showProgress(FINISHED);
-		
+
 		return words;
 	}
 
