@@ -69,6 +69,7 @@ public class ScrabbleWords extends Application {
 
 		Text title = new Text("Find Scrabble Words");
 		title.setId("title");
+		title.setStyle("-fx-font-size:30; -fx-font-weight:bold");
 		int col = 0, row = 0, colSpan = 2, rowSpan = 1;
 		grid.add(title, col, row, colSpan, rowSpan);
 
@@ -207,8 +208,6 @@ public class ScrabbleWords extends Application {
 		Scene scene = new Scene(grid);
 		stage.setScene(scene);
 		stage.setTitle("Find Scrabble Words");
-		scene.getStylesheets().add(
-				ScrabbleWords.class.getResource("main.css").toExternalForm());
 		stage.show();
 	}
 
