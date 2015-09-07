@@ -1,13 +1,18 @@
 package net.snortum.scrabble_words.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Validate {@link InputData}
+ * 
+ * @author Knute
+ * @version 0.2
+ */
 public class Validator {
 	private static final String INVALID_REGEX = "The regex is invalid";
 	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = 
@@ -15,8 +20,12 @@ public class Validator {
 	static final String TOO_FEW_LETTERS = "You must have at least three letters";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that five letters";
 	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
+	static final String CONTAINS_NONLETTERS = "Contains must only be letters (a-z)";
+	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters (a-z)";
+	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters (a-z)";
 	private static final Logger LOG = Logger.getLogger(Validator.class);
-	private static final String LETTERS_RE = "[a-z.]*";
+	private static final String LETTERS_DOT_RE = "[a-z.]*";
+	private static final String LETTERS_RE = "[a-z]*";
 
 	private InputData data;
 	private String reError = "";
@@ -39,43 +48,37 @@ public class Validator {
 	 */
 	public List<String> validate() {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Validating...");
+			LOG.debug("Validating");
 		}
-		StringBuilder errors = new StringBuilder();
+		List<String> errors = new ArrayList<>();
 		if (data.getLetters().length() < 3) {
-			addErrorMessage(errors, TOO_FEW_LETTERS);
+			errors.add(TOO_FEW_LETTERS);
 		}
-		if (!data.getLetters().matches(LETTERS_RE)) {
-			addErrorMessage(errors, LETTERS_OR_DOT);
+		if (!data.getLetters().matches(LETTERS_DOT_RE)) {
+			errors.add(LETTERS_OR_DOT);
 		}
 		if (!data.getContains().isEmpty() && !data.getContainsRe().isEmpty()) {
-			addErrorMessage(errors, BOTH_CONTAINS_LETTERS_AND_REGEX);
+			errors.add(BOTH_CONTAINS_LETTERS_AND_REGEX);
 		}
 		if (data.getContains().length() > 5) {
-			addErrorMessage(errors, CONTAINS_TOO_LONG);
+			errors.add(CONTAINS_TOO_LONG);
+		}
+		if (!data.getContains().matches(LETTERS_RE)) {
+			errors.add(CONTAINS_NONLETTERS);
+		}
+		if (!data.getStartsWith().matches(LETTERS_RE)) {
+			errors.add(STARTSWITH_NONLETTERS);
+		}
+		if (!data.getEndsWith().matches(LETTERS_RE)) {
+			errors.add(ENDSWITH_NONLETTERS);
 		}
 		if (!data.getContainsRe().isEmpty()
 				&& !regexIsValid(data.getContainsRe())) {
-			addErrorMessage(errors, INVALID_REGEX);
-			addErrorMessage(errors, reError);
+			errors.add(INVALID_REGEX);
+			errors.add(reError);
 		}
 
-		List<String> errorList = new ArrayList<>();
-		if (!errors.toString().isEmpty()) {
-			errorList = Arrays.asList(errors.toString().split("\n"));
-		}
-
-		return errorList;
-	}
-
-	/*
-	 * Append an error message with a new line
-	 */
-	private void addErrorMessage(StringBuilder errors, String message) {
-		if (!errors.toString().isEmpty()) {
-			errors.append("\n");
-		}
-		errors.append(message);
+		return errors;
 	}
 	
 	/*
@@ -85,9 +88,6 @@ public class Validator {
 		try {
 			Pattern.compile(regex);
 		} catch (PatternSyntaxException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(e.getDescription());
-			}
 			reError = e.getDescription();
 			return false;
 		}

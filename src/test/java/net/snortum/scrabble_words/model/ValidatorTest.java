@@ -44,5 +44,37 @@ public class ValidatorTest {
 		assertTrue( message.size() == 1 );
 		assertEquals( message.get( 0 ), Validator.CONTAINS_TOO_LONG );
 	}
-
+	
+	@Test
+	public void testValidatorContainsNonletters() {
+		InputData data = new InputData.Builder( "abc" )
+				.contains( "a5" )
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 1 );
+		assertEquals( message.get( 0 ), Validator.CONTAINS_NONLETTERS );
+	}
+	
+	@Test
+	public void testValidatorStartsWithNonletters() {
+		InputData data = new InputData.Builder( "abc" )
+				.startsWith( "a5" )
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 1 );
+		assertEquals( message.get( 0 ), Validator.STARTSWITH_NONLETTERS );
+	}
+	
+	@Test
+	public void testValidatorEndsWithNonletters() {
+		InputData data = new InputData.Builder( "abc" )
+				.endsWith( "a5" )
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 1 );
+		assertEquals( message.get( 0 ), Validator.ENDSWITH_NONLETTERS );
+	}
 }

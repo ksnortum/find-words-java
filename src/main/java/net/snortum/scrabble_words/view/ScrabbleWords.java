@@ -120,6 +120,20 @@ public class ScrabbleWords extends Application {
 						}
 					}
 				});
+		
+		col = 0;
+		row++;
+		grid.add(new Label("Starts with:"), col, row);
+		TextField startsWith = new TextField();
+		col = 1;
+		grid.add(startsWith, col, row);
+		
+		col = 0;
+		row++;
+		grid.add(new Label("Ends with:"), col, row);
+		TextField endsWith = new TextField();
+		col = 1;
+		grid.add(endsWith, col, row);
 
 		col = 0;
 		row++;
@@ -159,6 +173,8 @@ public class ScrabbleWords extends Application {
 				InputData data = new InputData.Builder(letters.getText())
 						.contains(containsData)
 						.containsRe(containsReData)
+						.startsWith(startsWith.getText())
+						.endsWith(endsWith.getText())
 						.dictionaryName(dictionary.getValue())
 						.build();
 				Validator validator = new Validator(data);

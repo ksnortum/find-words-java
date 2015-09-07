@@ -135,18 +135,13 @@ public class WordSearcher {
 
 				// Loop thru permutations
 				for (String word : permutator.permutate()) {
-
-					// Must be in the dictionary
+					word = data.getStartsWith() + word + data.getEndsWith();
 					if (!validWords.containsKey(word)) {
 						continue;
 					}
-
-					// Must contain these letters
 					if (!checkContains(word)) {
 						continue;
 					}
-
-					// Must match this pattern
 					if (pattern != null && !pattern.matcher(word).find()) {
 						continue;
 					}
