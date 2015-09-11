@@ -43,8 +43,8 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 		LETTER_VALUE.put('v', 4);
 		LETTER_VALUE.put('w', 4);
 		LETTER_VALUE.put('x', 8);
-		LETTER_VALUE.put('y', 10);
-		LETTER_VALUE.put('z', 1);
+		LETTER_VALUE.put('y', 4);
+		LETTER_VALUE.put('z', 10);
 	}
 
 	/**
