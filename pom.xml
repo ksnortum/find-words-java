@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.snortum.scrabble_words</groupId>
   <artifactId>Scrabble-Words</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

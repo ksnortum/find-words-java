@@ -25,6 +25,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -77,6 +78,8 @@ public class ScrabbleWords extends Application {
 		row++;
 		grid.add(new Label("Available Letters:"), col, row);
 		TextField letters = new TextField();
+		letters.setTooltip(
+				new Tooltip("Enter the tile letters you have available"));
 		col = 1;
 		grid.add(letters, col, row);
 
@@ -85,6 +88,7 @@ public class ScrabbleWords extends Application {
 		btnContains.setToggleGroup(group);
 		btnContains.setSelected(true);
 		btnContains.setUserData(USE_LETTERS);
+		btnContains.setTooltip(new Tooltip("Use letter(s) in contains field"));
 		col = 0;
 		row++;
 		grid.add(btnContains, col, row);
@@ -92,6 +96,8 @@ public class ScrabbleWords extends Application {
 		RadioButton btnContainsRe = new RadioButton("Contains (with regex)");
 		btnContainsRe.setToggleGroup(group);
 		btnContainsRe.setUserData(USE_REGEX);
+		btnContainsRe
+				.setTooltip(new Tooltip("Use a regex in the contains field"));
 		col = 0;
 		row++;
 		grid.add(btnContainsRe, col, row);
@@ -101,6 +107,8 @@ public class ScrabbleWords extends Application {
 		Label lblContains = new Label(CONTAINS_LETTERS);
 		grid.add(lblContains, col, row);
 		TextField contains = new TextField();
+		contains.setTooltip(new Tooltip(
+				"Letter(s)/regex on the board that words must contain"));
 		col = 1;
 		grid.add(contains, col, row);
 
@@ -120,18 +128,21 @@ public class ScrabbleWords extends Application {
 						}
 					}
 				});
-		
+
 		col = 0;
 		row++;
 		grid.add(new Label("Starts with:"), col, row);
 		TextField startsWith = new TextField();
+		startsWith.setTooltip(
+				new Tooltip("Words must start with these letter(s)"));
 		col = 1;
 		grid.add(startsWith, col, row);
-		
+
 		col = 0;
 		row++;
 		grid.add(new Label("Ends with:"), col, row);
 		TextField endsWith = new TextField();
+		endsWith.setTooltip(new Tooltip("Words must end with these letter(s)"));
 		col = 1;
 		grid.add(endsWith, col, row);
 
@@ -143,7 +154,7 @@ public class ScrabbleWords extends Application {
 		dictionary.setValue(DictionaryName.twl);
 		col = 1;
 		grid.add(dictionary, col, row);
-				
+
 		col = 0;
 		row++;
 		grid.add(new Label("Calculating: "), col, row);
@@ -166,7 +177,7 @@ public class ScrabbleWords extends Application {
 				// Get data a validate
 				String containsData = contains.getText();
 				String containsReData = "";
-				if ( containsIsRe(group) ) {
+				if (containsIsRe(group)) {
 					containsReData = containsData;
 					containsData = "";
 				}
@@ -268,22 +279,22 @@ public class ScrabbleWords extends Application {
 	 */
 	private void displayErrors(List<String> errors, Stage stage) {
 		StringBuilder message = new StringBuilder();
-		
+
 		for (String error : errors) {
 			if (!message.toString().isEmpty()) {
 				message.append("\n");
 			}
 			message.append(error);
 		}
-		
+
 		final Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(stage);
 		dialog.setTitle("Errors");
-		
+
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
-		
+
 		Text title = new Text("Please correct these errors");
 		title.setStyle("-fx-font-weight: bold;");
 		grid.add(title, 0, 0);
@@ -291,12 +302,12 @@ public class ScrabbleWords extends Application {
 		Label errorLabel = new Label(message.toString());
 		errorLabel.setWrapText(true);
 		grid.add(errorLabel, 0, 2);
-		
+
 		Scene dialogScene = new Scene(grid);
 		dialog.setScene(dialogScene);
 		dialog.show();
 	}
-	
+
 	private boolean containsIsRe(ToggleGroup group) {
 		return group.getSelectedToggle() != null &&
 				USE_REGEX.equals(group.getSelectedToggle().getUserData());
