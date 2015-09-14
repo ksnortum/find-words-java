@@ -79,7 +79,7 @@ public class ScrabbleWords extends Application {
 		grid.add(new Label("Available Letters:"), col, row);
 		TextField letters = new TextField();
 		letters.setTooltip(
-				new Tooltip("Enter the tile letters you have available"));
+				new Tooltip("Enter the tile letters you have available, a dot for a blank tile"));
 		col = 1;
 		grid.add(letters, col, row);
 
@@ -218,8 +218,11 @@ public class ScrabbleWords extends Application {
 					@Override
 					public void handle(WorkerStateEvent event) {
 						LOG.error("Word Search Task got an error:");
-						LOG.error(event.getSource().getException()
-								.getStackTrace());
+						StackTraceElement[] errors = event.getSource()
+								.getException().getStackTrace();
+						for (StackTraceElement error : errors) {
+							LOG.error(error.toString());
+						}
 					}
 				});
 
@@ -249,12 +252,13 @@ public class ScrabbleWords extends Application {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("in displayWords()");
 		}
+
 		final Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(stage);
 		ObservableList<String> data = FXCollections.observableArrayList();
 
-		if (words.size() == 0) {
+		if (words.isEmpty()) {
 			data.add("Nothing found");
 		} else {
 			for (ScrabbleWord sw : words) {

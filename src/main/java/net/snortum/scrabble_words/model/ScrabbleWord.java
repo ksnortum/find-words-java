@@ -7,7 +7,7 @@ import java.util.Map;
  * Holds a word and its Scrabble value. Immutable. Comparable.
  * 
  * @author Knute
- * @version 0.2
+ * @version 0.3
  */
 public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	private static final Map<Character, Integer> LETTER_VALUE;
@@ -89,11 +89,18 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	}
 
 	/**
-	 * Descending order
+	 * Descending value order, ascending word order
 	 */
 	@Override
 	public int compareTo(ScrabbleWord that) {
-		return this.value > that.value ? -1 : this.value == that.value ? 0 : 1;
+		if (this.value > that.value) {
+			return -1;
+		} else if (this.value < that.value) {
+			return 1;
+		} else {
+			return this.word.compareTo(that.word);
+		}
+			
 	}
 
 	@Override
