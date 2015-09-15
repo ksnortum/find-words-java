@@ -42,7 +42,7 @@ import net.snortum.scrabble_words.model.WordSearcher;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute
- * @version 1.0
+ * @version 1.1
  */
 public class ScrabbleWords extends Application {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
@@ -66,7 +66,7 @@ public class ScrabbleWords extends Application {
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-		grid.setPadding(new Insets(25, 25, 25, 25));
+		grid.setPadding(new Insets(25));
 
 		Text title = new Text("Find Scrabble Words");
 		title.setId("title");
@@ -78,8 +78,8 @@ public class ScrabbleWords extends Application {
 		row++;
 		grid.add(new Label("Available Letters:"), col, row);
 		TextField letters = new TextField();
-		letters.setTooltip(
-				new Tooltip("Enter the tile letters you have available, a dot for a blank tile"));
+		letters.setTooltip(new Tooltip(
+				"Enter the tile letters you have available, a dot for a blank tile"));
 		col = 1;
 		grid.add(letters, col, row);
 
@@ -167,71 +167,81 @@ public class ScrabbleWords extends Application {
 		hbox.setAlignment(Pos.BASELINE_RIGHT);
 		Button submit = new Button("Submit");
 		hbox.getChildren().add(submit);
+		HBox.setMargin(submit, new Insets(5));
+		submit.setOnAction((ActionEvent event) -> {
+			
+			// Get data a validate
+			String containsData = contains.getText();
+			String containsReData = "";
+			if (containsIsRe(group)) {
+				containsReData = containsData;
+				containsData = "";
+			}
+			InputData data = new InputData.Builder(letters.getText())
+					.contains(containsData)
+					.containsRe(containsReData)
+					.startsWith(startsWith.getText())
+					.endsWith(endsWith.getText())
+					.dictionaryName(dictionary.getValue())
+					.build();
+			Validator validator = new Validator(data);
+			List<String> errors = validator.validate();
+
+			if (!errors.isEmpty()) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Errors returned from validation");
+				}
+				displayErrors(errors, stage);
+				return;
+			}
+
+			// Create task for word searching
+			WordSearcher ws = new WordSearcher(data, progress);
+			Task<Set<ScrabbleWord>> searchWords = new Task<Set<ScrabbleWord>>() {
+				@Override
+				protected Set<ScrabbleWord> call() throws Exception {
+					return ws.getWords();
+				}
+			};
+			searchWords.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+				@Override
+				public void handle(WorkerStateEvent event) {
+					displayWords(searchWords.getValue(), stage);
+				}
+			});
+			searchWords.setOnFailed(new EventHandler<WorkerStateEvent>() {
+				@Override
+				public void handle(WorkerStateEvent event) {
+					LOG.error("Word Search Task got an error:");
+					StackTraceElement[] errors = event.getSource()
+							.getException().getStackTrace();
+					for (StackTraceElement error : errors) {
+						LOG.error(error.toString());
+					}
+				}
+			});
+
+			// Run the word searching task
+			Thread th = new Thread(searchWords);
+			th.setDaemon(true);
+			th.start();
+		});
+
+		// Clear button
+		Button clear = new Button("Clear");
+		clear.setOnAction((ActionEvent event) -> {
+			letters.clear();
+			contains.clear();
+			startsWith.clear();
+			endsWith.clear();
+			letters.requestFocus();
+		});
+		hbox.getChildren().add(clear);
+
+		// Add buttons to grid
 		col = 1;
 		row += rowSpan;
 		grid.add(hbox, col, row);
-		submit.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-
-				// Get data a validate
-				String containsData = contains.getText();
-				String containsReData = "";
-				if (containsIsRe(group)) {
-					containsReData = containsData;
-					containsData = "";
-				}
-				InputData data = new InputData.Builder(letters.getText())
-						.contains(containsData)
-						.containsRe(containsReData)
-						.startsWith(startsWith.getText())
-						.endsWith(endsWith.getText())
-						.dictionaryName(dictionary.getValue())
-						.build();
-				Validator validator = new Validator(data);
-				List<String> errors = validator.validate();
-
-				if (!errors.isEmpty()) {
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Errors returned from validation");
-					}
-					displayErrors(errors, stage);
-					return;
-				}
-
-				// Create task for word searching
-				WordSearcher ws = new WordSearcher(data, progress);
-				Task<Set<ScrabbleWord>> searchWords = new Task<Set<ScrabbleWord>>() {
-					@Override
-					protected Set<ScrabbleWord> call() throws Exception {
-						return ws.getWords();
-					}
-				};
-				searchWords
-						.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-					@Override
-					public void handle(WorkerStateEvent event) {
-						displayWords(searchWords.getValue(), stage);
-					}
-				});
-				searchWords.setOnFailed(new EventHandler<WorkerStateEvent>() {
-					@Override
-					public void handle(WorkerStateEvent event) {
-						LOG.error("Word Search Task got an error:");
-						StackTraceElement[] errors = event.getSource()
-								.getException().getStackTrace();
-						for (StackTraceElement error : errors) {
-							LOG.error(error.toString());
-						}
-					}
-				});
-
-				// Run the word searching task
-				Thread th = new Thread(searchWords);
-				th.setDaemon(true);
-				th.start();
-			}
-		});
 
 		// Display scene
 		Scene scene = new Scene(grid);
