@@ -179,4 +179,15 @@ public class InputData {
 	public DictionaryName getDictionaryName() {
 		return dictName;
 	}
+
+	/**
+	 * @return true if all text fields are empty, otherwise return false
+	 */
+	public boolean isEmpty() {
+		return letters.isEmpty() &&
+				contains.isEmpty() &&
+				containsRe.isEmpty() &&
+				startsWith.isEmpty() &&
+				endsWith.isEmpty();
+	}
 }

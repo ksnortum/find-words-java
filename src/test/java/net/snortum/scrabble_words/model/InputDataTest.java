@@ -32,4 +32,9 @@ public class InputDataTest {
 		assertTrue( DictionaryName.sowpods.equals( data.getDictionaryName() ) );
 	}
 
+	@Test
+	public void testInputDataEmpty() {
+		InputData data = new InputData.Builder("").build();
+		assertTrue( data.isEmpty() );
+	}
 }
