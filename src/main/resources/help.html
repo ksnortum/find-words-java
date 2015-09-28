@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Help for Scrabble Words</title>
+</head>
+<body>
+<h1>Scrabble Words Help</h1>
+<h2 id="top">Contents</h2>
+<ul>
+	<li><a href="#overview">Overview</a></li>
+	<li><a href="#available">Available letters</a></li>
+	<li><a href="#contains">Contains letters or regular expressions</a></li>
+	<li><a href="#startswith">Starts with these letters</a></li>
+	<li><a href="#endswith">Ends with these letters</a></li>
+	<li><a href="#dictionary">Select a dictionary</a></li>
+</ul>
+<h2 id="overview">Overview</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	<span class="emphasis">Scrabble Words</span> will help you find words to play in 
+	the game of Scrabble.
+	You enter letters of the tiles you have in your hand.  Optionally, you can enter
+	a letter or letters on the board that the suggested word must contain.  You can 
+	also enter the letters the suggested word must start with and end with.  Two
+	dictionaries are supported: the Official Tournament and Club Word List, or TWL,
+	(used in the USA) and SOWPODS (used in most other countries). 
+</p>
+<p>
+	If you are familiar with <a href="https://en.wikipedia.org/wiki/Regular_expression">
+	Regular Expressions</a> you can use them to	limit your search.  Options can be 
+	combined except <span class="quote">Contains Letters</span> and 
+	<span class="quote">Contains Regex</span>, which are mutually exclusive.
+</p>
+<h2 id="available">Available Letters</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	Enter the letters of the tiles in your hand.  If you have a blank tile, enter this as
+	a dot (.).  Currently, the program cannot handle the situation where the player has
+	both black tiles.
+</p>
+<h2 id="contains">Contains Letters / Regex</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	Select either <span class="quote">Contains these letters</span> or 
+	<span class="quote">Contains (with regex)</span>. 
+</p> 
+<h3>Contains Letters</h3>
+<p>	
+	Select
+	the first option if you are only going to enter a letter or letters that the suggested 
+	word must contain.  This would be a letter on the board that the suggested word will
+	intersect.  If you enter more than one letter, the suggested word must contain 
+	<span class="emphasis">all</span>
+	letters, not necessarily in order or next to each other.  To get letter(s) in exact 
+	positions in the words, use a regular expression.
+</p>
+<h3>Contains Regex</h3>
+<p>
+	Select the second option if know regular expressions and would like the suggested words 
+	to match this instead of simple letters.  The regex will be tested to make sure it is a
+	valid Java regular expression.  Note that you will have to add the letters from the 
+	regex to <span class="quote">Available Letters</span>. 
+</p>
+<h2 id="startswith">Starts With</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	Enter the letter or letters the suggested words should start with.  Do 
+	<span class="emphasis">not</span> enter these letters in 
+	<span class="quote">Available Letters</span>.
+</p>
+<h2 id ="endswith">Ends With</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	Enter the letter or letters the suggested words should end with.  Do 
+	<span class="emphasis">not</span> enter these letters in 
+	<span class="quote">Available Letters</span>.
+</p>
+<h2 id="dictionary">Dictionary</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	Select the dictionary to use.  Currently you have the choice between the Official Tournament 
+	and Club Word List, or TWL, (used in the USA) and SOWPODS (used in most other countries).
+</p>
+</body>
+</html>

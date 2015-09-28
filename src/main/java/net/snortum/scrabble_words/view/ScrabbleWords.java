@@ -1,9 +1,18 @@
 package net.snortum.scrabble_words.view;
 
+import static java.util.stream.Collectors.joining;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -11,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,8 +42,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.snortum.scrabble_words.model.DictionaryName;
@@ -46,8 +56,8 @@ import net.snortum.scrabble_words.model.WordSearcher;
  * Display possible Scrabble words to play based on your "tile" letters, a
  * Scrabble dictionary, and certain restrictions.
  * 
- * @author Knute
- * @version 1.1
+ * @author Knute Snortum
+ * @version 1.2
  */
 public class ScrabbleWords extends Application {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
@@ -55,6 +65,12 @@ public class ScrabbleWords extends Application {
 	private static final String CONTAINS_RE = "Contains Regex:";
 	private static final String USE_LETTERS = "use letters";
 	private static final String USE_REGEX = "use regex";
+	private static final int HELP_PAGE_WIDTH = 750;
+	private static final int HELP_PAGE_HEIGHT = 500;
+	private static final String HELP_PAGE_CSS = "main.css";
+	private static final int ABOUT_PAGE_WIDTH = 500;
+	private static final int ABOUT_PAGE_HEIGHT = 400;
+	private static final String ABOUT_PAGE_CSS = "main.css";
 
 	private final TextField letters = new TextField();
 	private final TextField contains = new TextField();
@@ -75,7 +91,7 @@ public class ScrabbleWords extends Application {
 			LOG.debug("Starting application");
 		}
 
-		// --- Setup the GUI
+		// Setup the GUI
 		final GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
@@ -83,12 +99,14 @@ public class ScrabbleWords extends Application {
 		int top = 5, right = 25, bottom = 15, left = 25;
 		grid.setPadding(new Insets(top, right, bottom, left));
 
+		// Title
 		final Text title = new Text("Find Scrabble Words");
 		title.setId("title");
 		title.setStyle("-fx-font-size:30; -fx-font-weight:bold");
 		int col = 0, row = 0, colSpan = 2, rowSpan = 1;
 		grid.add(title, col, row, colSpan, rowSpan);
 
+		// Available
 		col = 0;
 		row++;
 		grid.add(new Label("Available Letters:"), col, row);
@@ -97,6 +115,7 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(letters, col, row);
 
+		// Contains letters or regex
 		RadioButton btnContains = new RadioButton("Contains these letters");
 		btnContains.setToggleGroup(group);
 		btnContains.setSelected(true);
@@ -141,6 +160,7 @@ public class ScrabbleWords extends Application {
 					}
 				});
 
+		// Starts with
 		col = 0;
 		row++;
 		grid.add(new Label("Starts with:"), col, row);
@@ -149,6 +169,7 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(startsWith, col, row);
 
+		// Ends with
 		col = 0;
 		row++;
 		grid.add(new Label("Ends with:"), col, row);
@@ -156,6 +177,7 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(endsWith, col, row);
 
+		// Dictionary
 		col = 0;
 		row++;
 		grid.add(new Label("Dictionary: "), col, row);
@@ -163,6 +185,7 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(dictionary, col, row);
 
+		// Progress bar
 		col = 0;
 		row++;
 		grid.add(new Label("Calculating: "), col, row);
@@ -227,9 +250,13 @@ public class ScrabbleWords extends Application {
 	/**
 	 * Search for words in the background
 	 * 
-	 * @param stage The stage to create an Errors Display dialogue on
+	 * @param stage
+	 *            The stage where the input data is and to create an Errors 
+	 *            Display dialogue on
 	 */
 	private void searchForWords(final Stage stage) {
+		
+		// Validate input data
 		InputData data = validateInputData(stage);
 		if (data.isEmpty()) {
 			return;
@@ -249,9 +276,7 @@ public class ScrabbleWords extends Application {
 			LOG.error("Word Search Task got an error:");
 			StackTraceElement[] errs = wse.getSource().getException()
 					.getStackTrace();
-			for (StackTraceElement error : errs) {
-				LOG.error(error.toString());
-			}
+			Arrays.asList(errs).forEach( (err) -> LOG.error(err.toString()) );
 		});
 
 		// Run the word searching task
@@ -265,7 +290,7 @@ public class ScrabbleWords extends Application {
 	 * @return
 	 */
 	private InputData validateInputData(final Stage stage) {
-		
+
 		// Get data a validate
 		String containsData = contains.getText();
 		String containsReData = "";
@@ -299,7 +324,7 @@ public class ScrabbleWords extends Application {
 	 * @param words
 	 *            a set of {@link ScrabbleWord}s
 	 * @param stage
-	 *            JavaFx {@link Stage}
+	 *            the {@link Stage} to create a modal dialogue on
 	 */
 	private void displayWords(Set<ScrabbleWord> words, Stage stage) {
 		if (LOG.isDebugEnabled()) {
@@ -314,9 +339,7 @@ public class ScrabbleWords extends Application {
 		if (words.isEmpty()) {
 			data.add("Nothing found");
 		} else {
-			for (ScrabbleWord sw : words) {
-				data.add(sw.toString());
-			}
+			words.stream().forEach( (sw) -> data.add(sw.toString()) );
 		}
 
 		ListView<String> listView = new ListView<>(data);
@@ -332,18 +355,10 @@ public class ScrabbleWords extends Application {
 	 * @param errors
 	 *            a list of error strings
 	 * @param stage
-	 *            the {@link Stage} to create the dialog in
+	 *            the {@link Stage} to create the dialog on
 	 */
 	private void displayErrors(List<String> errors, Stage stage) {
-		StringBuilder message = new StringBuilder();
-
-		for (String error : errors) {
-			if (!message.toString().isEmpty()) {
-				message.append("\n");
-			}
-			message.append(error);
-		}
-
+		String message = errors.stream().collect(joining("\n"));
 		final Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(stage);
@@ -384,22 +399,96 @@ public class ScrabbleWords extends Application {
 		letters.requestFocus();
 	}
 
+	/**
+	 * Create web browser to display help HTML
+	 */
 	private void help() {
-		// TODO: add help
+		final Stage helpStage = new Stage();
+		helpStage.setTitle("Help");
+		URL url = ScrabbleWords.class.getResource("/help.html");
+
+		if (url == null) {
+			LOG.error("Could not find \"help.html\"");
+			return;
+		}
+
+		String helpUrl = url.toExternalForm();
+		Browser browser = new Browser(helpUrl);
+		String cssText = getCssText(HELP_PAGE_CSS);
+		setCssViaJavaScript(browser.getWebEngine(), cssText);
+		double width = HELP_PAGE_WIDTH, height = HELP_PAGE_HEIGHT;
+		Scene scene = new Scene(browser, width, height);
+		helpStage.setScene(scene);
+		helpStage.show();
 	}
 
 	/**
-	 * Create a dialog box for the About menu item
+	 * Create a browser for the About menu item
 	 */
 	private void about() {
-		// TODO: add Creative Commons link
-		Text text = new Text("(c) Copyright 2014, Knute Snortum");
-		VBox box = new VBox(text);
-		box.setAlignment(Pos.CENTER);
-		box.setPadding(new Insets(5));
-		Stage dialogStage = new Stage();
-		dialogStage.initModality(Modality.WINDOW_MODAL);
-		dialogStage.setScene(new Scene(box));
-		dialogStage.show();
+		final Stage aboutStage = new Stage();
+		aboutStage.setTitle("About");
+		URL url = ScrabbleWords.class.getResource("/about.html");
+
+		if (url == null) {
+			LOG.error("Could not find \"about.html\"");
+			return;
+		}
+
+		String aboutUrl = url.toExternalForm();
+		Browser browser = new Browser(aboutUrl);
+		String cssText = getCssText(ABOUT_PAGE_CSS);
+		setCssViaJavaScript(browser.getWebEngine(), cssText);
+		double width = ABOUT_PAGE_WIDTH, height = ABOUT_PAGE_HEIGHT;
+		Scene scene = new Scene(browser, width, height);
+		aboutStage.setScene(scene);
+		aboutStage.show();
+	}
+
+	/**
+	 * Read a CSS file
+	 * 
+	 * @param fileName
+	 *            the name and path of the CSS file
+	 * @return a sting that is the concatenation of all CSS text lines
+	 */
+	private String getCssText(String fileName) {
+		InputStream is = getClass().getClassLoader()
+				.getResourceAsStream(fileName);
+
+		if (is == null) {
+			LOG.error(fileName + " not found");
+			return "";
+		}
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		return br.lines().collect(joining(" "));
+	}
+
+	/**
+	 * Add CSS to HTML via DOM and JavaScript
+	 * 
+	 * @param webEngine
+	 *            the browser object's web engine to act on
+	 * @param cssText
+	 *            the CSS styling to add to the HTML
+	 * @return the web engine with listener added
+	 */
+	private WebEngine setCssViaJavaScript(WebEngine webEngine, String cssText) {
+		webEngine.getLoadWorker().stateProperty()
+				.addListener((obs, oldState, newState) -> {
+					if (newState == State.SUCCEEDED) {
+						Document doc = webEngine.getDocument();
+						Element styleNode = doc.createElement("style");
+						org.w3c.dom.Text styleContent = doc
+								.createTextNode(cssText);
+						styleNode.appendChild(styleContent);
+						doc.getDocumentElement().getElementsByTagName("head")
+								.item(0).appendChild(styleNode);
+						webEngine.executeScript(
+								"document.documentElement.innerHTML");
+					}
+				});
+		return webEngine;
 	}
 }
