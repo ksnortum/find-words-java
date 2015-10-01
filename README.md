@@ -20,6 +20,3 @@ If you have Java in your PATH, you can execute the jar file from the command lin
 * Add ability to do two wild cards (dots)
 * Better progress bar when using wild cards
 * Hide progress bar when not calculating
-* Java 8 techniques in Dictionary object
-
-
