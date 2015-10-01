@@ -136,17 +136,16 @@ public class WordSearcher {
 				// Loop thru permutations
 				for (String word : permutator.permutate()) {
 					word = data.getStartsWith() + word + data.getEndsWith();
-					if (!validWords.containsKey(word)) {
-						continue;
-					}
-					if (!checkContains(word)) {
-						continue;
-					}
-					if (pattern != null && !pattern.matcher(word).find()) {
-						continue;
-					}
 
-					words.add(new ScrabbleWord(word));
+					if ( validWords.containsKey(word) 
+							&& checkContains(word) 
+							&& (pattern == null || pattern.matcher(word).find()) ) {
+						
+						// Is this a bingo?
+						boolean isBingo = word.length() - data.getContains().length() >= 7;
+
+						words.add(new ScrabbleWord(word, isBingo));
+					}
 				}
 			}
 		}

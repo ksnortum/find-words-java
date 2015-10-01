@@ -3,11 +3,11 @@ body {
 }
 
 h1 {
-	background-color: #b0b0b0;
+	background-color: #d0d0d0;
 }
 
 h2 {
-	background-color: #d0d0d0;
+	background-color: #e0e0e0;
 	font-style: italic;
 }
 
@@ -30,4 +30,10 @@ a:hover {
 .quote {
 	font-family: Courier, fixed;
 	font-style: italic;
+}
+
+.button {
+	background-color: #f0f0f0;
+	font-family: Courier, fixed;
+	border: thin solid;
 }
