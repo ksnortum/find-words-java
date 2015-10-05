@@ -7,6 +7,8 @@ import org.junit.Test;
 public class InputDataTest {
 	private final String letters = "ABC";
 	private final String contains = "A";
+	private final String startsWith = "A";
+	private final String endsWith = "A";
 
 	@Test
 	public void testGetLetters() {
@@ -31,7 +33,24 @@ public class InputDataTest {
 				.build();
 		assertTrue( DictionaryName.sowpods.equals( data.getDictionaryName() ) );
 	}
+	
 
+	@Test
+	public void testStartsWith() {
+		InputData data = new InputData.Builder( letters )
+				.startsWith( startsWith )
+				.build();
+		assertTrue( data.getStartsWith().equals( startsWith.toLowerCase() ) );
+	}
+	
+	@Test
+	public void testEndsWith() {
+		InputData data = new InputData.Builder( letters )
+				.endsWith( endsWith )
+				.build();
+		assertTrue( data.getEndsWith().equals( endsWith.toLowerCase() ) );
+	}
+	
 	@Test
 	public void testInputDataEmpty() {
 		InputData data = new InputData.Builder("").build();

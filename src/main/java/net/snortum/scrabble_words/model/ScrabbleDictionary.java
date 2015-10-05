@@ -12,8 +12,16 @@ import java.util.function.Function;
 
 import org.apache.log4j.Logger;
 
-public class Dictionary {
-	private static final Logger LOG = Logger.getLogger(Dictionary.class);
+/**
+ * Retrieves a list of words from a Scrabble Dictionary text file. The text file
+ * must be in the ClassPath with one word per line. Words will be down-cased.
+ * 
+ * @author Knute Snortum
+ * @version 1.0
+ */
+public class ScrabbleDictionary {
+	private static final Logger LOG = Logger
+			.getLogger(ScrabbleDictionary.class);
 	static final String INPUTDATA_NULL = "Input Data cannot be null";
 	static final String DICTIONARY_NULL = "Dictionary name cannot be null";
 
@@ -22,14 +30,15 @@ public class Dictionary {
 	private InputData data;
 
 	/**
-	 * Create a new Dictionary object. Uses data to get the
+	 * Create a new ScrabbleDictionary object. Uses data to get the
 	 * {@link DictionaryName}.
 	 * 
 	 * @param data
 	 *            the input data to use
-	 * @throw IllegalArgumentException if data or dictionary name are null
+	 * @throws IllegalArgumentException
+	 *             if data or dictionary name are null
 	 */
-	public Dictionary(InputData data) {
+	public ScrabbleDictionary(InputData data) {
 		if (data == null) {
 			throw new IllegalArgumentException(INPUTDATA_NULL);
 		}
@@ -43,10 +52,11 @@ public class Dictionary {
 
 	/**
 	 * Get a list of words from a text dictionary file. Cache words for multiple
-	 * calls. Dictionary file name comes from the @{link InputDate} field
-	 * entered at object creation. Dictionary name must be in the class path.
+	 * calls. ScrabbleDictionary file name comes from the {@link InputData}
+	 * field entered at object creation. ScrabbleDictionary name must be in the
+	 * class path.
 	 * 
-	 * @return list of words from a text dictionary (use Map for faster access)
+	 * @return list of words from a text dictionary (uses Map for faster access)
 	 */
 	public Map<String, String> getValidWords() {
 		if (LOG.isDebugEnabled()) {

@@ -7,55 +7,59 @@ import java.util.Set;
 
 /**
  * Create sublists (sets actually) of a list
- *  
- * @author Knute
- *
- * @param <T> the type of this list
+ * 
+ * @author Knute Snortum
+ * @version 0.1
+ * 
+ * @param <T>
+ *            the type of this list
  */
-public class Sublister <T> {
+public class Sublister<T> {
 	private List<T> toSublist;
-	
+
 	/**
 	 * Create a sublister object
-	 * @param toSublist the list to sublist
+	 * 
+	 * @param toSublist
+	 *            the list to sublist
 	 */
-	public Sublister( List<T> toSublist ) {
+	public Sublister(List<T> toSublist) {
 		this.toSublist = toSublist;
 	}
 
 	/**
-	 * Return a set of all sublists.  Note that because this is a set, no
+	 * Return a set of all sublists. Note that because this is a set, no
 	 * duplicate lists are present.
 	 * 
 	 * @return a set of all sublists, duplicates excluded
 	 */
 	public Set<List<T>> sublist() {
-		return sublist( toSublist );
+		return sublist(toSublist);
 	}
-	
+
 	/*
 	 * Does the actual work of sublisting
 	 */
-	private Set<List<T>> sublist( List<T> thisList ) {
-	    Set<List<T>> lists = new HashSet<>();
-	    
-	    if (thisList.isEmpty()) {
-	    	lists.add( new ArrayList<>() );
+	private Set<List<T>> sublist(List<T> thisList) {
+		Set<List<T>> lists = new HashSet<>();
+
+		if (thisList.isEmpty()) {
+			lists.add(new ArrayList<>());
 			return lists;
 		}
-	    
-	    List<T> listCopy = new ArrayList<>(thisList);
-	    T head = listCopy.get(0);
-	    List<T> rest = new ArrayList<>(listCopy.subList(1, listCopy.size())); 
-	    
-	    for (List<T> list : sublist(rest)) {
-	    	List<T> newList = new ArrayList<>();
-	    	newList.add(head);
-	    	newList.addAll(list);
-	    	lists.add(newList);
-	    	lists.add(list);
-	    }	
-	    
-	    return lists;
+
+		List<T> listCopy = new ArrayList<>(thisList);
+		T head = listCopy.get(0);
+		List<T> rest = new ArrayList<>(listCopy.subList(1, listCopy.size()));
+
+		for (List<T> list : sublist(rest)) {
+			List<T> newList = new ArrayList<>();
+			newList.add(head);
+			newList.addAll(list);
+			lists.add(newList);
+			lists.add(list);
+		}
+
+		return lists;
 	}
 }

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.snortum.scrabble_words</groupId>
   <artifactId>Scrabble-Words</artifactId>
-  <version>0.1.7</version>
+  <version>0.1.8</version>
   <build>
     <plugins>
       <plugin>
@@ -63,6 +63,26 @@
       </plugin>
     </plugins>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.3</version>
+        <configuration>
+          <project>
+            <description>Scrabble Words will display suggested words to play based on data entered by the user.</description>
+            <licenses>
+              <license>
+                <a>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+              </license>
+            </licenses>
+            <url>file:///C:/Users/Knute/workspace/Scrabble</url>
+          </project>
+          <show>protected</show>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

@@ -19,8 +19,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.concurrent.Worker.State;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -38,7 +38,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -81,10 +83,23 @@ public class ScrabbleWords extends Application {
 	private final ChoiceBox<DictionaryName> dictionary = new ChoiceBox<>(
 			FXCollections.observableArrayList(DictionaryName.values()));
 
+	/**
+	 * Launch the ScrabbleWords application
+	 * 
+	 * @param args
+	 *            not used
+	 */
 	public static void main(String[] args) {
 		launch(ScrabbleWords.class, args);
 	}
 
+	/**
+	 * Create the form to get the {@link InputData} and validate it, displaying
+	 * error messages, if any. When "submit" is pressed, display all suggested
+	 * words that match the restrictions of the input data. When "clear" is
+	 * pressed, clear all entered data from the form. Create help and about
+	 * menus.
+	 */
 	@Override
 	public void start(final Stage stage) throws Exception {
 		if (LOG.isDebugEnabled()) {
@@ -177,7 +192,7 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(endsWith, col, row);
 
-		// Dictionary
+		// ScrabbleDictionary
 		col = 0;
 		row++;
 		grid.add(new Label("Dictionary: "), col, row);
@@ -203,6 +218,20 @@ public class ScrabbleWords extends Application {
 		left = 5;
 		HBox.setMargin(submit, new Insets(top, right, bottom, left));
 		submit.setOnAction((ActionEvent event) -> searchForWords(stage));
+		
+		// <Enter> = Submit, <Esc> = Quit
+		grid.setOnKeyPressed((KeyEvent keyEvent) -> {
+			switch (keyEvent.getCode()){
+			case ENTER:
+				searchForWords(stage);
+				break;
+			case ESCAPE:
+				System.exit(0);
+				break;
+			default:
+				break;
+			}
+		});
 
 		// Clear button
 		Button clear = new Button("Clear");
@@ -219,11 +248,11 @@ public class ScrabbleWords extends Application {
 		MenuItem clearItem = new MenuItem("Clear");
 		clearItem.setAccelerator(KeyCombination.keyCombination("Ctrl+L"));
 		clearItem.setOnAction((ActionEvent event) -> clearText());
-		MenuItem exitItem = new MenuItem("Exit");
-		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
+		MenuItem exitItem = new MenuItem("Quit");
+		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
 		exitItem.setOnAction((ActionEvent event) -> System.exit(0));
 		menuFile.getItems().addAll(clearItem, exitItem);
-
+		
 		// Menu Help
 		Menu menuHelp = new Menu("Help");
 		MenuItem helpItem = new MenuItem("Help");
@@ -251,11 +280,11 @@ public class ScrabbleWords extends Application {
 	 * Search for words in the background
 	 * 
 	 * @param stage
-	 *            The stage where the input data is and to create an Errors 
+	 *            The stage where the input data is and to create an Errors
 	 *            Display dialogue on
 	 */
 	private void searchForWords(final Stage stage) {
-		
+
 		// Validate input data
 		InputData data = validateInputData(stage);
 		if (data.isEmpty()) {
@@ -276,7 +305,7 @@ public class ScrabbleWords extends Application {
 			LOG.error("Word Search Task got an error:");
 			StackTraceElement[] errs = wse.getSource().getException()
 					.getStackTrace();
-			Arrays.asList(errs).forEach( (err) -> LOG.error(err.toString()) );
+			Arrays.asList(errs).forEach((err) -> LOG.error(err.toString()));
 		});
 
 		// Run the word searching task
@@ -286,8 +315,12 @@ public class ScrabbleWords extends Application {
 	}
 
 	/**
+	 * Validate the entered data, returning an {@link InputData} object, or
+	 * displaying errors, if any
+	 * 
 	 * @param stage
-	 * @return
+	 *            the stage to display the errors on
+	 * @return the validated {@link InputData}
 	 */
 	private InputData validateInputData(final Stage stage) {
 
@@ -328,7 +361,7 @@ public class ScrabbleWords extends Application {
 	 */
 	private void displayWords(Set<ScrabbleWord> words, Stage stage) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("in displayWords()");
+			LOG.debug("In displayWords()");
 		}
 
 		final Stage dialog = new Stage();
@@ -339,11 +372,19 @@ public class ScrabbleWords extends Application {
 		if (words.isEmpty()) {
 			data.add("Nothing found");
 		} else {
-			words.stream().forEach( (sw) -> data.add(sw.toString()) );
+			words.stream().forEach(word -> data.add(word.toString()));
 		}
 
 		ListView<String> listView = new ListView<>(data);
 		listView.setPrefSize(200, 300);
+		// FIXME: Doesn't work 
+		listView.setOnKeyPressed((KeyEvent keyEvent) -> {
+			System.out.println("Key pressed in Display Words");
+			if (keyEvent.getCode() == KeyCode.ESCAPE) {
+				System.out.println("Escape in Display Words");
+				System.exit(0);
+			}
+		});
 		Scene dialogScene = new Scene(listView);
 		dialog.setScene(dialogScene);
 		dialog.show();

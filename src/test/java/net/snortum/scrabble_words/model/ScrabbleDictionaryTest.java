@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.Before;
 
-public class DictionaryTest {
+public class ScrabbleDictionaryTest {
 	
 	Map<String, String> testWords;
 	
@@ -28,7 +28,7 @@ public class DictionaryTest {
 		InputData data = new InputData.Builder("abd")
 				.dictionaryName(DictionaryName.twl)
 				.build();
-		Dictionary dictionary = new Dictionary(data);
+		ScrabbleDictionary dictionary = new ScrabbleDictionary(data);
 		Map<String, String> validWords = dictionary.getValidWords();
 		
 		for (String key : testWords.keySet()) {

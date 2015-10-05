@@ -15,6 +15,11 @@ public class ValidatorTest {
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 0 );
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testNullDataValidate() {
+		new Validator( null );
+	}
 
 	@Test
 	public void testValidatorTooFewLettersError() {

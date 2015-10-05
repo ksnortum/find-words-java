@@ -6,13 +6,26 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+/**
+ * Create a {@link WebView} in a {@link Region} with the width and height based
+ * on the dimensions of the region.
+ * 
+ * @author Knute Snortum
+ * @version 0.1
+ */
 public class Browser extends Region {
 
 	private final WebView browser = new WebView();
 	private final WebEngine webEngine = browser.getEngine();
 
-	public Browser(String Url) {
-		webEngine.load(Url);
+	/**
+	 * Create a browser ({@link WebView}) from the passed in URL.
+	 * 
+	 * @param url
+	 *            the URL to load the browser from
+	 */
+	public Browser(String url) {
+		webEngine.load(url);
 		getChildren().add(browser);
 	}
 
@@ -33,7 +46,10 @@ public class Browser extends Region {
 	protected double computePrefHeight(double width) {
 		return getHeight();
 	}
-	
+
+	/**
+	 * @return the browser's {@link WebEngine}
+	 */
 	public WebEngine getWebEngine() {
 		return webEngine;
 	}

@@ -8,15 +8,14 @@ import java.util.regex.PatternSyntaxException;
 import org.apache.log4j.Logger;
 
 /**
- * Validate {@link InputData}
+ * Validate {@link InputData}, returning a list of errors, if any
  * 
- * @author Knute
+ * @author Knute Snortum
  * @version 0.2
  */
 public class Validator {
 	private static final String INVALID_REGEX = "The regex is invalid";
-	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = 
-			"Cannot have both Contains Letters and Contains Regex";
+	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = "Cannot have both Contains Letters and Contains Regex";
 	static final String TOO_FEW_LETTERS = "You must have at least three letters";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that five letters";
 	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
@@ -35,16 +34,20 @@ public class Validator {
 	 * 
 	 * @param data
 	 *            the {@link InputData} to validate
+	 * @throws IllegalArgumentException
+	 *             if data is null
 	 */
 	public Validator(InputData data) {
+		if (data == null) {
+			throw new IllegalArgumentException("Data cannot be null");
+		}
 		this.data = data;
 	}
 
 	/**
 	 * Validate the {@link InputData}
 	 * 
-	 * @return a String array of error messages. Will contain one empty message
-	 *         if no errors
+	 * @return a String array of error messages
 	 */
 	public List<String> validate() {
 		if (LOG.isDebugEnabled()) {
@@ -80,7 +83,7 @@ public class Validator {
 
 		return errors;
 	}
-	
+
 	/*
 	 * Validate a regex: will it compile?
 	 */
@@ -88,10 +91,10 @@ public class Validator {
 		try {
 			Pattern.compile(regex);
 		} catch (PatternSyntaxException e) {
-			reError = e.getDescription();
+			reError = e.toString();
 			return false;
 		}
-		
+
 		return true;
 	}
 

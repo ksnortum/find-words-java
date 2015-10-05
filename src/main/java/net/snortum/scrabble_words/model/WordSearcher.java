@@ -16,9 +16,9 @@ import net.snortum.utils.Sublister;
 
 /**
  * Create all possible permutations of the "tiles" (letters) and validate them
- * against the entered dictionary. Do other tests.
+ * against the entered dictionary
  * 
- * @author Knute
+ * @author Knute Snortum
  * @version 1.1
  */
 public class WordSearcher {
@@ -40,6 +40,15 @@ public class WordSearcher {
 		this.progress = new Progressor();
 	}
 
+	/**
+	 * Create a WordSearcher object, passing in a progress bar to update as work
+	 * is done
+	 * 
+	 * @param data
+	 *            the {@link InputData} to use
+	 * @param bar
+	 *            the {@link ProgressBar} to update
+	 */
 	public WordSearcher(InputData data, ProgressBar bar) {
 		this.data = data;
 		this.progress = new Progressor(bar);
@@ -49,7 +58,7 @@ public class WordSearcher {
 	 * Get a list of words from the selected dictionary that match the
 	 * requirements of the {@link InputData}.
 	 * 
-	 * @return a sorted Set where the words that are found can be added to it
+	 * @return a sorted Set containing the words that are found
 	 */
 	public Set<ScrabbleWord> getWords() {
 		if (LOG.isDebugEnabled()) {
@@ -57,7 +66,7 @@ public class WordSearcher {
 		}
 
 		// Get valid words from dictionary
-		Dictionary dict = new Dictionary(data);
+		ScrabbleDictionary dict = new ScrabbleDictionary(data);
 		Map<String, String> validWords = dict.getValidWords();
 
 		// Compile regex once for speed
@@ -137,12 +146,14 @@ public class WordSearcher {
 				for (String word : permutator.permutate()) {
 					word = data.getStartsWith() + word + data.getEndsWith();
 
-					if ( validWords.containsKey(word) 
-							&& checkContains(word) 
-							&& (pattern == null || pattern.matcher(word).find()) ) {
-						
+					if (validWords.containsKey(word)
+							&& checkContains(word)
+							&& (pattern == null
+									|| pattern.matcher(word).find())) {
+
 						// Is this a bingo?
-						boolean isBingo = word.length() - data.getContains().length() >= 7;
+						boolean isBingo = word.length()
+								- data.getContains().length() >= 7;
 
 						words.add(new ScrabbleWord(word, isBingo));
 					}

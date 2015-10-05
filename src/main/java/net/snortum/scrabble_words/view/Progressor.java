@@ -2,6 +2,13 @@ package net.snortum.scrabble_words.view;
 
 import javafx.scene.control.ProgressBar;
 
+/**
+ * Show progress of a task. Uses either a {@link ProgressBar} or messages sent to the
+ * system output.
+ * 
+ * @author Knute Snortum
+ * @version 0.1
+ */
 public class Progressor {
 	private final ProgressBar progress;
 
@@ -9,13 +16,13 @@ public class Progressor {
 	 * Show progress using a progress bar
 	 * 
 	 * @param progress
-	 *            Progress bar
+	 *            the progress bar
 	 * @throws IllegalArgumentException
 	 *             if progress bar is null
 	 */
-	public Progressor( ProgressBar progress ) {
-		if ( progress == null ) {
-			throw new IllegalArgumentException( "Progress bar cannot be null" );
+	public Progressor(ProgressBar progress) {
+		if (progress == null) {
+			throw new IllegalArgumentException("Progress bar cannot be null");
 		}
 
 		this.progress = progress;
@@ -34,12 +41,11 @@ public class Progressor {
 	 * @param percent
 	 *            Fraction of one representing a percentage finished
 	 */
-	public void showProgress( double percent ) {
-		if ( progress != null ) {
-			progress.setProgress( percent );
-		}
-		else {
-			System.out.printf( "Completed: %5.2f%n", percent * 100 );
+	public void showProgress(double percent) {
+		if (progress != null) {
+			progress.setProgress(percent);
+		} else {
+			System.out.printf("Completed: %5.2f%n", percent * 100);
 		}
 	}
 

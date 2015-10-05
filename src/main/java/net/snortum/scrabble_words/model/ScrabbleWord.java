@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Holds a word and its Scrabble value. Immutable. Comparable.
  * 
- * @author Knute
+ * @author Knute Snortum
  * @version 1.0
  */
 public class ScrabbleWord implements Comparable<ScrabbleWord> {
@@ -49,28 +49,7 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	}
 
 	/**
-	 * Create a Scrabble word and calculate its value
-	 * 
-	 * @param word
-	 *            the word formed by the Scrabble tiles
-	 * @throws IllegalArgumentException
-	 *             if word is null or empty
-	 */
-	public ScrabbleWord(String word) {
-		if (word == null) {
-			throw new IllegalArgumentException(WORD_NULL);
-		}
-		if (word.isEmpty()) {
-			throw new IllegalArgumentException(WORD_EMPTY);
-		}
-
-		this.word = word.toLowerCase();
-		this.value = calculateValue();
-	}
-
-	/**
-	 * Create a Scrabble word from an existing word, optionally adding 50 points
-	 * for a bingo
+	 * Create a Scrabble word, optionally adding 50 points for a bingo
 	 * 
 	 * @param word
 	 *            the word formed by the Scrabble tiles
@@ -89,6 +68,16 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 
 		this.word = word.toLowerCase();
 		this.value = calculateValue() + (isBingo ? 50 : 0);
+	}
+
+	/**
+	 * Create a Scrabble word and calculate its value, assume it is not a bingo
+	 * 
+	 * @param word
+	 *            the word formed by the Scrabble tiles
+	 */
+	public ScrabbleWord(String word) {
+		this(word, false);
 	}
 
 	/*

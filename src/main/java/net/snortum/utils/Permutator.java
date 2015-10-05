@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * Provides all permutations of a string
  * 
- * @author Knute
- *
+ * @author Knute Snortum
+ * @version 0.1
  */
 public class Permutator {
 	private String str;

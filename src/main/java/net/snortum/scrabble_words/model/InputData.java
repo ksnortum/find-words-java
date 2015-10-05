@@ -1,5 +1,19 @@
 package net.snortum.scrabble_words.model;
 
+/**
+ * This class holds to data inputed by the user from the form. It uses an
+ * internal Builder class to create the object.  For instance:
+ * 
+ *	<pre>
+ *	InputData data = new InputData.Builder("abc")
+ *			.contains("d")
+ *			.dictionaryName(DictionaryName.twl)
+ *			.build();
+ *	</pre>
+ * 
+ * @author Knute Snortum
+ * @version 0.3
+ */
 public class InputData {
 
 	private String letters;
@@ -10,10 +24,7 @@ public class InputData {
 	private DictionaryName dictName;
 
 	/**
-	 * Create a InputData object
-	 * 
-	 * @author Knute
-	 * @version 0.3
+	 * Build an {@link InputData} object
 	 */
 	public static class Builder {
 
@@ -28,11 +39,10 @@ public class InputData {
 		private DictionaryName dictName = DictionaryName.twl;
 
 		/**
-		 * Create a Builder object to build an @{link InputData} object.
+		 * Create a Builder object to build an {@link InputData} object.
 		 * 
 		 * @param letters
 		 *            the letters of the "tiles" you have
-		 * @see build
 		 */
 		public Builder(String letters) {
 			this.letters = letters.toLowerCase();
@@ -64,7 +74,7 @@ public class InputData {
 		 * @return this object
 		 */
 		public Builder startsWith(String startsWith) {
-			this.startsWith = startsWith;
+			this.startsWith = startsWith.toLowerCase();
 			return this;
 		}
 
@@ -74,7 +84,7 @@ public class InputData {
 		 * @return this object
 		 */
 		public Builder endsWith(String endsWith) {
-			this.endsWith = endsWith;
+			this.endsWith = endsWith.toLowerCase();
 			return this;
 		}
 
@@ -91,14 +101,7 @@ public class InputData {
 
 		/**
 		 * @return an {@link InputData} object built from {@link Builder}
-		 *         options. For instance:
-		 * 
-		 *         <pre>
-		 *         InputData data = new InputData.Builder("abc")
-		 *         		.contains("d")
-		 *         		.dictionaryName(DictionaryName.twl)
-		 *         		.build();
-		 *         </pre>
+		 *         options. 
 		 */
 		public InputData build() {
 			return new InputData(this);
