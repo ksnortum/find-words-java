@@ -2,7 +2,7 @@ package net.snortum.scrabble_words.model;
 
 /**
  * This class holds to data inputed by the user from the form. It uses an
- * internal Builder class to create the object.  For instance:
+ * internal {@link Builder} class to create the object.  For instance:
  * 
  *	<pre>
  *	InputData data = new InputData.Builder("abc")

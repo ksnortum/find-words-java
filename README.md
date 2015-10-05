@@ -7,6 +7,10 @@
 This project uses [Maven](http://maven.apache.org/) to build an executable jar file.  From the command line, execute:
 
 	mvn package
+	
+To get HTML reports including JavaDocs, execute:
+
+	mvn site
 
 ## Running ##
 
@@ -19,5 +23,4 @@ If you have Java in your PATH, you can execute the jar file from the command lin
 * Validate that only one dot is in letters
 * Add ability to do two wild cards (dots)
 * Better progress bar when using wild cards
-* Hide progress bar when not calculating
-* <Enter> for Submit
+

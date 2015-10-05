@@ -36,7 +36,7 @@ public class ScrabbleDictionary {
 	 * @param data
 	 *            the input data to use
 	 * @throws IllegalArgumentException
-	 *             if data or dictionary name are null
+	 *             if data or data.getDictionaryName() are null
 	 */
 	public ScrabbleDictionary(InputData data) {
 		if (data == null) {
@@ -84,6 +84,9 @@ public class ScrabbleDictionary {
 			LOG.error(e.toString());
 		}
 
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Size of valid word list: " + validWords.size());
+		}
 		words.put(data.getDictionaryName(), validWords);
 
 		return validWords;

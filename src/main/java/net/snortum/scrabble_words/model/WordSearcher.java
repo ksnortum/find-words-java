@@ -23,7 +23,6 @@ import net.snortum.utils.Sublister;
  */
 public class WordSearcher {
 	private static final Logger LOG = Logger.getLogger(WordSearcher.class);
-	private static final int FINISHED = 1;
 	private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
 	private final InputData data;
@@ -160,7 +159,7 @@ public class WordSearcher {
 				}
 			}
 		}
-		progress.showProgress(FINISHED);
+		progress.showProgress(Progressor.FINISHED);
 
 		return words;
 	}

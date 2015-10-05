@@ -201,11 +201,10 @@ public class ScrabbleWords extends Application {
 		grid.add(dictionary, col, row);
 
 		// Progress bar
-		col = 0;
-		row++;
-		grid.add(new Label("Calculating: "), col, row);
 		col = 1;
+		row++;
 		grid.add(progress, col, row);
+		progress.setVisible(false);
 
 		// Submit button and action
 		HBox hbox = new HBox();

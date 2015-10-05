@@ -10,6 +10,8 @@ import javafx.scene.control.ProgressBar;
  * @version 0.1
  */
 public class Progressor {
+	public static final int FINISHED = 1;
+	
 	private final ProgressBar progress;
 
 	/**
@@ -43,7 +45,12 @@ public class Progressor {
 	 */
 	public void showProgress(double percent) {
 		if (progress != null) {
-			progress.setProgress(percent);
+			if (percent == FINISHED) {
+				progress.setVisible(false);
+			} else {
+				progress.setVisible(true);
+				progress.setProgress(percent);
+			}
 		} else {
 			System.out.printf("Completed: %5.2f%n", percent * 100);
 		}
