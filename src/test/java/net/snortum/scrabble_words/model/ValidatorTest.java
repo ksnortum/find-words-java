@@ -9,11 +9,28 @@ import org.junit.Test;
 public class ValidatorTest {
 
 	@Test
-	public void testValidate() {
+	public void testValidateNoDot() {
+		InputData data = new InputData.Builder( "abc" ).build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 0 );
+	}
+	
+	@Test
+	public void testValidateOneDot() {
 		InputData data = new InputData.Builder( "abc." ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 0 );
+	}
+	
+	@Test
+	public void testValidatorOneDotOnlyError() {
+		InputData data = new InputData.Builder( "abc.." ).build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 1 );
+		assertEquals( message.get( 0 ), Validator.ONLY_ONE_DOT );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

@@ -20,7 +20,6 @@ If you have Java in your PATH, you can execute the jar file from the command lin
 	
 ## TODO ##
 
-* Validate that only one dot is in letters
-* Add ability to do two wild cards (dots)
+* Add ability to do two wild cards (dots) (use two progress bars, new one for alphabet?)
 * Better progress bar when using wild cards
 

@@ -19,6 +19,7 @@ public class Validator {
 	static final String TOO_FEW_LETTERS = "You must have at least three letters";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that five letters";
 	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
+	static final String ONLY_ONE_DOT = "Letters can only have one dot";
 	static final String CONTAINS_NONLETTERS = "Contains must only be letters (a-z)";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters (a-z)";
 	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters (a-z)";
@@ -60,6 +61,9 @@ public class Validator {
 		if (!data.getLetters().matches(LETTERS_DOT_RE)) {
 			errors.add(LETTERS_OR_DOT);
 		}
+		if (!onlyOneDot(data.getLetters())) {
+			errors.add(ONLY_ONE_DOT);
+		}
 		if (!data.getContains().isEmpty() && !data.getContainsRe().isEmpty()) {
 			errors.add(BOTH_CONTAINS_LETTERS_AND_REGEX);
 		}
@@ -82,6 +86,21 @@ public class Validator {
 		}
 
 		return errors;
+	}
+	
+	/*
+	 * True if letters has no dot or only one dot
+	 */
+	private boolean onlyOneDot(String letters) {
+		int dotIndex = letters.indexOf(".");
+		if (dotIndex == -1) {
+			return true;
+		}
+		int nextDotIndex = letters.indexOf(".", dotIndex + 1);
+		if (nextDotIndex == -1) {
+			return true;
+		}
+		return false;
 	}
 
 	/*
