@@ -196,7 +196,7 @@ public class ScrabbleWords extends Application {
 		col = 0;
 		row++;
 		grid.add(new Label("Dictionary: "), col, row);
-		dictionary.setValue(DictionaryName.twl);
+		dictionary.setValue(DictionaryName.ospd);
 		col = 1;
 		grid.add(dictionary, col, row);
 

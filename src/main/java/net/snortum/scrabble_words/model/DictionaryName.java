@@ -4,8 +4,8 @@ package net.snortum.scrabble_words.model;
  * The names of valid Scrabble dictionaries.
  * 
  * @author Knute Snortum
- * @version 0.1
+ * @version 0.2
  */
 public enum DictionaryName {
-	twl, sowpods;
+	ospd, twl, sowpods;
 }
