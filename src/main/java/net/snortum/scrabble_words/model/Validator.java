@@ -8,12 +8,14 @@ import java.util.regex.PatternSyntaxException;
 import org.apache.log4j.Logger;
 
 /**
- * Validate {@link InputData}, returning a list of errors, if any
+ * This immutable class will validate {@link InputData}, returning a list of
+ * errors, if any
  * 
  * @author Knute Snortum
- * @version 0.2
+ * @version 0.3
  */
 public class Validator {
+	private static final Logger LOG = Logger.getLogger(Validator.class);
 	private static final String INVALID_REGEX = "The regex is invalid";
 	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = "Cannot have both Contains Letters and Contains Regex";
 	static final String TOO_FEW_LETTERS = "You must have at least three letters";
@@ -23,11 +25,10 @@ public class Validator {
 	static final String CONTAINS_NONLETTERS = "Contains must only be letters (a-z)";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters (a-z)";
 	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters (a-z)";
-	private static final Logger LOG = Logger.getLogger(Validator.class);
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
 	private static final String LETTERS_RE = "[a-z]*";
 
-	private InputData data;
+	private final InputData data;
 	private String reError = "";
 
 	/**
@@ -87,7 +88,7 @@ public class Validator {
 
 		return errors;
 	}
-	
+
 	/*
 	 * True if letters has no dot or only one dot
 	 */

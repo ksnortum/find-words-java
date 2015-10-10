@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.snortum.scrabble_words</groupId>
   <artifactId>Scrabble-Words</artifactId>
-  <version>0.1.11</version>
+  <version>0.1.12</version>
   <build>
     <plugins>
       <plugin>

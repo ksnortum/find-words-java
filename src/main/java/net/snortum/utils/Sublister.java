@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Create sublists (sets actually) of a list
+ * Create an immutable object that can sublist the given list. (Uses sets so
+ * there are no duplicates).
  * 
  * @author Knute Snortum
- * @version 0.1
+ * @version 0.2
  * 
  * @param <T>
  *            the type of this list
  */
 public class Sublister<T> {
-	private List<T> toSublist;
+	private final List<T> toSublist;
 
 	/**
 	 * Create a sublister object

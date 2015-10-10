@@ -7,8 +7,9 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 /**
- * Create a {@link WebView} in a {@link Region} with the width and height based
- * on the dimensions of the region.
+ * Create an immutable object that will load a {@link WebView} in a
+ * {@link Region} with the width and height based on the dimensions of the
+ * region.
  * 
  * @author Knute Snortum
  * @version 0.1

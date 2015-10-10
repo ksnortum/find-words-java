@@ -1,27 +1,27 @@
 package net.snortum.scrabble_words.model;
 
 /**
- * This class holds to data inputed by the user from the form. It uses an
- * internal {@link Builder} class to create the object.  For instance:
+ * This class immutable holds to data inputed by the user from the form. It uses
+ * an internal {@link Builder} class to create the object. For instance:
  * 
- *	<pre>
- *	InputData data = new InputData.Builder("abc")
- *			.contains("d")
- *			.dictionaryName(DictionaryName.twl)
- *			.build();
- *	</pre>
+ * <pre>
+ * InputData data = new InputData.Builder("abc")
+ * 		.contains("d")
+ * 		.dictionaryName(DictionaryName.twl)
+ * 		.build();
+ * </pre>
  * 
  * @author Knute Snortum
- * @version 0.3
+ * @version 0.4
  */
 public class InputData {
 
-	private String letters;
-	private String contains;
-	private String containsRe;
-	private String startsWith;
-	private String endsWith;
-	private DictionaryName dictName;
+	private final String letters;
+	private final String contains;
+	private final String containsRe;
+	private final String startsWith;
+	private final String endsWith;
+	private final DictionaryName dictName;
 
 	/**
 	 * Build an {@link InputData} object
@@ -101,7 +101,7 @@ public class InputData {
 
 		/**
 		 * @return an {@link InputData} object built from {@link Builder}
-		 *         options. 
+		 *         options.
 		 */
 		public InputData build() {
 			return new InputData(this);

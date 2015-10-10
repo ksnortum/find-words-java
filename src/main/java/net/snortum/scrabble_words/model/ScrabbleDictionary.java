@@ -13,11 +13,12 @@ import java.util.function.Function;
 import org.apache.log4j.Logger;
 
 /**
- * Retrieves a list of words from a Scrabble Dictionary text file. The text file
- * must be in the ClassPath with one word per line. Words will be down-cased.
+ * This immutable class retrieves a list of words from a Scrabble Dictionary
+ * text file. The text file must be in the ClassPath with one word per line.
+ * Words will be down-cased.
  * 
  * @author Knute Snortum
- * @version 1.0
+ * @version 1.1
  */
 public class ScrabbleDictionary {
 	private static final Logger LOG = Logger
@@ -27,7 +28,7 @@ public class ScrabbleDictionary {
 
 	private static Map<DictionaryName, Map<String, String>> words = new HashMap<>();
 
-	private InputData data;
+	private final InputData data;
 
 	/**
 	 * Create a new ScrabbleDictionary object. Uses data to get the

@@ -15,8 +15,8 @@ import net.snortum.utils.Permutator;
 import net.snortum.utils.Sublister;
 
 /**
- * Create all possible permutations of the "tiles" (letters) and validate them
- * against the entered dictionary
+ * This immutable class will create all possible permutations of the "tiles"
+ * (letters) and validate them against the entered dictionary
  * 
  * @author Knute Snortum
  * @version 1.1

@@ -166,9 +166,11 @@ public class ScrabbleWords extends Application {
 						if (USE_LETTERS.equals(
 								group.getSelectedToggle().getUserData())) {
 							lblContains.setText(CONTAINS_LETTERS);
+							contains.clear();
 						} else if (USE_REGEX.equals(
 								group.getSelectedToggle().getUserData())) {
 							lblContains.setText(CONTAINS_RE);
+							contains.clear();
 						} else {
 							lblContains.setText("Unknown");
 						}
