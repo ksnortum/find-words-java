@@ -12,13 +12,12 @@ package net.snortum.scrabble_words.model;
  * </pre>
  * 
  * @author Knute Snortum
- * @version 0.4
+ * @version 2015.11.15
  */
 public class InputData {
 
 	private final String letters;
 	private final String contains;
-	private final String containsRe;
 	private final String startsWith;
 	private final String endsWith;
 	private final DictionaryName dictName;
@@ -33,7 +32,6 @@ public class InputData {
 
 		// Optional, set default values
 		private String contains = "";
-		private String containsRe = "";
 		private String startsWith = "";
 		private String endsWith = "";
 		private DictionaryName dictName = DictionaryName.twl;
@@ -55,16 +53,6 @@ public class InputData {
 		 */
 		public Builder contains(String contains) {
 			this.contains = contains.toLowerCase();
-			return this;
-		}
-
-		/**
-		 * @param containsRe
-		 *            the regex the suggested words must match
-		 * @return this object
-		 */
-		public Builder containsRe(String containsRe) {
-			this.containsRe = containsRe;
 			return this;
 		}
 
@@ -112,7 +100,6 @@ public class InputData {
 	private InputData(Builder builder) {
 		this.letters = builder.letters;
 		this.contains = builder.contains;
-		this.containsRe = builder.containsRe;
 		this.startsWith = builder.startsWith;
 		this.endsWith = builder.endsWith;
 		this.dictName = builder.dictName;
@@ -133,7 +120,6 @@ public class InputData {
 
 		this.letters = data.letters;
 		this.contains = data.contains;
-		this.containsRe = data.containsRe;
 		this.startsWith = data.startsWith;
 		this.endsWith = data.endsWith;
 		this.dictName = data.dictName;
@@ -153,13 +139,6 @@ public class InputData {
 	 */
 	public String getContains() {
 		return contains;
-	}
-
-	/**
-	 * @return the regex the suggested words must contain
-	 */
-	public String getContainsRe() {
-		return containsRe;
 	}
 
 	/**
@@ -189,7 +168,6 @@ public class InputData {
 	public boolean isEmpty() {
 		return letters.isEmpty() &&
 				contains.isEmpty() &&
-				containsRe.isEmpty() &&
 				startsWith.isEmpty() &&
 				endsWith.isEmpty();
 	}

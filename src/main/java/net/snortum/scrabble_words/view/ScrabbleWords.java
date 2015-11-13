@@ -15,7 +15,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -33,10 +32,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
@@ -64,9 +60,6 @@ import net.snortum.scrabble_words.model.WordSearcher;
 public class ScrabbleWords extends Application {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
 	private static final String CONTAINS_LETTERS = "Contains Letters:";
-	private static final String CONTAINS_RE = "Contains Regex:";
-	private static final String USE_LETTERS = "use letters";
-	private static final String USE_REGEX = "use regex";
 	private static final int HELP_PAGE_WIDTH = 750;
 	private static final int HELP_PAGE_HEIGHT = 500;
 	private static final String HELP_PAGE_CSS = "main.css";
@@ -79,7 +72,6 @@ public class ScrabbleWords extends Application {
 	private final TextField startsWith = new TextField();
 	private final TextField endsWith = new TextField();
 	private final ProgressBar progress = new ProgressBar(0.0);
-	private final ToggleGroup group = new ToggleGroup();
 	private final ChoiceBox<DictionaryName> dictionary = new ChoiceBox<>(
 			FXCollections.observableArrayList(DictionaryName.values()));
 
@@ -130,25 +122,6 @@ public class ScrabbleWords extends Application {
 		col = 1;
 		grid.add(letters, col, row);
 
-		// Contains letters or regex
-		RadioButton btnContains = new RadioButton("Contains these letters");
-		btnContains.setToggleGroup(group);
-		btnContains.setSelected(true);
-		btnContains.setUserData(USE_LETTERS);
-		btnContains.setTooltip(new Tooltip("Use letter(s) in contains field"));
-		col = 0;
-		row++;
-		grid.add(btnContains, col, row);
-
-		RadioButton btnContainsRe = new RadioButton("Contains (with regex)");
-		btnContainsRe.setToggleGroup(group);
-		btnContainsRe.setUserData(USE_REGEX);
-		btnContainsRe
-				.setTooltip(new Tooltip("Use a regex in the contains field"));
-		col = 0;
-		row++;
-		grid.add(btnContainsRe, col, row);
-
 		col = 0;
 		row++;
 		Label lblContains = new Label(CONTAINS_LETTERS);
@@ -157,25 +130,6 @@ public class ScrabbleWords extends Application {
 				"Letter(s)/regex on the board that words must contain"));
 		col = 1;
 		grid.add(contains, col, row);
-
-		// Set Contains label text based on radio button selection
-		group.selectedToggleProperty()
-				.addListener((ObservableValue<? extends Toggle> ov,
-						Toggle old_toggle, Toggle new_toggle) -> {
-					if (group.getSelectedToggle() != null) {
-						if (USE_LETTERS.equals(
-								group.getSelectedToggle().getUserData())) {
-							lblContains.setText(CONTAINS_LETTERS);
-							contains.clear();
-						} else if (USE_REGEX.equals(
-								group.getSelectedToggle().getUserData())) {
-							lblContains.setText(CONTAINS_RE);
-							contains.clear();
-						} else {
-							lblContains.setText("Unknown");
-						}
-					}
-				});
 
 		// Starts with
 		col = 0;
@@ -326,15 +280,8 @@ public class ScrabbleWords extends Application {
 	private InputData validateInputData(final Stage stage) {
 
 		// Get data a validate
-		String containsData = contains.getText();
-		String containsReData = "";
-		if (containsIsRe(group)) {
-			containsReData = containsData;
-			containsData = "";
-		}
 		InputData data = new InputData.Builder(letters.getText())
-				.contains(containsData)
-				.containsRe(containsReData)
+				.contains(contains.getText())
 				.startsWith(startsWith.getText())
 				.endsWith(endsWith.getText())
 				.dictionaryName(dictionary.getValue())
@@ -425,12 +372,7 @@ public class ScrabbleWords extends Application {
 		dialog.show();
 	}
 
-	private boolean containsIsRe(ToggleGroup group) {
-		return group.getSelectedToggle() != null &&
-				USE_REGEX.equals(group.getSelectedToggle().getUserData());
-	}
-
-	/**
+	/*
 	 * Clear all test fields
 	 */
 	private void clearText() {
@@ -441,7 +383,7 @@ public class ScrabbleWords extends Application {
 		letters.requestFocus();
 	}
 
-	/**
+	/*
 	 * Create web browser to display help HTML
 	 */
 	private void help() {

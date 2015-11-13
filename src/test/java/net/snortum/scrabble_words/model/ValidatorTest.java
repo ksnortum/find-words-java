@@ -68,17 +68,6 @@ public class ValidatorTest {
 	}
 	
 	@Test
-	public void testValidatorContainsNonletters() {
-		InputData data = new InputData.Builder( "abc" )
-				.contains( "a5" )
-				.build();
-		Validator validator = new Validator( data );
-		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
-		assertEquals( message.get( 0 ), Validator.CONTAINS_NONLETTERS );
-	}
-	
-	@Test
 	public void testValidatorStartsWithNonletters() {
 		InputData data = new InputData.Builder( "abc" )
 				.startsWith( "a5" )

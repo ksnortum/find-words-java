@@ -19,7 +19,7 @@ import net.snortum.utils.Sublister;
  * (letters) and validate them against the entered dictionary
  * 
  * @author Knute Snortum
- * @version 1.1
+ * @version 2015.11.13
  */
 public class WordSearcher {
 	private static final Logger LOG = Logger.getLogger(WordSearcher.class);
@@ -70,15 +70,15 @@ public class WordSearcher {
 
 		// Compile regex once for speed
 		Pattern pattern = null;
-		if (!data.getContainsRe().isEmpty()) {
-			pattern = Pattern.compile(data.getContainsRe());
+		if (!data.getContains().isEmpty()) {
+			pattern = Pattern.compile(data.getContains());
 		}
 
 		Set<ScrabbleWord> words = new TreeSet<>();
 
 		// Do letters have a wild card?
 		if (data.getLetters().indexOf(".") == -1) {
-			String letters = data.getLetters() + data.getContains();
+			String letters = data.getLetters() + getLettersFromContains(); 
 			List<String> lettersAsList = Arrays.asList(letters.split(""));
 			Sublister<String> sublister = new Sublister<String>(lettersAsList);
 			Set<List<String>> sublists = sublister.sublist();
@@ -91,7 +91,7 @@ public class WordSearcher {
 
 			// Wild card processing
 			for (String letter : ALPHABET.split("")) {
-				String allLetters = letter + dataLetters + data.getContains();
+				String allLetters = letter + dataLetters + getLettersFromContains(); 
 				List<String> lettersAsList = Arrays
 						.asList(allLetters.split(""));
 				Sublister<String> sublister = new Sublister<String>(
@@ -145,14 +145,12 @@ public class WordSearcher {
 				for (String word : permuter.permuteUnique()) {
 					word = data.getStartsWith() + word + data.getEndsWith();
 
-					if (validWords.containsKey(word)
-							&& checkContains(word)
-							&& (pattern == null
-									|| pattern.matcher(word).find())) {
+					if (validWords.containsKey(word) && (pattern == null
+							|| pattern.matcher(word).find())) {
 
 						// Is this a bingo?
 						boolean isBingo = word.length()
-								- data.getContains().length() >= 7;
+								- getLettersFromContains().length() >= 7; 
 
 						words.add(new ScrabbleWord(word, isBingo));
 					}
@@ -164,31 +162,25 @@ public class WordSearcher {
 		return words;
 	}
 
-	/**
-	 * Does this word contain all the letters from the {@link InputData}?
-	 * 
-	 * @param word
-	 *            the word to check
-	 * @return true: there are no "contains" letters, or word contains all
-	 *         letters false: word does not contain all letters
+	/*
+	 * Return only letters. Since a regex can contain escaped characters, return
+	 * only non-escaped
 	 */
-	private boolean checkContains(String word) {
-		boolean addIt = true;
-
-		// No containing letters always passes
-		if (!data.getContains().isEmpty()) {
-			addIt = false;
-
-			// Check all containing letters
-			for (String containsLetter : data.getContains().split("")) {
-				if (word.indexOf(containsLetter) >= 0) {
-					addIt = true;
-					break;
-				}
+	private String getLettersFromContains() {
+		StringBuilder letters = new StringBuilder();
+		boolean isEscapeCharacter = false;
+		
+		for (String letter : data.getContains().split("")) {
+			if ( letter.matches("[a-z]") && !isEscapeCharacter ) {
+				letters.append(letter);
+			}
+			if ( "\\".equals(letter) ) {
+				isEscapeCharacter = true;
+			} else {
+				isEscapeCharacter = false;
 			}
 		}
-
-		return addIt;
+		
+		return letters.toString();
 	}
-
 }

@@ -12,12 +12,11 @@ import org.apache.log4j.Logger;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2015.11.12
+ * @version 2015.11.13
  */
 public class Validator {
 	private static final Logger LOG = Logger.getLogger(Validator.class);
 	private static final String INVALID_REGEX = "The regex is invalid";
-	private static final String BOTH_CONTAINS_LETTERS_AND_REGEX = "Cannot have both Contains Letters and Contains Regex";
 	static final String TOO_FEW_LETTERS = "You must have at least one letter";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that twenty letters";
 	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
@@ -65,14 +64,8 @@ public class Validator {
 		if (!onlyOneDot(data.getLetters())) {
 			errors.add(ONLY_ONE_DOT);
 		}
-		if (!data.getContains().isEmpty() && !data.getContainsRe().isEmpty()) {
-			errors.add(BOTH_CONTAINS_LETTERS_AND_REGEX);
-		}
 		if (data.getContains().length() > 20) {
 			errors.add(CONTAINS_TOO_LONG);
-		}
-		if (!data.getContains().matches(LETTERS_RE)) {
-			errors.add(CONTAINS_NONLETTERS);
 		}
 		if (!data.getStartsWith().matches(LETTERS_RE)) {
 			errors.add(STARTSWITH_NONLETTERS);
@@ -80,8 +73,7 @@ public class Validator {
 		if (!data.getEndsWith().matches(LETTERS_RE)) {
 			errors.add(ENDSWITH_NONLETTERS);
 		}
-		if (!data.getContainsRe().isEmpty()
-				&& !regexIsValid(data.getContainsRe())) {
+		if (!regexIsValid(data.getContains())) {
 			errors.add(INVALID_REGEX);
 			errors.add(reError);
 		}
