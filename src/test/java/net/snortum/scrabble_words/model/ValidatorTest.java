@@ -40,7 +40,7 @@ public class ValidatorTest {
 
 	@Test
 	public void testValidatorTooFewLettersError() {
-		InputData data = new InputData.Builder( "ab" ).build();
+		InputData data = new InputData.Builder( "" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 1 );
@@ -59,7 +59,7 @@ public class ValidatorTest {
 	@Test
 	public void testValidatorContainsError() {
 		InputData data = new InputData.Builder( "abc" )
-				.contains( "abcdef" )
+				.contains( "abcdefghijklmnopqrstuvwxyz" )
 				.build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
