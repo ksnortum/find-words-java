@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import javafx.scene.control.ProgressBar;
 import net.snortum.scrabble_words.view.Progressor;
-import net.snortum.utils.Permutator;
+import net.snortum.utils.Permuter;
 import net.snortum.utils.Sublister;
 
 /**
@@ -139,10 +139,10 @@ public class WordSearcher {
 
 				// Ready to permutate
 				String str = String.join("", thisList);
-				Permutator permutator = new Permutator(str);
+				Permuter permuter = new Permuter(str);
 
 				// Loop thru permutations
-				for (String word : permutator.permutate()) {
+				for (String word : permuter.permuteUnique()) {
 					word = data.getStartsWith() + word + data.getEndsWith();
 
 					if (validWords.containsKey(word)
