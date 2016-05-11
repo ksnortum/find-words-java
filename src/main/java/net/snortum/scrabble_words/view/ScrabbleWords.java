@@ -55,7 +55,7 @@ import net.snortum.scrabble_words.model.WordSearcher;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 1.2
+ * @version 2016.05.11
  */
 public class ScrabbleWords extends Application {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
@@ -192,6 +192,16 @@ public class ScrabbleWords extends Application {
 		Button clear = new Button("Clear");
 		clear.setOnAction((ActionEvent event) -> clearText());
 		hbox.getChildren().add(clear);
+		top = 0;
+		right = 5;
+		bottom = 0;
+		left = 0;
+		HBox.setMargin(clear, new Insets(top, right, bottom, left));
+		
+		// Clear except Letters button
+		Button clearExcept = new Button("Clear Except Avail");
+		clearExcept.setOnAction((ActionEvent event) -> clearTextExceptLetters());
+		hbox.getChildren().add(clearExcept);
 
 		// Add buttons to box
 		col = 1;
@@ -203,10 +213,15 @@ public class ScrabbleWords extends Application {
 		MenuItem clearItem = new MenuItem("Clear");
 		clearItem.setAccelerator(KeyCombination.keyCombination("Ctrl+L"));
 		clearItem.setOnAction((ActionEvent event) -> clearText());
+		
+		MenuItem clearExceptItem = new MenuItem("Clear Except Avail");
+		clearExceptItem.setAccelerator(KeyCombination.keyCombination("Ctrl+R"));
+		clearExceptItem.setOnAction((ActionEvent event) -> clearTextExceptLetters());
+		
 		MenuItem exitItem = new MenuItem("Quit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
 		exitItem.setOnAction((ActionEvent event) -> System.exit(0));
-		menuFile.getItems().addAll(clearItem, exitItem);
+		menuFile.getItems().addAll(clearItem, clearExceptItem, exitItem);
 		
 		// Menu Help
 		Menu menuHelp = new Menu("Help");
@@ -325,15 +340,14 @@ public class ScrabbleWords extends Application {
 
 		ListView<String> listView = new ListView<>(data);
 		listView.setPrefSize(200, 300);
-		// FIXME: Doesn't work 
-		listView.setOnKeyPressed((KeyEvent keyEvent) -> {
-			System.out.println("Key pressed in Display Words");
+		Scene dialogScene = new Scene(listView);
+ 
+		dialogScene.setOnKeyPressed((KeyEvent keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ESCAPE) {
-				System.out.println("Escape in Display Words");
-				System.exit(0);
+				dialog.close();
 			}
 		});
-		Scene dialogScene = new Scene(listView);
+		
 		dialog.setScene(dialogScene);
 		dialog.show();
 	}
@@ -373,7 +387,17 @@ public class ScrabbleWords extends Application {
 	}
 
 	/*
-	 * Clear all test fields
+	 * Clear all text fields, except letters
+	 */
+	private void clearTextExceptLetters() {
+		contains.clear();
+		startsWith.clear();
+		endsWith.clear();
+		contains.requestFocus();
+	}
+	
+	/*
+	 * Clear all text fields
 	 */
 	private void clearText() {
 		letters.clear();
