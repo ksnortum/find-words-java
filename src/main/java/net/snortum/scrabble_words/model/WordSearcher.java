@@ -19,7 +19,7 @@ import net.snortum.utils.Sublister;
  * (letters) and validate them against the entered dictionary
  * 
  * @author Knute Snortum
- * @version 2015.11.13
+ * @version 2016.05.12
  */
 public class WordSearcher {
 	private static final Logger LOG = Logger.getLogger(WordSearcher.class);
@@ -135,7 +135,8 @@ public class WordSearcher {
 			thusFar += inc;
 
 			// No one-letter words
-			if (thisList.size() >= 2) {
+			if (thisList.size() + data.getStartsWith().length() 
+					+ data.getEndsWith().length() >= 2) {
 
 				// Ready to permutate
 				String str = String.join("", thisList);
