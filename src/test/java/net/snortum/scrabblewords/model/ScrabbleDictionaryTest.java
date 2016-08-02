@@ -1,4 +1,4 @@
-package net.snortum.scrabble_words.model;
+package net.snortum.scrabblewords.model;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+
+import net.snortum.scrabblewords.model.DictionaryName;
+import net.snortum.scrabblewords.model.InputData;
+import net.snortum.scrabblewords.model.ScrabbleDictionary;
+
 import org.junit.Before;
 
 public class ScrabbleDictionaryTest {

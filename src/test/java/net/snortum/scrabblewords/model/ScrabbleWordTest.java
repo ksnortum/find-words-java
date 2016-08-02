@@ -1,4 +1,4 @@
-package net.snortum.scrabble_words.model;
+package net.snortum.scrabblewords.model;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
+
+import net.snortum.scrabblewords.model.ScrabbleWord;
 
 /**
  * @author Knute

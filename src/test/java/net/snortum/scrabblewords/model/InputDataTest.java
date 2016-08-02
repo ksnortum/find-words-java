@@ -1,8 +1,11 @@
-package net.snortum.scrabble_words.model;
+package net.snortum.scrabblewords.model;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import net.snortum.scrabblewords.model.DictionaryName;
+import net.snortum.scrabblewords.model.InputData;
 
 public class InputDataTest {
 	private final String letters = "ABC";

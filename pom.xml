@@ -4,9 +4,9 @@
 		                     http://maven.apache.org/xsd/maven-4.0.0.xsd">
 							 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>net.snortum.scrabble_words</groupId>
+  <groupId>net.snortum.scrabblewords</groupId>
   <artifactId>Scrabble-Words</artifactId>
-  <version>0.2.2</version>
+  <version>1.0.0</version>
   <name>Scrabble Words</name>
   <description>Scrabble Words will display suggested words to play based on data entered by the user.</description>
   
@@ -44,7 +44,7 @@
 		</executions>
 		
 		<configuration>
-			<mainClass>net.snortum.scrabble_words.view.ScrabbleWords</mainClass>
+			<mainClass>net.snortum.scrabblewords.view.ScrabbleWords</mainClass>
 		</configuration>
       </plugin>
       
@@ -62,7 +62,7 @@
             <configuration>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>net.snortum.scrabble_words.view.ScrabbleWords</mainClass>
+                  <mainClass>net.snortum.scrabblewords.view.ScrabbleWords</mainClass>
                 </transformer>
               </transformers>
             </configuration>
