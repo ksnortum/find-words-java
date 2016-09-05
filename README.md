@@ -21,5 +21,6 @@ If you have Java in your PATH, you can execute the jar file from the command lin
 ## TODO ##
 
 * Add ability to do two wild cards (dots) 
+* Better scoring of wild cards.  Should not add wild card's value to total score 
 * Better progress bar when using wild cards (use two progress bars, new one for alphabet?)
 
