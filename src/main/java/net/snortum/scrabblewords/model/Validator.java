@@ -48,7 +48,7 @@ public class Validator {
 	/**
 	 * Validate the {@link InputData}
 	 * 
-	 * @return a String array of error messages
+	 * @return a List of error messages
 	 */
 	public List<String> validate() {
 		if (LOG.isDebugEnabled()) {
