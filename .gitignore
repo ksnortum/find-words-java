@@ -8,3 +8,4 @@ target
 /deploy/
 /dependency-reduced-pom.xml
 /jar-in-jar-loader.zip
+/doc/
