@@ -117,13 +117,6 @@
             <description>
               Scrabble Words will display suggested words to play based on data entered by the user.
             </description>
-            <licenses>
-              <license>
-                <a href="http://creativecommons.org/licenses/by-sa/4.0/">
-                  Creative Commons Attribution-ShareAlike 4.0 International License
-                </a>
-              </license>
-            </licenses>
             <url>file:///C:/Users/Knute/workspace/Scrabble</url>
           </project>
           <show>protected</show>
