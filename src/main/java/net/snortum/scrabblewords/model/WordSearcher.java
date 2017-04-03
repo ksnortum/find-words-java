@@ -146,6 +146,7 @@ public class WordSearcher {
 				for (String word : permuter.permuteUnique()) {
 					word = data.getStartsWith() + word + data.getEndsWith();
 
+					// Is this permutation a valid word?
 					if (validWords.containsKey(word) && (pattern == null
 							|| pattern.matcher(word).find())) {
 
