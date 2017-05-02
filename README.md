@@ -16,7 +16,7 @@ To get HTML reports including JavaDocs, execute:
 
 If you have Java in your PATH, you can execute the jar file from the command line:
 
-	java -jar Scrabble-Words-0.x.x.jar
+	java -jar Scrabble-Words-1.x.x.jar
 	
 ## TODO ##
 
