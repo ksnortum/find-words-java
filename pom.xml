@@ -117,7 +117,6 @@
             <description>
               Scrabble Words will display suggested words to play based on data entered by the user.
             </description>
-            <url>file:///C:/Users/Knute/workspace/Scrabble</url>
           </project>
           <show>protected</show>
         </configuration>
