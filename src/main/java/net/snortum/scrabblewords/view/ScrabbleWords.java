@@ -15,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -55,7 +56,7 @@ import net.snortum.scrabblewords.model.WordSearcher;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2016.05.11
+ * @version 2017.06.29
  */
 public class ScrabbleWords extends Application {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
@@ -181,7 +182,7 @@ public class ScrabbleWords extends Application {
 				searchForWords(stage);
 				break;
 			case ESCAPE:
-				System.exit(0);
+				Platform.exit();
 				break;
 			default:
 				break;
@@ -220,7 +221,7 @@ public class ScrabbleWords extends Application {
 		
 		MenuItem exitItem = new MenuItem("Quit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
-		exitItem.setOnAction((ActionEvent event) -> System.exit(0));
+		exitItem.setOnAction((ActionEvent event) -> Platform.exit());
 		menuFile.getItems().addAll(clearItem, clearExceptItem, exitItem);
 		
 		// Menu Help
