@@ -2,24 +2,18 @@ package net.snortum.scrabblewords.view;
 
 import static java.util.stream.Collectors.joining;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker.State;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -42,7 +36,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.snortum.scrabblewords.model.DictionaryName;
@@ -63,10 +56,10 @@ public class ScrabbleWords extends Application {
 	private static final String CONTAINS_LETTERS = "Contains Letters:";
 	private static final int HELP_PAGE_WIDTH = 750;
 	private static final int HELP_PAGE_HEIGHT = 500;
-	private static final String HELP_PAGE_CSS = "main.css";
+	private static final String HELP_PAGE_CSS = "/main.css";
 	private static final int ABOUT_PAGE_WIDTH = 500;
 	private static final int ABOUT_PAGE_HEIGHT = 400;
-	private static final String ABOUT_PAGE_CSS = "main.css";
+	private static final String ABOUT_PAGE_CSS = "/main.css";
 
 	private final TextField letters = new TextField();
 	private final TextField contains = new TextField();
@@ -414,7 +407,7 @@ public class ScrabbleWords extends Application {
 	private void help() {
 		final Stage helpStage = new Stage();
 		helpStage.setTitle("Help");
-		URL url = ScrabbleWords.class.getResource("/help.html");
+		URL url = getClass().getResource("/help.html");
 
 		if (url == null) {
 			LOG.error("Could not find \"help.html\"");
@@ -423,8 +416,18 @@ public class ScrabbleWords extends Application {
 
 		String helpUrl = url.toExternalForm();
 		Browser browser = new Browser(helpUrl);
-		String cssText = getCssText(HELP_PAGE_CSS);
-		setCssViaJavaScript(browser.getWebEngine(), cssText);
+		URL styleSheetUrl = getClass().getResource(HELP_PAGE_CSS);
+
+		if (styleSheetUrl == null) {
+			LOG.error("Could not find \"" + HELP_PAGE_CSS + "\"");
+		} else {
+      		if (LOG.isDebugEnabled()) {
+    			LOG.debug("Help page style sheet location: " + styleSheetUrl.toString());
+    		}
+    	
+    		browser.getWebEngine().setUserStyleSheetLocation(styleSheetUrl.toString());
+		}
+		
 		double width = HELP_PAGE_WIDTH, height = HELP_PAGE_HEIGHT;
 		Scene scene = new Scene(browser, width, height);
 		helpStage.setScene(scene);
@@ -444,60 +447,23 @@ public class ScrabbleWords extends Application {
 			return;
 		}
 
-		String aboutUrl = url.toExternalForm();
-		Browser browser = new Browser(aboutUrl);
-		String cssText = getCssText(ABOUT_PAGE_CSS);
-		setCssViaJavaScript(browser.getWebEngine(), cssText);
+		Browser browser = new Browser(url.toExternalForm());
+		URL styleSheetUrl = getClass().getResource(ABOUT_PAGE_CSS);
+
+		if (styleSheetUrl == null) {
+			LOG.error("Could not find \"" + ABOUT_PAGE_CSS + "\"");
+		} else {
+      		if (LOG.isDebugEnabled()) {
+    			LOG.debug("About page style sheet location: " + styleSheetUrl.toString());
+    		}
+    	
+    		browser.getWebEngine().setUserStyleSheetLocation(styleSheetUrl.toString());
+		}
+		
 		double width = ABOUT_PAGE_WIDTH, height = ABOUT_PAGE_HEIGHT;
 		Scene scene = new Scene(browser, width, height);
 		aboutStage.setScene(scene);
 		aboutStage.show();
 	}
 
-	/**
-	 * Read a CSS file
-	 * 
-	 * @param fileName
-	 *            the name and path of the CSS file
-	 * @return a sting that is the concatenation of all CSS text lines
-	 */
-	private String getCssText(String fileName) {
-		InputStream is = getClass().getClassLoader()
-				.getResourceAsStream(fileName);
-
-		if (is == null) {
-			LOG.error(fileName + " not found");
-			return "";
-		}
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		return br.lines().collect(joining(" "));
-	}
-
-	/**
-	 * Add CSS to HTML via DOM and JavaScript
-	 * 
-	 * @param webEngine
-	 *            the browser object's web engine to act on
-	 * @param cssText
-	 *            the CSS styling to add to the HTML
-	 * @return the web engine with listener added
-	 */
-	private WebEngine setCssViaJavaScript(WebEngine webEngine, String cssText) {
-		webEngine.getLoadWorker().stateProperty()
-				.addListener((obs, oldState, newState) -> {
-					if (newState == State.SUCCEEDED) {
-						Document doc = webEngine.getDocument();
-						Element styleNode = doc.createElement("style");
-						org.w3c.dom.Text styleContent = doc
-								.createTextNode(cssText);
-						styleNode.appendChild(styleContent);
-						doc.getDocumentElement().getElementsByTagName("head")
-								.item(0).appendChild(styleNode);
-						webEngine.executeScript(
-								"document.documentElement.innerHTML");
-					}
-				});
-		return webEngine;
-	}
 }
