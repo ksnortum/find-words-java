@@ -12,7 +12,7 @@ package net.snortum.scrabblewords.model;
  * </pre>
  * 
  * @author Knute Snortum
- * @version 2015.11.15
+ * @version 2017.07.05
  */
 public class InputData {
 
@@ -52,7 +52,7 @@ public class InputData {
 		 * @return this object
 		 */
 		public Builder contains(String contains) {
-			this.contains = contains.toLowerCase();
+			this.contains = contains;
 			return this;
 		}
 
@@ -62,7 +62,7 @@ public class InputData {
 		 * @return this object
 		 */
 		public Builder startsWith(String startsWith) {
-			this.startsWith = startsWith.toLowerCase();
+			this.startsWith = startsWith;
 			return this;
 		}
 
@@ -72,7 +72,7 @@ public class InputData {
 		 * @return this object
 		 */
 		public Builder endsWith(String endsWith) {
-			this.endsWith = endsWith.toLowerCase();
+			this.endsWith = endsWith;
 			return this;
 		}
 

@@ -13,8 +13,10 @@
 	<li><a href="#contains">Contains letters</a></li>
 	<li><a href="#startswith">Starts with these letters</a></li>
 	<li><a href="#endswith">Ends with these letters</a></li>
+	<li><a href="#capitals">Use of capital letters</a></li>
 	<li><a href="#dictionary">Select a dictionary</a></li>
 </ul>
+
 <h2 id="overview">Overview</h2>
 <p><a href=#top>Top</a></p>
 <p>
@@ -49,6 +51,7 @@
 	regular expressions.  This means it is possible (but not
 	likely) that a bingo word may not display first in the suggested word list. 
 </p>
+
 <h2 id="available">Available Letters</h2>
 <p><a href=#top>Top</a></p>
 <p>
@@ -56,6 +59,7 @@
 	a dot (.).  Currently, the program cannot handle the situation where the player has
 	both blank tiles.
 </p>
+
 <h2 id="contains">Contains Letters</h2>
 <p><a href=#top>Top</a></p>
 <p>	
@@ -63,17 +67,41 @@
 	Regular expressions are allowed.  The regex will be tested to make sure it is a
 	valid Java regular expression.  
 </p>
+
 <h2 id="startswith">Starts With</h2>
 <p><a href=#top>Top</a></p>
 <p>
 	Enter the letter or letters the suggested words should start with. (This is faster 
 	than using "^" in a regular expression.)
 </p>
-<h2 id ="endswith">Ends With</h2>
+
+<h2 id="endswith">Ends With</h2>
 <p><a href=#top>Top</a></p>
 <p>
 	Enter the letter or letters the suggested words should end with. (This is faster 
 	than using "$" in a regular expression.)
+</p>
+
+<h2 id="capitals">Use of Capital Letters</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	The <span class="quote">Contains Letters</span>, <span class="quote">Starts With</span>, 
+	and <span class="quote">Ends With</span> fields will all take capital
+	letters.  These have a special meaning, best illustrated by an example.  
+</p>
+<p>
+	Say there is a letter on the board, "m", and you know you want to take a letter from
+	your hand, "a", to make a word that contains "ma".  You could remove the "a" from your
+	<span class="quote">Available Letters</span> field and enter "ma" in the <span class="quote">
+	Contains Letters</span> field.  However, you now have to remember to put back the "a" 
+	if you look for another list of words with different settings.
+</p>
+<p>
+	The shortcut for this is to use capital letters in the <span class="quote">
+	Contains Letters</span>, <span class="quote">Starts With</span>, or <span class="quote">
+	Ends With</span> fields.  Entering "mA" in the <span class="quote">Contains Letters</span>
+	field means, I want to see a list of all words that contain "ma", but first remove one
+	"a" from the <span class="quote">Available Letters</span> field.
 </p>
 <h2 id="dictionary">Dictionary</h2>
 <p><a href=#top>Top</a></p>

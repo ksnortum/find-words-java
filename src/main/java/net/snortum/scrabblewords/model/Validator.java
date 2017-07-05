@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2015.11.13
+ * @version 2017.07.05
  */
 public class Validator {
 	private static final Logger LOG = Logger.getLogger(Validator.class);
@@ -21,11 +21,10 @@ public class Validator {
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that twenty letters";
 	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
 	static final String ONLY_ONE_DOT = "Letters can only have one dot";
-	static final String CONTAINS_NONLETTERS = "Contains must only be letters (a-z)";
-	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters (a-z)";
-	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters (a-z)";
+	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters";
+	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters";
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
-	private static final String LETTERS_RE = "[a-z]*";
+	private static final String LETTERS_RE = "[a-zA-Z]*";
 
 	private final InputData data;
 	private String reError = "";

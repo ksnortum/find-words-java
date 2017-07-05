@@ -19,7 +19,7 @@ import net.snortum.utils.Sublister;
  * (letters) and validate them against the entered dictionary
  * 
  * @author Knute Snortum
- * @version 2016.05.12
+ * @version 2017.07.05
  */
 public class WordSearcher {
 	private static final Logger LOG = Logger.getLogger(WordSearcher.class);
@@ -71,36 +71,44 @@ public class WordSearcher {
 		// Compile regex once for speed
 		Pattern pattern = null;
 		if (!data.getContains().isEmpty()) {
-			pattern = Pattern.compile(data.getContains());
+			pattern = Pattern.compile(data.getContains().toLowerCase());
 		}
 
+		String dataLetters = getValidDataLetters();
 		Set<ScrabbleWord> words = new TreeSet<>();
 
 		// Do letters have a wild card?
-		if (data.getLetters().indexOf(".") == -1) {
-			String letters = data.getLetters() + getLettersFromContains(); 
+		if (dataLetters.indexOf(".") == -1) {
+			String letters = dataLetters
+					+ getLettersFromContains().toLowerCase();
 			List<String> lettersAsList = Arrays.asList(letters.split(""));
 			Sublister<String> sublister = new Sublister<String>(lettersAsList);
 			Set<List<String>> sublists = sublister.sublist();
+
 			if (LOG.isDebugEnabled()) {
+				LOG.debug("Letters used to permutate = " + letters);
 				LOG.debug("Starting permutations");
 			}
+
 			words = permutateSublists(validWords, pattern, sublists, words);
 		} else {
-			String dataLetters = data.getLetters().replace(".", "");
+			dataLetters = dataLetters.replace(".", "");
 
 			// Wild card processing
 			for (String letter : ALPHABET.split("")) {
-				String allLetters = letter + dataLetters + getLettersFromContains(); 
+				String allLetters = letter + dataLetters
+						+ getLettersFromContains().toLowerCase();
 				List<String> lettersAsList = Arrays
 						.asList(allLetters.split(""));
 				Sublister<String> sublister = new Sublister<String>(
 						lettersAsList);
 				Set<List<String>> sublists = sublister.sublist();
+
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Starting permutations for letter (" + letter
 							+ ")");
 				}
+
 				words = permutateSublists(validWords, pattern, sublists, words);
 			}
 		}
@@ -135,7 +143,7 @@ public class WordSearcher {
 			thusFar += inc;
 
 			// No one-letter words
-			if (thisList.size() + data.getStartsWith().length() 
+			if (thisList.size() + data.getStartsWith().length()
 					+ data.getEndsWith().length() >= 2) {
 
 				// Ready to permutate
@@ -144,7 +152,8 @@ public class WordSearcher {
 
 				// Loop thru permutations
 				for (String word : permuter.permuteUnique()) {
-					word = data.getStartsWith() + word + data.getEndsWith();
+					word = data.getStartsWith().toLowerCase() + word
+							+ data.getEndsWith().toLowerCase();
 
 					// Is this permutation a valid word?
 					if (validWords.containsKey(word) && (pattern == null
@@ -152,7 +161,7 @@ public class WordSearcher {
 
 						// Is this a bingo?
 						boolean isBingo = word.length()
-								- getLettersFromContains().length() >= 7; 
+								- getLettersFromContains().length() >= 7;
 
 						words.add(new ScrabbleWord(word, isBingo));
 					}
@@ -164,25 +173,57 @@ public class WordSearcher {
 		return words;
 	}
 
-	/*
+	/**
 	 * Return only letters. Since a regex can contain escaped characters, return
 	 * only non-escaped
 	 */
 	private String getLettersFromContains() {
 		StringBuilder letters = new StringBuilder();
 		boolean isEscapeCharacter = false;
-		
+
 		for (String letter : data.getContains().split("")) {
-			if ( letter.matches("[a-z]") && !isEscapeCharacter ) {
+			if (letter.matches("[a-zA-Z]") && !isEscapeCharacter) {
 				letters.append(letter);
 			}
-			if ( "\\".equals(letter) ) {
+			if ("\\".equals(letter)) {
 				isEscapeCharacter = true;
 			} else {
 				isEscapeCharacter = false;
 			}
 		}
-		
+
 		return letters.toString();
 	}
+
+	/**
+	 * Remove any capital letters from dataLetters that are in Contains,
+	 * StartsWith, or EndsWith.
+	 */
+	private String getValidDataLetters() {
+		String dataLetters = data.getLetters();
+		dataLetters = removeCapitals(getLettersFromContains(), dataLetters);
+		dataLetters = removeCapitals(data.getStartsWith(), dataLetters);
+		dataLetters = removeCapitals(data.getEndsWith(), dataLetters);
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Valid data letters = " + dataLetters);
+		}
+
+		return dataLetters;
+	}
+
+	/**
+	 * Remove any capital letters in word from dataLetters
+	 */
+	private String removeCapitals(String word, String dataLetters) {
+		for (int i = 0; i < word.length(); i++) {
+			if (Character.isUpperCase(word.charAt(i))) {
+				dataLetters = dataLetters
+						.replace(word.substring(i, i + 1).toLowerCase(), "");
+			}
+		}
+
+		return dataLetters;
+	}
+
 }

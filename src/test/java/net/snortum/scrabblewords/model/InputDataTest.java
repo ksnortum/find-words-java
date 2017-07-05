@@ -7,6 +7,10 @@ import org.junit.Test;
 import net.snortum.scrabblewords.model.DictionaryName;
 import net.snortum.scrabblewords.model.InputData;
 
+/**
+ * @author Knute Snortum
+ * @version 2017.07.05
+ */
 public class InputDataTest {
 	private final String letters = "ABC";
 	private final String contains = "A";
@@ -24,7 +28,7 @@ public class InputDataTest {
 		InputData data = new InputData.Builder( letters )
 				.contains( contains )
 				.build();
-		assertTrue( data.getContains().equals( contains.toLowerCase() ) );
+		assertTrue( data.getContains().equals( contains ) );
 	}
 
 	@Test
@@ -43,7 +47,7 @@ public class InputDataTest {
 		InputData data = new InputData.Builder( letters )
 				.startsWith( startsWith )
 				.build();
-		assertTrue( data.getStartsWith().equals( startsWith.toLowerCase() ) );
+		assertTrue( data.getStartsWith().equals( startsWith ) );
 	}
 	
 	@Test
@@ -51,7 +55,7 @@ public class InputDataTest {
 		InputData data = new InputData.Builder( letters )
 				.endsWith( endsWith )
 				.build();
-		assertTrue( data.getEndsWith().equals( endsWith.toLowerCase() ) );
+		assertTrue( data.getEndsWith().equals( endsWith ) );
 	}
 	
 	@Test
