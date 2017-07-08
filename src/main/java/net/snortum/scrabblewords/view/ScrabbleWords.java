@@ -1,18 +1,13 @@
 package net.snortum.scrabblewords.view;
 
-import static java.util.stream.Collectors.joining;
-
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -22,44 +17,34 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import net.snortum.scrabblewords.controller.Validator;
+import net.snortum.scrabblewords.controller.WordSearcher;
 import net.snortum.scrabblewords.model.DictionaryName;
 import net.snortum.scrabblewords.model.InputData;
 import net.snortum.scrabblewords.model.ScrabbleWord;
-import net.snortum.scrabblewords.model.Validator;
-import net.snortum.scrabblewords.model.WordSearcher;
 
 /**
  * Display possible Scrabble words to play based on your "tile" letters, a
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2017.06.29
+ * @version 2017.07.08
  */
-public class ScrabbleWords extends Application {
+public class ScrabbleWords {
 	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
-	private static final String CONTAINS_LETTERS = "Contains Letters:";
-	private static final int HELP_PAGE_WIDTH = 750;
-	private static final int HELP_PAGE_HEIGHT = 500;
-	private static final String HELP_PAGE_CSS = "/main.css";
-	private static final int ABOUT_PAGE_WIDTH = 500;
-	private static final int ABOUT_PAGE_HEIGHT = 400;
-	private static final String ABOUT_PAGE_CSS = "/main.css";
 
 	private final TextField letters = new TextField();
 	private final TextField contains = new TextField();
@@ -70,30 +55,37 @@ public class ScrabbleWords extends Application {
 			FXCollections.observableArrayList(DictionaryName.values()));
 
 	/**
-	 * Launch the ScrabbleWords application
+	 * Build the main GUI form and display
 	 * 
-	 * @param args
-	 *            not used
+	 * @param stage
+	 *            the primary stage from the main application
 	 */
-	public static void main(String[] args) {
-		launch(ScrabbleWords.class, args);
-	}
-
-	/**
-	 * Create the form to get the {@link InputData} and validate it, displaying
-	 * error messages, if any. When "submit" is pressed, display all suggested
-	 * words that match the restrictions of the input data. When "clear" is
-	 * pressed, clear all entered data from the form. Create help and about
-	 * menus.
-	 */
-	@Override
-	public void start(final Stage stage) throws Exception {
+	public void buildAndShowGui(final Stage stage) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Starting application");
 		}
 
-		// Setup the GUI
-		final GridPane grid = new GridPane();
+		GridPane grid = buildGrid(stage);
+		MenuBar menuBar = buildMenu();
+		VBox box = new VBox();
+		Scene scene = new Scene(box);
+		((VBox) scene.getRoot()).getChildren().add(menuBar);
+		box.getChildren().add(grid);
+		stage.setScene(scene);
+		stage.setTitle("Find Scrabble Words");
+		stage.show();
+	}
+
+	/**
+	 * Create the form to get the {@link InputData}.
+	 * 
+	 * @param stage
+	 *            the primary stage from the main application
+	 */
+	private GridPane buildGrid(final Stage stage) {
+		
+		// Setup the grid pane
+		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -101,7 +93,7 @@ public class ScrabbleWords extends Application {
 		grid.setPadding(new Insets(top, right, bottom, left));
 
 		// Title
-		final Text title = new Text("Find Scrabble Words");
+		Text title = new Text("Find Scrabble Words");
 		title.setId("title");
 		title.setStyle("-fx-font-size:30; -fx-font-weight:bold");
 		int col = 0, row = 0, colSpan = 2, rowSpan = 1;
@@ -118,7 +110,7 @@ public class ScrabbleWords extends Application {
 
 		col = 0;
 		row++;
-		Label lblContains = new Label(CONTAINS_LETTERS);
+		Label lblContains = new Label("Contains Letters:");
 		grid.add(lblContains, col, row);
 		contains.setTooltip(new Tooltip(
 				"Letter(s)/regex on the board that words must contain"));
@@ -155,22 +147,10 @@ public class ScrabbleWords extends Application {
 		row++;
 		grid.add(progress, col, row);
 		progress.setVisible(false);
-
-		// Submit button and action
-		HBox hbox = new HBox();
-		hbox.setAlignment(Pos.BASELINE_RIGHT);
-		Button submit = new Button("Submit");
-		hbox.getChildren().add(submit);
-		top = 0;
-		right = 5;
-		bottom = 0;
-		left = 5;
-		HBox.setMargin(submit, new Insets(top, right, bottom, left));
-		submit.setOnAction((ActionEvent event) -> searchForWords(stage));
 		
 		// <Enter> = Submit, <Esc> = Quit
 		grid.setOnKeyPressed((KeyEvent keyEvent) -> {
-			switch (keyEvent.getCode()){
+			switch (keyEvent.getCode()) {
 			case ENTER:
 				searchForWords(stage);
 				break;
@@ -182,62 +162,74 @@ public class ScrabbleWords extends Application {
 			}
 		});
 
-		// Clear button
-		Button clear = new Button("Clear");
-		clear.setOnAction((ActionEvent event) -> clearText());
-		hbox.getChildren().add(clear);
-		top = 0;
-		right = 5;
-		bottom = 0;
-		left = 0;
-		HBox.setMargin(clear, new Insets(top, right, bottom, left));
-		
-		// Clear except Letters button
-		Button clearExcept = new Button("Clear Except Avail");
-		clearExcept.setOnAction((ActionEvent event) -> clearTextExceptLetters());
-		hbox.getChildren().add(clearExcept);
-
 		// Add buttons to box
+		HBox hbox = buildButtons(stage);
 		col = 1;
 		row += rowSpan;
 		grid.add(hbox, col, row);
 
+		return grid;
+	}
+	
+	private HBox buildButtons(final Stage stage) {
+		
+		// Submit button and action
+		HBox hbox = new HBox();
+		hbox.setAlignment(Pos.BASELINE_RIGHT);
+		Button submit = new Button("Submit");
+		hbox.getChildren().add(submit);
+		int top = 0, right = 5, bottom = 0, left = 5;
+		HBox.setMargin(submit, new Insets(top, right, bottom, left));
+		submit.setOnAction((ActionEvent event) -> searchForWords(stage));
+
+		// Clear button
+		Button clear = new Button("Clear");
+		clear.setOnAction((ActionEvent event) -> clearText());
+		hbox.getChildren().add(clear);
+		top = 0; right = 5; bottom = 0; left = 0;
+		HBox.setMargin(clear, new Insets(top, right, bottom, left));
+
+		// Clear except Letters button
+		Button clearExcept = new Button("Clear Except Avail");
+		clearExcept
+				.setOnAction((ActionEvent event) -> clearTextExceptLetters());
+		hbox.getChildren().add(clearExcept);
+
+		return hbox;
+	}
+
+	private MenuBar buildMenu() {
+		
 		// Menu File
 		Menu menuFile = new Menu("File");
 		MenuItem clearItem = new MenuItem("Clear");
 		clearItem.setAccelerator(KeyCombination.keyCombination("Ctrl+L"));
 		clearItem.setOnAction((ActionEvent event) -> clearText());
-		
+
 		MenuItem clearExceptItem = new MenuItem("Clear Except Avail");
 		clearExceptItem.setAccelerator(KeyCombination.keyCombination("Ctrl+R"));
-		clearExceptItem.setOnAction((ActionEvent event) -> clearTextExceptLetters());
-		
+		clearExceptItem
+				.setOnAction((ActionEvent event) -> clearTextExceptLetters());
+
 		MenuItem exitItem = new MenuItem("Quit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
 		exitItem.setOnAction((ActionEvent event) -> Platform.exit());
 		menuFile.getItems().addAll(clearItem, clearExceptItem, exitItem);
-		
+
 		// Menu Help
 		Menu menuHelp = new Menu("Help");
 		MenuItem helpItem = new MenuItem("Help");
 		helpItem.setAccelerator(KeyCombination.keyCombination("Ctrl+H"));
-		helpItem.setOnAction((ActionEvent event) -> help());
+		helpItem.setOnAction((ActionEvent event) -> new HelpPage().display());
 		MenuItem aboutItem = new MenuItem("About");
-		aboutItem.setOnAction((ActionEvent event) -> about());
+		aboutItem.setOnAction((ActionEvent event) -> new AboutPage().display());
 		menuHelp.getItems().addAll(helpItem, aboutItem);
 
 		// Create menus
 		MenuBar menuBar = new MenuBar();
 		menuBar.getMenus().addAll(menuFile, menuHelp);
 
-		// Display scene
-		VBox box = new VBox();
-		Scene scene = new Scene(box);
-		((VBox) scene.getRoot()).getChildren().addAll(menuBar);
-		box.getChildren().add(grid);
-		stage.setScene(scene);
-		stage.setTitle("Find Scrabble Words");
-		stage.show();
+		return menuBar;
 	}
 
 	/**
@@ -263,8 +255,9 @@ public class ScrabbleWords extends Application {
 				return ws.getWords();
 			}
 		};
-		searchWords.setOnSucceeded((WorkerStateEvent wse) -> displayWords(
-				searchWords.getValue(), stage));
+		searchWords.setOnSucceeded((WorkerStateEvent wse) -> {
+			new FoundWords(searchWords.getValue(), stage).display();
+		});
 		searchWords.setOnFailed((WorkerStateEvent wse) -> {
 			LOG.error("Word Search Task got an error:");
 			StackTraceElement[] errs = wse.getSource().getException()
@@ -302,85 +295,14 @@ public class ScrabbleWords extends Application {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Errors returned from validation");
 			}
-			displayErrors(errors, stage);
+			Errors errorsView = new Errors(errors, stage);
+			errorsView.display();
 			return new InputData.Builder("").build();
 		}
 		return data;
 	}
 
 	/**
-	 * Display the set of Scrabble words and values
-	 * 
-	 * @param words
-	 *            a set of {@link ScrabbleWord}s
-	 * @param stage
-	 *            the {@link Stage} to create a modal dialogue on
-	 */
-	private void displayWords(Set<ScrabbleWord> words, Stage stage) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("In displayWords()");
-		}
-
-		final Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(stage);
-		ObservableList<String> data = FXCollections.observableArrayList();
-
-		if (words.isEmpty()) {
-			data.add("Nothing found");
-		} else {
-			words.stream().forEach(word -> data.add(word.toString()));
-		}
-
-		ListView<String> listView = new ListView<>(data);
-		listView.setPrefSize(200, 300);
-		Scene dialogScene = new Scene(listView);
- 
-		dialogScene.setOnKeyPressed((KeyEvent keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ESCAPE) {
-				dialog.close();
-			}
-		});
-		
-		dialog.setScene(dialogScene);
-		dialog.show();
-	}
-
-	/**
-	 * Display validation errors
-	 * 
-	 * @param errors
-	 *            a list of error strings
-	 * @param stage
-	 *            the {@link Stage} to create the dialog on
-	 */
-	private void displayErrors(List<String> errors, Stage stage) {
-		String message = errors.stream().collect(joining("\n"));
-		final Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(stage);
-		dialog.setTitle("Errors");
-
-		VBox box = new VBox();
-		GridPane grid = new GridPane();
-		box.getChildren().add(grid);
-		int top = 10, right = 10, bottom = 10, left = 10;
-		grid.setPadding(new Insets(top, right, bottom, left));
-
-		Text title = new Text("Please correct these errors");
-		title.setStyle("-fx-font-weight: bold;");
-		grid.add(title, 0, 0);
-
-		Label errorLabel = new Label(message.toString());
-		errorLabel.setWrapText(true);
-		grid.add(errorLabel, 0, 2);
-
-		Scene dialogScene = new Scene(box);
-		dialog.setScene(dialogScene);
-		dialog.show();
-	}
-
-	/*
 	 * Clear all text fields, except letters
 	 */
 	private void clearTextExceptLetters() {
@@ -389,8 +311,8 @@ public class ScrabbleWords extends Application {
 		endsWith.clear();
 		contains.requestFocus();
 	}
-	
-	/*
+
+	/**
 	 * Clear all text fields
 	 */
 	private void clearText() {
@@ -399,71 +321,6 @@ public class ScrabbleWords extends Application {
 		startsWith.clear();
 		endsWith.clear();
 		letters.requestFocus();
-	}
-
-	/*
-	 * Create web browser to display help HTML
-	 */
-	private void help() {
-		final Stage helpStage = new Stage();
-		helpStage.setTitle("Help");
-		URL url = getClass().getResource("/help.html");
-
-		if (url == null) {
-			LOG.error("Could not find \"help.html\"");
-			return;
-		}
-
-		String helpUrl = url.toExternalForm();
-		Browser browser = new Browser(helpUrl);
-		URL styleSheetUrl = getClass().getResource(HELP_PAGE_CSS);
-
-		if (styleSheetUrl == null) {
-			LOG.error("Could not find \"" + HELP_PAGE_CSS + "\"");
-		} else {
-      		if (LOG.isDebugEnabled()) {
-    			LOG.debug("Help page style sheet location: " + styleSheetUrl.toString());
-    		}
-    	
-    		browser.getWebEngine().setUserStyleSheetLocation(styleSheetUrl.toString());
-		}
-		
-		double width = HELP_PAGE_WIDTH, height = HELP_PAGE_HEIGHT;
-		Scene scene = new Scene(browser, width, height);
-		helpStage.setScene(scene);
-		helpStage.show();
-	}
-
-	/**
-	 * Create a browser for the About menu item
-	 */
-	private void about() {
-		final Stage aboutStage = new Stage();
-		aboutStage.setTitle("About");
-		URL url = ScrabbleWords.class.getResource("/about.html");
-
-		if (url == null) {
-			LOG.error("Could not find \"about.html\"");
-			return;
-		}
-
-		Browser browser = new Browser(url.toExternalForm());
-		URL styleSheetUrl = getClass().getResource(ABOUT_PAGE_CSS);
-
-		if (styleSheetUrl == null) {
-			LOG.error("Could not find \"" + ABOUT_PAGE_CSS + "\"");
-		} else {
-      		if (LOG.isDebugEnabled()) {
-    			LOG.debug("About page style sheet location: " + styleSheetUrl.toString());
-    		}
-    	
-    		browser.getWebEngine().setUserStyleSheetLocation(styleSheetUrl.toString());
-		}
-		
-		double width = ABOUT_PAGE_WIDTH, height = ABOUT_PAGE_HEIGHT;
-		Scene scene = new Scene(browser, width, height);
-		aboutStage.setScene(scene);
-		aboutStage.show();
 	}
 
 }

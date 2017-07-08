@@ -1,4 +1,4 @@
-package net.snortum.scrabblewords.model;
+package net.snortum.scrabblewords.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import javafx.scene.control.ProgressBar;
+import net.snortum.scrabblewords.model.InputData;
+import net.snortum.scrabblewords.model.ScrabbleDictionary;
+import net.snortum.scrabblewords.model.ScrabbleWord;
 import net.snortum.scrabblewords.view.Progressor;
 import net.snortum.utils.Permuter;
 import net.snortum.utils.Sublister;

@@ -1,4 +1,4 @@
-package net.snortum.scrabblewords.model;
+package net.snortum.scrabblewords.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.log4j.Logger;
+
+import net.snortum.scrabblewords.model.InputData;
 
 /**
  * This immutable class will validate {@link InputData}, returning a list of
