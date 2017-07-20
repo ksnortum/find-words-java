@@ -10,13 +10,13 @@ This project uses [Maven](http://maven.apache.org/) to build an executable jar f
 	
 To get HTML reports including JavaDocs, execute:
 
-	mvn site
+	mvn site javadoc:javadoc
 
 ## Running ##
 
 If you have Java in your PATH, you can execute the jar file from the command line:
 
-	java -jar Scrabble-Words-1.x.x.jar
+	java -jar Scrabble-Words-1.1.x.jar
 	
 ## TODO ##
 
