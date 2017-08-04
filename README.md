@@ -8,15 +8,19 @@ This project uses [Maven](http://maven.apache.org/) to build an executable jar f
 
 	mvn package
 	
-To get HTML reports including JavaDocs, execute:
+To build the Javadocs, execute:
 
-	mvn site javadoc:javadoc
+	mvn javadoc:javadoc
 
 ## Running ##
 
-If you have Java in your PATH, you can execute the jar file from the command line:
+There are two ways to execute scrabble-words-java.  Using Maven, execute:
 
-	java -jar Scrabble-Words-1.1.x.jar
+    mvn exec:java
+
+Or, if you have Java in your PATH, you can execute the jar file from the command line:
+
+	java -jar /path/to/Scrabble-Words-1.1.x.jar
 	
 ## TODO ##
 
