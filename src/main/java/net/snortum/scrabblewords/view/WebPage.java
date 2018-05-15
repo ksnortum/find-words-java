@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  * Base class of all web browser displays.
  * 
  * @author Knute Snortum
- * @version 2017.07.08
+ * @version 2017.12.14
  */
 public class WebPage {
 	private static final Logger LOG = Logger.getLogger(WebPage.class);
@@ -35,8 +35,8 @@ public class WebPage {
 	 * Create web browser to display HTML
 	 */
 	public void display() {
-		Stage helpStage = new Stage();
-		helpStage.setTitle(title);
+		Stage stage = new Stage();
+		stage.setTitle(title);
 		LOG.debug("resource = " + resource);
 		URL url = getClass().getResource(resource);
 
@@ -45,8 +45,7 @@ public class WebPage {
 			return;
 		}
 
-		String helpUrl = url.toExternalForm();
-		Browser browser = new Browser(helpUrl);
+		Browser browser = new Browser(url.toExternalForm());
 		URL styleSheetUrl = getClass().getResource(css);
 
 		if (styleSheetUrl == null) {
@@ -62,7 +61,7 @@ public class WebPage {
 		}
 
 		Scene scene = new Scene(browser, width, height);
-		helpStage.setScene(scene);
-		helpStage.show();
+		stage.setScene(scene);
+		stage.show();
 	}
 }
