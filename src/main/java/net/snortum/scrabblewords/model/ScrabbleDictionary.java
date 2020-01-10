@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This immutable class retrieves a list of words from a Scrabble Dictionary
@@ -21,8 +22,7 @@ import org.apache.log4j.Logger;
  * @version 1.1
  */
 public class ScrabbleDictionary {
-	private static final Logger LOG = Logger
-			.getLogger(ScrabbleDictionary.class);
+	private static final Logger LOG = LogManager.getLogger();
 	static final String INPUTDATA_NULL = "Input Data cannot be null";
 	static final String DICTIONARY_NULL = "Dictionary name cannot be null";
 

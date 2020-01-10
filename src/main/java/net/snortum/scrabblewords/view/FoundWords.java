@@ -2,7 +2,8 @@ package net.snortum.scrabblewords.view;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +23,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * @version 2017.07.07
  */
 public class FoundWords {
-	private static final Logger LOG = Logger.getLogger(FoundWords.class);
+	private static final Logger LOG = LogManager.getLogger();
 	private static final int VIEW_WIDTH = 200;
 	private static final int VIEW_HEIGHT = 300;
 	

@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -44,7 +45,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * @version 2017.07.08
  */
 public class ScrabbleWords {
-	private static final Logger LOG = Logger.getLogger(ScrabbleWords.class);
+	private static final Logger LOG = LogManager.getLogger();
 
 	private final TextField letters = new TextField();
 	private final TextField contains = new TextField();

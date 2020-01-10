@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.snortum.scrabblewords.model.InputData;
 
@@ -17,7 +18,7 @@ import net.snortum.scrabblewords.model.InputData;
  * @version 2017.07.05
  */
 public class Validator {
-	private static final Logger LOG = Logger.getLogger(Validator.class);
+	private static final Logger LOG = LogManager.getLogger();
 	private static final String INVALID_REGEX = "The regex is invalid";
 	static final String TOO_FEW_LETTERS = "You must have at least one letter";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that twenty letters";

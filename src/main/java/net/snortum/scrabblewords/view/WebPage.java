@@ -2,7 +2,8 @@ package net.snortum.scrabblewords.view;
 
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,7 +15,7 @@ import javafx.stage.Stage;
  * @version 2017.12.14
  */
 public class WebPage {
-	private static final Logger LOG = Logger.getLogger(WebPage.class);
+	private static final Logger LOG = LogManager.getLogger();
 	
 	private final String title; 
 	private final String resource; 
