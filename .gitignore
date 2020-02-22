@@ -1,10 +1,14 @@
+# Eclipse only files and directories
 .classpath
 .project
 .settings
+build.xml
 target
+
 *.class
 *.jar
 *.log
+
 /deploy/
 /dependency-reduced-pom.xml
 /jar-in-jar-loader.zip
