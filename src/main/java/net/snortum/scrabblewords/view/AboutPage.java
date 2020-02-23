@@ -8,8 +8,8 @@ package net.snortum.scrabblewords.view;
  */
 public class AboutPage extends WebPage {
 	private static final String TITLE = "About";
-	private static final String RESOURCE = "/about.html";
-	private static final String CSS = "/main.css";
+	private static final String RESOURCE = "/html/about.html";
+	private static final String CSS = "/css/main.css";
 	private static final double WIDTH = 500.0;
 	private static final double HEIGHT = 400.0;
 	

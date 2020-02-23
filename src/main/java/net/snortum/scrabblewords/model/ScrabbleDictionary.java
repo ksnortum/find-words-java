@@ -72,7 +72,7 @@ public class ScrabbleDictionary {
 			return words.get(data.getDictionaryName());
 		}
 
-		String dictionaryFile = "/" + data.getDictionaryName() + ".txt";
+		String dictionaryFile = "/dicts/" + data.getDictionaryName() + ".txt";
 		InputStream in = getClass().getResourceAsStream(dictionaryFile);
 		Map<String, String> validWords = new HashMap<>();
 
