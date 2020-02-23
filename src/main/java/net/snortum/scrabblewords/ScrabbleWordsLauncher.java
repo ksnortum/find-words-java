@@ -10,10 +10,10 @@ import net.snortum.scrabblewords.view.ScrabbleWords;
  * @author Knute Snortum
  * @version 2017.07.05
  */
-public class Main extends Application {
+public class ScrabbleWordsLauncher extends Application {
 
 	public static void main(String[] args) {
-		launch(Main.class, args);
+		launch();
 	}
 
 	@Override
