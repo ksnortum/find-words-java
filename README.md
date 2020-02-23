@@ -2,11 +2,17 @@
 
 **scrabble-words-java** is a JavaFx implementation of my project [scrabble-words](https://github.com/ksnortum/scrabble-words), originally written in Perl as a command line program. 
 
+## Requirements ##
+
+* Java 1.8 from Oracle that still has JavaFX bundled.  If you have an OpenJDK version of Java 1.8 or you need to use a higher version of Java, checkout the master branch.
+
+* Maven 3.6.1 (Lower versions may work, but this is what the project was tested with)
+
 ## Building ##
 
 This project uses [Maven](http://maven.apache.org/) to build an executable jar file.  From the command line, execute:
 
-	mvn package
+	mvn clean package
 	
 To build the Javadocs, execute:
 
