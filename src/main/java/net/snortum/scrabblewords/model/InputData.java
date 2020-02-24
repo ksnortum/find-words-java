@@ -12,15 +12,9 @@ package net.snortum.scrabblewords.model;
  * </pre>
  * 
  * @author Knute Snortum
- * @version 2017.07.05
+ * @version 2020.02.24
  */
 public class InputData {
-
-	private final String letters;
-	private final String contains;
-	private final String startsWith;
-	private final String endsWith;
-	private final DictionaryName dictName;
 
 	/**
 	 * Build an {@link InputData} object
@@ -95,14 +89,12 @@ public class InputData {
 			return new InputData(this);
 		}
 	}
+	
+	private Builder builder;
 
 	// Create InputData object from builder
 	private InputData(Builder builder) {
-		this.letters = builder.letters;
-		this.contains = builder.contains;
-		this.startsWith = builder.startsWith;
-		this.endsWith = builder.endsWith;
-		this.dictName = builder.dictName;
+		this.builder = builder;
 	}
 
 	/**
@@ -118,57 +110,57 @@ public class InputData {
 			throw new IllegalArgumentException("Data cannot be null");
 		}
 
-		this.letters = data.letters;
-		this.contains = data.contains;
-		this.startsWith = data.startsWith;
-		this.endsWith = data.endsWith;
-		this.dictName = data.dictName;
+		builder = data.getBuilder();
 	}
 
 	// Getters. For Setters, use Builder
+	
+	private Builder getBuilder() {
+		return builder;
+	}
 
 	/**
 	 * @return the letters of your "tiles"
 	 */
 	public String getLetters() {
-		return letters;
+		return getBuilder().letters;
 	}
 
 	/**
 	 * @return the letters the suggested words must contain
 	 */
 	public String getContains() {
-		return contains;
+		return getBuilder().contains;
 	}
 
 	/**
 	 * @return the letters the suggested word must start with
 	 */
 	public String getStartsWith() {
-		return startsWith;
+		return getBuilder().startsWith;
 	}
 
 	/**
 	 * @return the letters the suggested word must end with
 	 */
 	public String getEndsWith() {
-		return endsWith;
+		return getBuilder().endsWith;
 	}
 
 	/**
 	 * @return the {@link DictionaryName} used to check valid words
 	 */
 	public DictionaryName getDictionaryName() {
-		return dictName;
+		return getBuilder().dictName;
 	}
 
 	/**
 	 * @return true if all text fields are empty, otherwise return false
 	 */
 	public boolean isEmpty() {
-		return letters.isEmpty() &&
-				contains.isEmpty() &&
-				startsWith.isEmpty() &&
-				endsWith.isEmpty();
+		return getBuilder().letters.isEmpty() &&
+				getBuilder().contains.isEmpty() &&
+				getBuilder().startsWith.isEmpty() &&
+				getBuilder().endsWith.isEmpty();
 	}
 }
