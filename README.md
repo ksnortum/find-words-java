@@ -1,6 +1,6 @@
 # README for scrabble-words-java #
 
-**scrabble-words-java** is a JavaFx implementation of my project [scrabble-words](https://github.com/ksnortum/scrabble-words), originally written in Perl as a command line program. 
+**scrabble-words-java** is a JavaFX implementation of my project [scrabble-words](https://github.com/ksnortum/scrabble-words), originally written in Perl as a command line program. 
 
 ## Requirements ##
 
