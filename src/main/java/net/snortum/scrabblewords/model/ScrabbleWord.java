@@ -14,9 +14,7 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	private static final Map<String, Integer> LETTER_VALUE;
 	private static final String WORD_NULL = "Word cannot be null";
 	private static final String WORD_EMPTY = "Word cannot be empty";
-
-	private final String word;
-	private final int value;
+	private static final String VALUE_WORD_NULL = "Value word cannot be null";
 
 	static {
 		LETTER_VALUE = new HashMap<>();
@@ -48,51 +46,60 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 		LETTER_VALUE.put("z", 10);
 	}
 
+	private final String word;
+	private final String valueWord;
+	private final int value;
+
 	/**
 	 * Create a Scrabble word, optionally adding 50 points for a bingo
 	 * 
-	 * @param word
-	 *            the word formed by the Scrabble tiles
-	 * @param isBingo
-	 *            true if this word created a bingo
-	 * @throws IllegalArgumentException
-	 *             if word is null or empty
+	 * @param word      the word formed by the Scrabble tiles for display
+	 * @param valueWord the word that carries the value of the ScrabbleWord, that
+	 *                  is, it has no wildcards (which have zero value)
+	 * @param isBingo   true if this word created a bingo
+	 * @throws IllegalArgumentException if word is null or empty
 	 */
-	public ScrabbleWord(String word, boolean isBingo) {
+	public ScrabbleWord(String word, String valueWord, boolean isBingo) {
 		if (word == null) {
 			throw new IllegalArgumentException(WORD_NULL);
 		}
+
 		if (word.isEmpty()) {
 			throw new IllegalArgumentException(WORD_EMPTY);
 		}
 
+		if (valueWord == null) {
+			throw new IllegalArgumentException(VALUE_WORD_NULL);
+		}
+
 		this.word = word.toLowerCase();
+		this.valueWord = valueWord.toLowerCase();
 		this.value = calculateValue() + (isBingo ? 50 : 0);
 	}
 
-	/**
-	 * Create a Scrabble word and calculate its value, assume it is not a bingo
-	 * 
-	 * @param word
-	 *            the word formed by the Scrabble tiles
-	 */
-	public ScrabbleWord(String word) {
-		this(word, false);
-	}
-
 	/*
-	 * Calculate value as total letter values from tiles
+	 * Calculate value as total letter values from tiles, without wildcards
 	 */
 	private int calculateValue() {
-		return Arrays.stream(word.split(""))
-				.mapToInt(letter -> LETTER_VALUE.get(letter))
-				.sum();
+		int total = 0;
+
+		if (!valueWord.isEmpty()) {
+			total = Arrays.stream(valueWord.split(""))
+					.mapToInt(letter -> LETTER_VALUE.get(letter))
+					.sum();
+		}
+
+		return total;
 	}
 
 	// Values can only be set in constructors
 
 	public String getWord() {
 		return word;
+	}
+
+	public String getValueWord() {
+		return valueWord;
 	}
 
 	public int getValue() {
@@ -102,18 +109,17 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	/**
 	 * Descending value order, ascending word order
 	 * 
-	 * @param that
-	 *            the other Scrabble word
+	 * @param that the other Scrabble word
 	 * @return -1, 0, or 1
 	 */
 	@Override
 	public int compareTo(ScrabbleWord that) {
-		if (this.value > that.value) {
+		if (this.value > that.getValue()) {
 			return -1;
-		} else if (this.value < that.value) {
+		} else if (this.value < that.getValue()) {
 			return 1;
 		} else {
-			return this.word.compareTo(that.word);
+			return this.word.compareTo(that.getWord());
 		}
 	}
 
@@ -126,10 +132,13 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 		if (getClass() != obj.getClass())
 			return false;
 		ScrabbleWord other = (ScrabbleWord) obj;
-		if (value != other.value)
+		if (value != other.getValue())
 			return false;
-		if (!word.equals(other.word))
+		if (!word.equals(other.getWord()))
 			return false;
+		if (!valueWord.equals(other.getValueWord()))
+			return false;
+
 		return true;
 	}
 
@@ -139,6 +148,7 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 		int result = 1;
 		result = prime * result + value;
 		result = prime * result + word.hashCode();
+		result = prime * result + valueWord.hashCode();
 
 		return result;
 	}

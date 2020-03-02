@@ -1,28 +1,23 @@
 package net.snortum.scrabblewords.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Test;
-
-import net.snortum.scrabblewords.model.DictionaryName;
-import net.snortum.scrabblewords.model.InputData;
-import net.snortum.scrabblewords.model.ScrabbleDictionary;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
+import org.junit.Test;
 
 public class ScrabbleDictionaryTest {
 	
-	Map<String, String> testWords;
+	List<String> testWords;
 	
 	@Before
 	public void setup() {
-		testWords = new HashMap<>();
-		testWords.put("one", "");
-		testWords.put("two", "");
-		testWords.put("three", "");
+		testWords = new ArrayList<>();
+		testWords.add("one");
+		testWords.add("two");
+		testWords.add("three");
 	}
 
 	/*
@@ -34,10 +29,10 @@ public class ScrabbleDictionaryTest {
 				.dictionaryName(DictionaryName.twl)
 				.build();
 		ScrabbleDictionary dictionary = new ScrabbleDictionary(data);
-		Map<String, String> validWords = dictionary.getValidWords();
+		List<String> validWords = dictionary.getValidWords();
 		
-		for (String key : testWords.keySet()) {
-			assertTrue(validWords.remove(key) != null);
+		for (String word : testWords) {
+			assertTrue(validWords.remove(word));
 		}
 		
 		assertTrue(validWords.isEmpty());

@@ -25,12 +25,12 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import net.snortum.scrabblewords.controller.Validator;
 import net.snortum.scrabblewords.controller.WordSearcher;
 import net.snortum.scrabblewords.model.DictionaryName;
@@ -42,7 +42,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2017.07.08
+ * @version 2.0.0
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger();
@@ -73,7 +73,7 @@ public class ScrabbleWords {
 		((VBox) scene.getRoot()).getChildren().add(menuBar);
 		box.getChildren().add(grid);
 		stage.setScene(scene);
-		stage.setTitle("Find Scrabble Words");
+		stage.setTitle("ScrabbleWords");
 		stage.show();
 	}
 
@@ -150,7 +150,7 @@ public class ScrabbleWords {
 		progress.setVisible(false);
 		
 		// <Enter> = Submit, <Esc> = Quit
-		grid.setOnKeyPressed((KeyEvent keyEvent) -> {
+		grid.setOnKeyPressed(keyEvent -> {
 			switch (keyEvent.getCode()) {
 			case ENTER:
 				searchForWords(stage);
@@ -181,7 +181,7 @@ public class ScrabbleWords {
 		hbox.getChildren().add(submit);
 		int top = 0, right = 5, bottom = 0, left = 5;
 		HBox.setMargin(submit, new Insets(top, right, bottom, left));
-		submit.setOnAction((ActionEvent event) -> searchForWords(stage));
+		submit.setOnAction(event -> searchForWords(stage));
 
 		// Clear button
 		Button clear = new Button("Clear");
@@ -192,8 +192,7 @@ public class ScrabbleWords {
 
 		// Clear except Letters button
 		Button clearExcept = new Button("Clear Except Avail");
-		clearExcept
-				.setOnAction((ActionEvent event) -> clearTextExceptLetters());
+		clearExcept.setOnAction(event -> clearTextExceptLetters());
 		hbox.getChildren().add(clearExcept);
 
 		return hbox;
@@ -205,25 +204,24 @@ public class ScrabbleWords {
 		Menu menuFile = new Menu("File");
 		MenuItem clearItem = new MenuItem("Clear");
 		clearItem.setAccelerator(KeyCombination.keyCombination("Ctrl+L"));
-		clearItem.setOnAction((ActionEvent event) -> clearText());
+		clearItem.setOnAction(event -> clearText());
 
 		MenuItem clearExceptItem = new MenuItem("Clear Except Avail");
 		clearExceptItem.setAccelerator(KeyCombination.keyCombination("Ctrl+R"));
-		clearExceptItem
-				.setOnAction((ActionEvent event) -> clearTextExceptLetters());
+		clearExceptItem.setOnAction(event -> clearTextExceptLetters());
 
 		MenuItem exitItem = new MenuItem("Quit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
-		exitItem.setOnAction((ActionEvent event) -> Platform.exit());
+		exitItem.setOnAction(event -> Platform.exit());
 		menuFile.getItems().addAll(clearItem, clearExceptItem, exitItem);
 
 		// Menu Help
 		Menu menuHelp = new Menu("Help");
 		MenuItem helpItem = new MenuItem("Help");
 		helpItem.setAccelerator(KeyCombination.keyCombination("Ctrl+H"));
-		helpItem.setOnAction((ActionEvent event) -> new HelpPage().display());
+		helpItem.setOnAction(event -> new HelpPage().display());
 		MenuItem aboutItem = new MenuItem("About");
-		aboutItem.setOnAction((ActionEvent event) -> new AboutPage().display());
+		aboutItem.setOnAction(event -> new AboutPage().display());
 		menuHelp.getItems().addAll(helpItem, aboutItem);
 
 		// Create menus
@@ -259,11 +257,10 @@ public class ScrabbleWords {
 		searchWords.setOnSucceeded((WorkerStateEvent wse) -> {
 			new FoundWords(searchWords.getValue(), stage).display();
 		});
-		searchWords.setOnFailed((WorkerStateEvent wse) -> {
+		searchWords.setOnFailed(wse -> {
 			LOG.error("Word Search Task got an error:");
-			StackTraceElement[] errs = wse.getSource().getException()
-					.getStackTrace();
-			Arrays.asList(errs).forEach((err) -> LOG.error(err.toString()));
+			StackTraceElement[] errs = wse.getSource().getException().getStackTrace();
+			Arrays.asList(errs).forEach(err -> LOG.error(err.toString()));
 		});
 
 		// Run the word searching task
@@ -300,6 +297,7 @@ public class ScrabbleWords {
 			errorsView.display();
 			return new InputData.Builder("").build();
 		}
+		
 		return data;
 	}
 

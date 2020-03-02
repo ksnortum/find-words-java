@@ -21,19 +21,27 @@ public class ValidatorTest {
 	
 	@Test
 	public void testValidateOneDot() {
-		InputData data = new InputData.Builder( "abc." ).build();
+		InputData data = new InputData.Builder( "ab.c" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 0 );
 	}
 	
 	@Test
-	public void testValidatorOneDotOnlyError() {
-		InputData data = new InputData.Builder( "abc.." ).build();
+	public void testValidatorTwoDots() {
+		InputData data = new InputData.Builder( "a.b.c" ).build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertTrue( message.size() == 0 );
+	}
+	
+	@Test
+	public void testValidatorMoreThanTwoDots() {
+		InputData data = new InputData.Builder( "a.b.c." ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 1 );
-		assertEquals( message.get( 0 ), Validator.ONLY_ONE_DOT );
+		assertEquals( message.get( 0 ), Validator.NO_MORE_THAN_TWO_DOTS );
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

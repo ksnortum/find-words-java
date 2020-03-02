@@ -1,9 +1,11 @@
 package net.snortum.scrabblewords.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +17,7 @@ import net.snortum.scrabblewords.model.InputData;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2017.07.05
+ * @version 2.0.0
  */
 public class Validator {
 	private static final Logger LOG = LogManager.getLogger();
@@ -23,7 +25,7 @@ public class Validator {
 	static final String TOO_FEW_LETTERS = "You must have at least one letter";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that twenty letters";
 	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
-	static final String ONLY_ONE_DOT = "Letters can only have one dot";
+	static final String NO_MORE_THAN_TWO_DOTS = "Letters can have no more than two dots";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters";
 	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters";
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
@@ -56,25 +58,33 @@ public class Validator {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Validating");
 		}
+		
 		List<String> errors = new ArrayList<>();
+		
 		if (data.getLetters().length() < 1) {
 			errors.add(TOO_FEW_LETTERS);
 		}
+		
 		if (!data.getLetters().matches(LETTERS_DOT_RE)) {
 			errors.add(LETTERS_OR_DOT);
 		}
-		if (!onlyOneDot(data.getLetters())) {
-			errors.add(ONLY_ONE_DOT);
+		
+		if (!noMoreThanTwoDots(data.getLetters())) {
+			errors.add(NO_MORE_THAN_TWO_DOTS);
 		}
+		
 		if (data.getContains().length() > 20) {
 			errors.add(CONTAINS_TOO_LONG);
 		}
+		
 		if (!data.getStartsWith().matches(LETTERS_RE)) {
 			errors.add(STARTSWITH_NONLETTERS);
 		}
+		
 		if (!data.getEndsWith().matches(LETTERS_RE)) {
 			errors.add(ENDSWITH_NONLETTERS);
 		}
+		
 		if (!regexIsValid(data.getContains())) {
 			errors.add(INVALID_REGEX);
 			errors.add(reError);
@@ -84,18 +94,14 @@ public class Validator {
 	}
 
 	/*
-	 * True if letters has no dot or only one dot
+	 * True if letters has no more than two dots
 	 */
-	private boolean onlyOneDot(String letters) {
-		int dotIndex = letters.indexOf(".");
-		if (dotIndex == -1) {
-			return true;
-		}
-		int nextDotIndex = letters.indexOf(".", dotIndex + 1);
-		if (nextDotIndex == -1) {
-			return true;
-		}
-		return false;
+	private boolean noMoreThanTwoDots(String letters) {
+		String dots = Arrays.stream(letters.split(""))
+				.filter(s -> s.equals("."))
+				.collect(Collectors.joining());
+		
+		return dots.length() <= 2;
 	}
 
 	/*

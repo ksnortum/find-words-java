@@ -5,10 +5,10 @@
 							 
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.snortum.scrabblewords</groupId>
-  <artifactId>Scrabble-Words</artifactId>
-  <version>1.1.0</version>
-  <name>Scrabble Words</name>
-  <description>Scrabble Words will display suggested words to play based on data entered by the user.</description>
+  <artifactId>ScrabbleWords</artifactId>
+  <version>2.0.0</version>
+  <name>ScrabbleWords</name>
+  <description>ScrabbleWords will display suggested words to play based on data entered by the user.</description>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

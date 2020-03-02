@@ -12,64 +12,80 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
 
 /**
  * @author Knute
- * @version 0.2
+ * @version 2.0.0
  */
 public class ScrabbleWordTest {
 	private final String testWord = "punjabi";
-	private final int testValue = 18;
-	private final int bingoValue = 68;
+	private final String testValueWord = "punjbi";
+	private final int testValue = 17;
+	private final int bingoValue = 67;
 
 	@Test
 	public void testScrabbleWord() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord);
+		boolean isBingo = false;
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, isBingo);
 		assertEquals(testWord, thisWord.getWord());
+		assertEquals(testValueWord, thisWord.getValueWord());
 		assertEquals(testValue, thisWord.getValue());
 	}
 
 	@Test
 	public void testBingo() {
 		boolean isBingo = true;
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, isBingo);
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, isBingo);
 		assertEquals(testWord, thisWord.getWord());
+		assertEquals(testValueWord, thisWord.getValueWord());
 		assertEquals(bingoValue, thisWord.getValue());
-		isBingo = false;
-		thisWord = new ScrabbleWord(testWord, isBingo);
-		assertEquals(testWord, thisWord.getWord());
-		assertEquals(testValue, thisWord.getValue());
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testScrabbleWordNull() {
-		new ScrabbleWord(null);
+		new ScrabbleWord(null, testValueWord, false);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testScrabbleValueWordNull() {
+		new ScrabbleWord(testWord, null, false);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testScrabbleWordEmpty() {
-		new ScrabbleWord("");
-	}
-	
-	@Test (expected=IllegalArgumentException.class)
-	public void testBingoWordNull() {
-		new ScrabbleWord(null, true);
-	}
-	
-	@Test (expected=IllegalArgumentException.class)
-	public void testBingoWordEmpty() {
-		new ScrabbleWord("", true);
+		new ScrabbleWord("", testValueWord, false);
 	}
 	
 	@Test
 	public void testEqualsObject() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord);
-		ScrabbleWord thatWord = new ScrabbleWord(testWord);
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
+		ScrabbleWord thatWord = new ScrabbleWord(testWord, testValueWord, false);
 		assertTrue(thisWord.equals(thatWord));
+	}
+	
+	@Test
+	public void testEqualsObjectNotIsBingo() {
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
+		ScrabbleWord thatWord = new ScrabbleWord(testWord, testValueWord, true);
+		assertFalse(thisWord.equals(thatWord));
+	}
+	
+	@Test
+	public void testEqualsObjectNotValueWord() {
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
+		ScrabbleWord thatWord = new ScrabbleWord(testWord, testWord, false);
+		assertFalse(thisWord.equals(thatWord));
 	}
 
 	@Test
+	public void testEqualsObjectNotWord() {
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
+		ScrabbleWord thatWord = new ScrabbleWord(testValueWord, testValueWord, false);
+		assertFalse(thisWord.equals(thatWord));
+	}
+	
+	@Test
 	public void testScrabbleWordSort() {
-		ScrabbleWord word1 = new ScrabbleWord("trick");
-		ScrabbleWord word2 = new ScrabbleWord("pat");
-		ScrabbleWord word3 = new ScrabbleWord("tap");
+		ScrabbleWord word1 = new ScrabbleWord("trick", "trick", false);
+		ScrabbleWord word2 = new ScrabbleWord("pat", "pat", false);
+		ScrabbleWord word3 = new ScrabbleWord("tap", "tap", false);
 		List<ScrabbleWord> list = Arrays.asList(word2, word1, word3);
 		Collections.sort(list);
 		assertEquals(word1, list.get(0));
