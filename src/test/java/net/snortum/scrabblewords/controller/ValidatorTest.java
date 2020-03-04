@@ -64,7 +64,7 @@ public class ValidatorTest {
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertTrue( message.size() == 1 );
-		assertEquals( message.get( 0 ), Validator.LETTERS_OR_DOT );
+		assertEquals( message.get( 0 ), Validator.LETTERS_OR_DOTS );
 	}
 	
 	@Test

@@ -4,8 +4,7 @@
 
 ## Requirements
 
-* Java 1.8 from Oracle that still has JavaFX bundled.  A branch for OpenJDK version of Java 1.8 or higher version of Java is coming. 
-
+* Java 11 or greater.  For Java 1.8, see the `java8` branch.
 * Maven 3.6.1 (Lower versions may work, but this is what the project was tested with)
 
 ## Building
@@ -34,5 +33,4 @@ Or, if you have Java in your PATH, you can execute the jar file from the command
 * ability to have two wildcards in a hand	
 
 # TODO
-* ability to run in Java versions higher than 8
 * possibly use FXML files

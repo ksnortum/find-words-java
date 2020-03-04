@@ -20,10 +20,10 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * and presses "submit."
  * 
  * @author Knute Snortum
- * @version 2017.07.07
+ * @version 2.1.0
  */
 public class FoundWords {
-	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger LOG = LogManager.getLogger(FoundWords.class);
 	private static final int VIEW_WIDTH = 200;
 	private static final int VIEW_HEIGHT = 300;
 	

@@ -19,10 +19,10 @@ import org.apache.logging.log4j.Logger;
  * Words will be down-cased.
  * 
  * @author Knute Snortum
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class ScrabbleDictionary {
-	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger LOG = LogManager.getLogger(ScrabbleDictionary.class);
 	static final String INPUTDATA_NULL = "Input Data cannot be null";
 	static final String DICTIONARY_NULL = "Dictionary name cannot be null";
 

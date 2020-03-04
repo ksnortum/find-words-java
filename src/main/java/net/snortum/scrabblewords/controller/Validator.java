@@ -17,14 +17,14 @@ import net.snortum.scrabblewords.model.InputData;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class Validator {
-	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger LOG = LogManager.getLogger(Validator.class);
 	private static final String INVALID_REGEX = "The regex is invalid";
 	static final String TOO_FEW_LETTERS = "You must have at least one letter";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that twenty letters";
-	static final String LETTERS_OR_DOT = "Letters can only be \"a\" thru \"z\" and one dot";
+	static final String LETTERS_OR_DOTS = "Letters can only be \"a\" thru \"z\" and one or two dots";
 	static final String NO_MORE_THAN_TWO_DOTS = "Letters can have no more than two dots";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters";
 	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters";
@@ -66,7 +66,7 @@ public class Validator {
 		}
 		
 		if (!data.getLetters().matches(LETTERS_DOT_RE)) {
-			errors.add(LETTERS_OR_DOT);
+			errors.add(LETTERS_OR_DOTS);
 		}
 		
 		if (!noMoreThanTwoDots(data.getLetters())) {

@@ -20,10 +20,10 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * if the available "tiles" (letters) and patterns match the dictionary word
  * 
  * @author Knute Snortum
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class WordSearcher {
-	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger LOG = LogManager.getLogger(WordSearcher.class);
 
 	private final InputData data;
 	private final ProgressBar progress;

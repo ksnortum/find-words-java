@@ -42,10 +42,10 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.0.0
+ * @version 2.1.0
  */
 public class ScrabbleWords {
-	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
 
 	private final TextField letters = new TextField();
 	private final TextField contains = new TextField();

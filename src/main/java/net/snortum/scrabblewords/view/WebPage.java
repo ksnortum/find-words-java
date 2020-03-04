@@ -12,10 +12,10 @@ import javafx.stage.Stage;
  * Base class of all web browser displays.
  * 
  * @author Knute Snortum
- * @version 2017.12.14
+ * @version 2.1.0
  */
 public class WebPage {
-	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger LOG = LogManager.getLogger(WebPage.class);
 	
 	private final String title; 
 	private final String resource; 
