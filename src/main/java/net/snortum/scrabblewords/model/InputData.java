@@ -12,7 +12,7 @@ package net.snortum.scrabblewords.model;
  * </pre>
  * 
  * @author Knute Snortum
- * @version 2020.02.24
+ * @version 2.1.1
  */
 public class InputData {
 
@@ -28,7 +28,7 @@ public class InputData {
 		private String contains = "";
 		private String startsWith = "";
 		private String endsWith = "";
-		private DictionaryName dictName = DictionaryName.twl;
+		private DictionaryName dictName = DictionaryName.OSPD;
 
 		/**
 		 * Create a Builder object to build an {@link InputData} object.

@@ -42,7 +42,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.1.0
+ * @version 2.1.1
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -139,7 +139,7 @@ public class ScrabbleWords {
 		col = 0;
 		row++;
 		grid.add(new Label("Dictionary: "), col, row);
-		dictionary.setValue(DictionaryName.ospd);
+		dictionary.setValue(DictionaryName.OSPD);
 		col = 1;
 		grid.add(dictionary, col, row);
 

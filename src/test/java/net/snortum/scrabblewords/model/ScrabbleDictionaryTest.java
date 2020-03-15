@@ -1,6 +1,6 @@
 package net.snortum.scrabblewords.model;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * @author Knute Snortum
+ * @version 2.1.1
+ */
 public class ScrabbleDictionaryTest {
 	
 	List<String> testWords;
@@ -25,17 +29,12 @@ public class ScrabbleDictionaryTest {
 	 */
 	@Test
 	public void testDictionary() {
-		InputData data = new InputData.Builder("abd")
-				.dictionaryName(DictionaryName.twl)
+		InputData data = new InputData.Builder("")
+				.dictionaryName(DictionaryName.TWL)
 				.build();
 		ScrabbleDictionary dictionary = new ScrabbleDictionary(data);
 		List<String> validWords = dictionary.getValidWords();
-		
-		for (String word : testWords) {
-			assertTrue(validWords.remove(word));
-		}
-		
-		assertTrue(validWords.isEmpty());
+		assertEquals(testWords, validWords);
 	}
 
 }

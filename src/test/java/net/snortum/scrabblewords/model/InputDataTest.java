@@ -9,7 +9,7 @@ import net.snortum.scrabblewords.model.InputData;
 
 /**
  * @author Knute Snortum
- * @version 2017.07.05
+ * @version 2.1.1
  */
 public class InputDataTest {
 	private final String letters = "ABC";
@@ -34,11 +34,11 @@ public class InputDataTest {
 	@Test
 	public void testGetDictionaryName() {
 		InputData data = new InputData.Builder( letters ).build();
-		assertTrue( DictionaryName.twl.equals( data.getDictionaryName() ) );
+		assertTrue( DictionaryName.OSPD.equals( data.getDictionaryName() ) );
 		data = new InputData.Builder( letters )
-				.dictionaryName( DictionaryName.sowpods )
+				.dictionaryName( DictionaryName.SOWPODS )
 				.build();
-		assertTrue( DictionaryName.sowpods.equals( data.getDictionaryName() ) );
+		assertTrue( DictionaryName.SOWPODS.equals( data.getDictionaryName() ) );
 	}
 	
 
