@@ -205,8 +205,6 @@ public class WordSearcher {
 			} catch (PatternSyntaxException e) {
 				String alertText = String.format(
 						"Error compiling regex from contains, starts-with, and ends-with%nPattern: %s", patternString);
-				System.out.println(alertText);
-				e.printStackTrace();
 				LOG.error(alertText, e);
 			}
 		}
