@@ -32,7 +32,7 @@ public class ScrabbleDictionaryTest {
 		InputData data = new InputData.Builder("")
 				.dictionaryName(DictionaryName.TWL)
 				.build();
-		ScrabbleDictionary dictionary = new ScrabbleDictionary(data);
+		ScrabbleDictionary dictionary = new ScrabbleDictionary(data.getDictionaryName());
 		List<String> validWords = dictionary.getValidWords();
 		assertEquals(testWords, validWords);
 	}

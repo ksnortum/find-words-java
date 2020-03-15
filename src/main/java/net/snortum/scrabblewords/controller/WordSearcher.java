@@ -53,7 +53,7 @@ public class WordSearcher {
 		}
 
 		// Get valid words from dictionary
-		ScrabbleDictionary dict = new ScrabbleDictionary(data);
+		ScrabbleDictionary dict = new ScrabbleDictionary(data.getDictionaryName());
 		List<String> validWords = dict.getValidWords();
 
 		// Compile regex once for speed

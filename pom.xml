@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.snortum.scrabblewords</groupId>
 	<artifactId>ScrabbleWords</artifactId>
-	<version>2.1.1</version>
+	<version>2.2.0</version>
 	<name>ScrabbleWords</name>
 	<description>ScrabbleWords will display suggested words to play based on data entered by the user.</description>
 

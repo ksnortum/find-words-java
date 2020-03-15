@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  * Words will be down-cased.
  * 
  * @author Knute Snortum
- * @version 2.1.0
+ * @version 2.1.1
  */
 public class ScrabbleDictionary {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleDictionary.class);
@@ -28,27 +28,23 @@ public class ScrabbleDictionary {
 
 	private static Map<DictionaryName, List<String>> words = new HashMap<>();
 
-	private final InputData data;
+	private final DictionaryName dictionaryName;
 
 	/**
 	 * Create a new ScrabbleDictionary object. Uses data to get the
 	 * {@link DictionaryName}.
 	 * 
-	 * @param data
-	 *            the input data to use
+	 * @param dictionaryName
+	 *            the dictionary name to use
 	 * @throws IllegalArgumentException
 	 *             if data or data.getDictionaryName() are null
 	 */
-	public ScrabbleDictionary(InputData data) {
-		if (data == null) {
-			throw new IllegalArgumentException(INPUTDATA_NULL);
-		}
-
-		this.data = new InputData(data);
-
-		if (this.data.getDictionaryName() == null) {
+	public ScrabbleDictionary(DictionaryName dictionaryName) {
+		if (dictionaryName == null) {
 			throw new IllegalArgumentException(DICTIONARY_NULL);
 		}
+		
+		this.dictionaryName = dictionaryName;
 	}
 
 	/**
@@ -65,14 +61,14 @@ public class ScrabbleDictionary {
 		}
 
 		// Was this dictionary loaded already?
-		if (words.containsKey(data.getDictionaryName())) {
+		if (words.containsKey(dictionaryName)) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Using pre-loaded dictionary");
 			}
-			return words.get(data.getDictionaryName());
+			return words.get(dictionaryName);
 		}
 
-		String dictionaryFile = "/dicts/" + data.getDictionaryName().toString().toLowerCase() + ".txt";
+		String dictionaryFile = "/dicts/" + dictionaryName.toString().toLowerCase() + ".txt";
 		InputStream in = getClass().getResourceAsStream(dictionaryFile);
 		List<String> validWords = new ArrayList<>();
 
@@ -88,7 +84,7 @@ public class ScrabbleDictionary {
 			LOG.debug("Size of valid word list: " + validWords.size());
 		}
 		
-		words.put(data.getDictionaryName(), validWords);
+		words.put(dictionaryName, validWords);
 
 		return validWords;
 	}
