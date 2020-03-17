@@ -20,7 +20,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * if the available "tiles" (letters) and patterns match the dictionary word
  * 
  * @author Knute Snortum
- * @version 2.1.0
+ * @version 2.2.1
  */
 public class WordSearcher {
 	private static final Logger LOG = LogManager.getLogger(WordSearcher.class);
@@ -33,12 +33,21 @@ public class WordSearcher {
 	 * done
 	 * 
 	 * @param data     the {@link InputData} to use
-	 * @param progress the {@link ProgressBar} to update
+	 * @param progress the {@link ProgressBar} to update, or null
 	 */
 	public WordSearcher(InputData data, ProgressBar progress) {
+		if (data == null) {
+			throw new IllegalArgumentException("InputData cannot be null");
+		}
+		
 		this.data = data;
+		
+		// ProgressBar can be null
 		this.progress = progress;
-		progress.setVisible(false);
+		
+		if (progress != null) {
+			progress.setVisible(false);
+		}
 	}
 
 	/**
@@ -69,10 +78,16 @@ public class WordSearcher {
 		// ProgressBar variables
 		double inc = 1.0 / validWords.size();
 		double thusFar = 0.0;
-		progress.setVisible(true);
+		
+		if (progress != null) {
+			progress.setVisible(true);
+		}
 
 		for (String word : validWords) {
-			progress.setProgress(thusFar);
+			if (progress != null) {
+				progress.setProgress(thusFar);
+			}
+			
 			thusFar += inc;
 			StringBuilder valueLetters = new StringBuilder();
 
@@ -123,7 +138,9 @@ public class WordSearcher {
 
 		}
 
-		progress.setVisible(false);
+		if (progress != null) {
+			progress.setVisible(false);
+		}
 
 		return words;
 	}
@@ -213,7 +230,7 @@ public class WordSearcher {
 	}
 
 	/**
-	 * Lower case non-escaped letters
+	 * Return the lower case of any non-escaped letters
 	 */
 	private String lowerCaseNonEscapedLetters(String input) {
 		StringBuilder result = new StringBuilder();
