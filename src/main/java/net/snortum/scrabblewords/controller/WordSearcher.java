@@ -18,7 +18,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
 /**
  * This immutable class will roll through the selected word dictionary, checking
  * if the available "tiles" (letters) and patterns match the dictionary word
- * 
+ *
  * @author Knute Snortum
  * @version 2.2.1
  */
@@ -31,7 +31,7 @@ public class WordSearcher {
 	/**
 	 * Create a WordSearcher object, passing in a progress bar to update as work is
 	 * done
-	 * 
+	 *
 	 * @param data     the {@link InputData} to use
 	 * @param progress the {@link ProgressBar} to update, or null
 	 */
@@ -39,12 +39,12 @@ public class WordSearcher {
 		if (data == null) {
 			throw new IllegalArgumentException("InputData cannot be null");
 		}
-		
+
 		this.data = data;
-		
+
 		// ProgressBar can be null
 		this.progress = progress;
-		
+
 		if (progress != null) {
 			progress.setVisible(false);
 		}
@@ -53,7 +53,7 @@ public class WordSearcher {
 	/**
 	 * Get a list of words from the selected dictionary that match the requirements
 	 * of the {@link InputData}.
-	 * 
+	 *
 	 * @return a sorted Set containing the words that are found
 	 */
 	public Set<ScrabbleWord> getWords() {
@@ -78,7 +78,7 @@ public class WordSearcher {
 		// ProgressBar variables
 		double inc = 1.0 / validWords.size();
 		double thusFar = 0.0;
-		
+
 		if (progress != null) {
 			progress.setVisible(true);
 		}
@@ -87,7 +87,7 @@ public class WordSearcher {
 			if (progress != null) {
 				progress.setProgress(thusFar);
 			}
-			
+
 			thusFar += inc;
 			StringBuilder valueLetters = new StringBuilder();
 
@@ -197,7 +197,7 @@ public class WordSearcher {
 
 	/**
 	 * Build and compile a pattern out of contains, startsWith, and endsWith
-	 * 
+	 *
 	 * @return a compiled pattern or null if there is nothing to compile
 	 */
 	private Pattern buildPattern() {
@@ -205,7 +205,7 @@ public class WordSearcher {
 		String patternString = lowerCaseNonEscapedLetters(data.getContains());
 
 		if (!data.getStartsWith().isEmpty()) {
-			patternString = "^" + data.getStartsWith().toLowerCase() + ".*" + patternString; 
+			patternString = "^" + data.getStartsWith().toLowerCase() + ".*" + patternString;
 		}
 
 		if (!data.getEndsWith().isEmpty()) {
