@@ -5,11 +5,15 @@
 build.xml
 target
 
+# IntelliJ IDEA only files
+*.iml
+.idea
+
 *.class
 *.jar
 *.log
 
-/deploy/
-/dependency-reduced-pom.xml
-/jar-in-jar-loader.zip
-/doc/
+deploy/
+dependency-reduced-pom.xml
+jar-in-jar-loader.zip
+doc/

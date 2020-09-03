@@ -69,9 +69,8 @@ public class ScrabbleWords {
 		GridPane grid = buildGrid(stage);
 		MenuBar menuBar = buildMenu();
 		VBox box = new VBox();
+		box.getChildren().addAll(menuBar, grid);
 		Scene scene = new Scene(box);
-		((VBox) scene.getRoot()).getChildren().add(menuBar);
-		box.getChildren().add(grid);
 		stage.setScene(scene);
 		stage.setTitle("ScrabbleWords");
 		stage.show();
