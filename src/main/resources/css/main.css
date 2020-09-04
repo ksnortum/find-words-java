@@ -44,7 +44,7 @@ a:hover {
 
 .key {
 	background-color: #f0f0f0;
-	font-family: Courier, fixed;
+	font-family: fixed, monospace, Courier, Courier New;
 	border: thin solid lightgray;
 	border-radius: 5px;
 }

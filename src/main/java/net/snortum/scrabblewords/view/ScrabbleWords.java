@@ -16,7 +16,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -42,7 +44,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.1.1
+ * @version 2.3.0
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -54,6 +56,7 @@ public class ScrabbleWords {
 	private final ProgressBar progress = new ProgressBar(0.0);
 	private final ChoiceBox<DictionaryName> dictionary = new ChoiceBox<>(
 			FXCollections.observableArrayList(DictionaryName.values()));
+	private final CheckBox crossword = new CheckBox();
 
 	/**
 	 * Build the main GUI form and display
@@ -142,9 +145,17 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(dictionary, col, row);
 
+		// Crossword Mode
+		col = 0;
+		row++;
+		Label checkBoxLabel = new Label("Crossword Mode:");
+		checkBoxLabel.setGraphic(crossword);
+		checkBoxLabel.setContentDisplay(ContentDisplay.RIGHT);
+		grid.add(checkBoxLabel, col, row);
+		crossword.setTooltip(new Tooltip("unchecked = Scrabble mode, checked = crossword mode"));
+		
 		// Progress bar
 		col = 1;
-		row++;
 		grid.add(progress, col, row);
 		progress.setVisible(false);
 		
@@ -284,6 +295,7 @@ public class ScrabbleWords {
 				.startsWith(startsWith.getText())
 				.endsWith(endsWith.getText())
 				.dictionaryName(dictionary.getValue())
+				.crosswordMode(crossword.isSelected())
 				.build();
 		Validator validator = new Validator(data);
 		List<String> errors = validator.validate();

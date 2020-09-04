@@ -17,7 +17,7 @@ import net.snortum.scrabblewords.model.InputData;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2.1.0
+ * @version 2.3.0
  */
 public class Validator {
 	private static final Logger LOG = LogManager.getLogger(Validator.class);
@@ -69,7 +69,7 @@ public class Validator {
 			errors.add(LETTERS_OR_DOTS);
 		}
 		
-		if (!noMoreThanTwoDots(data.getLetters())) {
+		if (!data.getCrosswordMode() && !noMoreThanTwoDots(data.getLetters())) {
 			errors.add(NO_MORE_THAN_TWO_DOTS);
 		}
 		

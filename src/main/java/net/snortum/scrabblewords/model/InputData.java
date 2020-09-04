@@ -12,7 +12,7 @@ package net.snortum.scrabblewords.model;
  * </pre>
  * 
  * @author Knute Snortum
- * @version 2.1.1
+ * @version 2.3.0
  */
 public class InputData {
 
@@ -29,6 +29,7 @@ public class InputData {
 		private String startsWith = "";
 		private String endsWith = "";
 		private DictionaryName dictName = DictionaryName.OSPD;
+		private boolean crosswordMode = false;
 
 		/**
 		 * Create a Builder object to build an {@link InputData} object.
@@ -73,11 +74,21 @@ public class InputData {
 		/**
 		 * @param dictName
 		 *            the {@link DictionaryName} to search for valid words;
-		 *            defaults to "twl".
+		 *            defaults to "ospd".
 		 * @return this object
 		 */
 		public Builder dictionaryName(DictionaryName dictName) {
 			this.dictName = dictName;
+			return this;
+		}
+		
+		/**
+		 * @param crosswordMode
+		 * 				the crossword mode -- false = Scrabble, true = Crossword
+		 * @return this object
+		 */
+		public Builder crosswordMode(boolean crosswordMode) {
+			this.crosswordMode = crosswordMode;
 			return this;
 		}
 
@@ -152,6 +163,11 @@ public class InputData {
 	 */
 	public DictionaryName getDictionaryName() {
 		return getBuilder().dictName;
+	}
+	
+	/** @return the crossword mode -- false = Scrabble, true = Crossword */
+	public boolean getCrosswordMode() {
+		return getBuilder().crosswordMode;
 	}
 
 	/**
