@@ -8,6 +8,7 @@ target
 # IntelliJ IDEA only files
 *.iml
 .idea
+.metadata
 
 *.class
 *.jar
