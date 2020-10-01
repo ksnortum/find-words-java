@@ -7,15 +7,13 @@
 * Java 11 or greater.  For Java 1.8, see the `java8` branch.
 * Maven 3.6.1 (Lower versions may work, but this is what the project was tested with)
 
+(The `java8` branch is unfortunately way behind the Java 11 branch.)
+
 ## Building
 
 This project uses [Maven](http://maven.apache.org/) to build an executable jar file.  From the command line, execute:
 
 	mvn clean package
-	
-To build the Javadocs, execute:
-
-	mvn javadoc:javadoc
 
 ## Running
 
@@ -31,6 +29,7 @@ Or, if you have Java in your PATH, you can execute the jar file from the command
 * faster processing, in general
 * wildcards are scored correctly
 * ability to have two wildcards in a hand	
+* Crossword mode
 
 # TODO
 * possibly use FXML files

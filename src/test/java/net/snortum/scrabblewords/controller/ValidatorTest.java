@@ -99,4 +99,38 @@ public class ValidatorTest {
 		assertTrue( message.size() == 1 );
 		assertEquals( message.get( 0 ), Validator.ENDSWITH_NONLETTERS );
 	}
+	
+	@Test
+	public void testNumOfLettersCanBeBlank() {
+		InputData data = new InputData.Builder("abc")
+				.numOfLetters(" ")
+				.build();
+		Validator validator = new Validator(data);
+		List<String> message = validator.validate();
+		assertTrue(message.size() == 0);
+	}
+	
+	@Test
+	public void testNumOfLettersIsNumeric() {
+		InputData data = new InputData.Builder("abc")
+				.crosswordMode(true)
+				.numOfLetters("X")
+				.build();
+		Validator validator = new Validator(data);
+		List<String> message = validator.validate();
+		assertTrue(message.size() == 1);
+		assertEquals(message.get(0), Validator.INVALID_NUMBER);
+	}
+	
+	@Test
+	public void testNumOfLettersLessThanTwenty() {
+		InputData data = new InputData.Builder("abc")
+				.crosswordMode(true)
+				.numOfLetters("21")
+				.build();
+		Validator validator = new Validator(data);
+		List<String> message = validator.validate();
+		assertTrue(message.size() == 1);
+		assertEquals(message.get(0), Validator.TOO_MANY_NUM_OF_LETTERS);
+	}
 }

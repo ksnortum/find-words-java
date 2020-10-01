@@ -4,18 +4,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import net.snortum.scrabblewords.model.DictionaryName;
-import net.snortum.scrabblewords.model.InputData;
-
 /**
  * @author Knute Snortum
- * @version 2.1.1
+ * @version 2.4.0
  */
 public class InputDataTest {
 	private final String letters = "ABC";
 	private final String contains = "A";
 	private final String startsWith = "A";
 	private final String endsWith = "A";
+	private final String numOfLetters = "5";
 
 	@Test
 	public void testGetLetters() {
@@ -62,5 +60,13 @@ public class InputDataTest {
 	public void testInputDataEmpty() {
 		InputData data = new InputData.Builder("").build();
 		assertTrue( data.isEmpty() );
+	}
+	
+	@Test
+	public void testNumOfLetters() {
+		InputData data = new InputData.Builder( letters )
+				.numOfLetters( numOfLetters )
+				.build();
+		assertTrue( data.getNumOfLetters().equals( numOfLetters ) );
 	}
 }

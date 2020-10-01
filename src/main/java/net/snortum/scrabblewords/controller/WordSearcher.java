@@ -20,7 +20,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * if the available "tiles" (letters) and patterns match the dictionary word
  *
  * @author Knute Snortum
- * @version 2.2.1
+ * @version 2.4.0
  */
 public class WordSearcher {
 	private static final Logger LOG = LogManager.getLogger(WordSearcher.class);
@@ -100,7 +100,15 @@ public class WordSearcher {
 			if (pattern != null && !pattern.matcher(word).find()) {
 				continue;
 			}
-
+			
+			// Skip if this is crossword mode and length the the word is not equal to numOfLetters
+			if (data.isCrosswordMode() 
+					&& !data.getNumOfLetters().isBlank()
+					&& Integer.parseInt(data.getNumOfLetters()) > 0
+					&& word.length() != Integer.parseInt(data.getNumOfLetters())) {
+				continue;
+			}
+			
 			String dictWord = word; // make copy of word
 
 			// Loop through letters to see if they can make up the dict word
@@ -123,6 +131,7 @@ public class WordSearcher {
 				i++;
 			}
 
+			
 			// All the letters in the dict word have been accounted for, so make a ScrabbleWord
 			if (dictWord.isEmpty()) {
 				boolean isBingo = false;

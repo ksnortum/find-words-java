@@ -32,7 +32,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import net.snortum.scrabblewords.controller.Validator;
 import net.snortum.scrabblewords.controller.WordSearcher;
 import net.snortum.scrabblewords.model.DictionaryName;
@@ -44,7 +43,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.3.0
+ * @version 2.4.0
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -57,6 +56,7 @@ public class ScrabbleWords {
 	private final ChoiceBox<DictionaryName> dictionary = new ChoiceBox<>(
 			FXCollections.observableArrayList(DictionaryName.values()));
 	private final CheckBox crossword = new CheckBox();
+	private final TextField numOfLetters = new TextField();
 
 	/**
 	 * Build the main GUI form and display
@@ -144,7 +144,7 @@ public class ScrabbleWords {
 		dictionary.setValue(DictionaryName.OSPD);
 		col = 1;
 		grid.add(dictionary, col, row);
-
+		
 		// Crossword Mode
 		col = 0;
 		row++;
@@ -153,11 +153,29 @@ public class ScrabbleWords {
 		checkBoxLabel.setContentDisplay(ContentDisplay.RIGHT);
 		grid.add(checkBoxLabel, col, row);
 		crossword.setTooltip(new Tooltip("unchecked = Scrabble mode, checked = crossword mode"));
+		crossword.setOnAction((event) -> {
+			if (crossword.isSelected()) {
+				numOfLetters.setDisable(false);
+			} else {
+				numOfLetters.setDisable(true);
+			}
+		});
 		
 		// Progress bar
 		col = 1;
 		grid.add(progress, col, row);
 		progress.setVisible(false);
+		
+		// Number of Letters to Match
+		col = 0;
+		row++;
+		Label numOfLettersLabel = new Label("Number of Letters:");
+		grid.add(numOfLettersLabel, col, row);
+		numOfLetters.setDisable(true);
+		col = 1;
+		grid.add(numOfLetters, col, row);
+		numOfLetters.setTooltip(new Tooltip(
+				"The exact number of letters in a word.  Zero or blank mean unlimited"));
 		
 		// <Enter> = Submit, <Esc> = Quit
 		grid.setOnKeyPressed(keyEvent -> {
@@ -296,6 +314,7 @@ public class ScrabbleWords {
 				.endsWith(endsWith.getText())
 				.dictionaryName(dictionary.getValue())
 				.crosswordMode(crossword.isSelected())
+				.numOfLetters(numOfLetters.getText())
 				.build();
 		Validator validator = new Validator(data);
 		List<String> errors = validator.validate();
@@ -319,6 +338,7 @@ public class ScrabbleWords {
 		contains.clear();
 		startsWith.clear();
 		endsWith.clear();
+		numOfLetters.clear();
 		contains.requestFocus();
 	}
 
@@ -330,6 +350,7 @@ public class ScrabbleWords {
 		contains.clear();
 		startsWith.clear();
 		endsWith.clear();
+		numOfLetters.clear();
 		letters.requestFocus();
 	}
 

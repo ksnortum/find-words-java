@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.snortum.scrabblewords</groupId>
 	<artifactId>ScrabbleWords</artifactId>
-	<version>2.3.0</version>
+	<version>2.4.0</version>
 	<name>ScrabbleWords</name>
 	<description>ScrabbleWords will display suggested words to play based on data entered by the user.</description>
 
@@ -133,22 +133,4 @@
 			<version>${javafxVersion}</version>
 		</dependency>
 	</dependencies>
-
-	<reporting>
-		<plugins>
-
-			<!-- JavaDoc plugin, goal: javadoc:javadoc -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10</version>
-				<configuration>
-					<project>
-						<description>${project.description}</description>
-					</project>
-					<show>protected</show>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>

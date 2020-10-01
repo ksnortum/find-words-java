@@ -17,7 +17,7 @@ import net.snortum.scrabblewords.model.InputData;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2.3.0
+ * @version 2.4.0
  */
 public class Validator {
 	private static final Logger LOG = LogManager.getLogger(Validator.class);
@@ -28,6 +28,9 @@ public class Validator {
 	static final String NO_MORE_THAN_TWO_DOTS = "Letters can have no more than two dots";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters";
 	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters";
+	static final String INVALID_NUMBER = "You must enter only non-negative digits in the number of letters field";
+	static final String TOO_MANY_LETTERS = "You cannot have over 20 number of letters";
+	static final String TOO_MANY_NUM_OF_LETTERS = "The Number of Letters field can't be more then 20";
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
 	private static final String LETTERS_RE = "[a-zA-Z]*";
 
@@ -63,13 +66,15 @@ public class Validator {
 		
 		if (data.getLetters().length() < 1) {
 			errors.add(TOO_FEW_LETTERS);
+		} else if (data.getLetters().length() > 20) {
+			errors.add(TOO_MANY_LETTERS);
 		}
 		
 		if (!data.getLetters().matches(LETTERS_DOT_RE)) {
 			errors.add(LETTERS_OR_DOTS);
 		}
 		
-		if (!data.getCrosswordMode() && !noMoreThanTwoDots(data.getLetters())) {
+		if (!data.isCrosswordMode() && !noMoreThanTwoDots(data.getLetters())) {
 			errors.add(NO_MORE_THAN_TWO_DOTS);
 		}
 		
@@ -89,7 +94,15 @@ public class Validator {
 			errors.add(INVALID_REGEX);
 			errors.add(reError);
 		}
-
+		
+		if (data.isCrosswordMode() && !data.getNumOfLetters().isBlank()) {
+			if (!data.getNumOfLetters().matches("\\d*")) {
+				errors.add(INVALID_NUMBER);
+			} else if (Integer.parseInt(data.getNumOfLetters()) > 20) {
+				errors.add(TOO_MANY_NUM_OF_LETTERS);
+			}
+		}
+		
 		return errors;
 	}
 

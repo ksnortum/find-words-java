@@ -12,7 +12,7 @@ package net.snortum.scrabblewords.model;
  * </pre>
  * 
  * @author Knute Snortum
- * @version 2.3.0
+ * @version 2.4.0
  */
 public class InputData {
 
@@ -30,6 +30,7 @@ public class InputData {
 		private String endsWith = "";
 		private DictionaryName dictName = DictionaryName.OSPD;
 		private boolean crosswordMode = false;
+		private String numOfLetters = "";
 
 		/**
 		 * Create a Builder object to build an {@link InputData} object.
@@ -89,6 +90,18 @@ public class InputData {
 		 */
 		public Builder crosswordMode(boolean crosswordMode) {
 			this.crosswordMode = crosswordMode;
+			return this;
+		}
+		
+		/**
+		 * In crossword mode, this contains the number of letters long
+		 * the word must be
+		 * 
+		 * @param numOfLetters
+		 * @return this object
+		 */
+		public Builder numOfLetters(String numOfLetters) {
+			this.numOfLetters = numOfLetters;
 			return this;
 		}
 
@@ -166,8 +179,13 @@ public class InputData {
 	}
 	
 	/** @return the crossword mode -- false = Scrabble, true = Crossword */
-	public boolean getCrosswordMode() {
+	public boolean isCrosswordMode() {
 		return getBuilder().crosswordMode;
+	}
+	
+	/** @return the number of letters the word is supposed to have. */
+	public String getNumOfLetters() {
+		return getBuilder().numOfLetters;
 	}
 
 	/**
@@ -177,6 +195,7 @@ public class InputData {
 		return getBuilder().letters.isEmpty() &&
 				getBuilder().contains.isEmpty() &&
 				getBuilder().startsWith.isEmpty() &&
-				getBuilder().endsWith.isEmpty();
+				getBuilder().endsWith.isEmpty() &&
+				getBuilder().numOfLetters.isEmpty();
 	}
 }

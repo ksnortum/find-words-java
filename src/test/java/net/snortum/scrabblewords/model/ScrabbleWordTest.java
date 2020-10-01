@@ -8,8 +8,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import net.snortum.scrabblewords.model.ScrabbleWord;
-
 /**
  * @author Knute
  * @version 2.0.0
