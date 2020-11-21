@@ -85,7 +85,7 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 
 		if (!valueWord.isEmpty()) {
 			total = Arrays.stream(valueWord.split(""))
-					.mapToInt(letter -> LETTER_VALUE.get(letter))
+					.mapToInt(LETTER_VALUE::get)
 					.sum();
 		}
 
