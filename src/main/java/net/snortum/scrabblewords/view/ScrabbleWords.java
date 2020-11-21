@@ -43,7 +43,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.4.0
+ * @version 2.5.1
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -110,7 +110,12 @@ public class ScrabbleWords {
 				"Enter the tile letters you have available, a dot for a blank tile"));
 		col = 1;
 		grid.add(letters, col, row);
+		Button clearLetters = new Button("Clear");
+		clearLetters.setOnAction(event -> letters.clear());
+		col = 2;
+		grid.add(clearLetters, col, row);
 
+		// Contains letters
 		col = 0;
 		row++;
 		Label lblContains = new Label("Contains Letters:");
@@ -119,6 +124,10 @@ public class ScrabbleWords {
 				"Letter(s)/regex on the board that words must contain"));
 		col = 1;
 		grid.add(contains, col, row);
+		Button clearContains = new Button("Clear");
+		clearContains.setOnAction(event -> contains.clear());
+		col = 2;
+		grid.add(clearContains, col, row);
 
 		// Starts with
 		col = 0;
@@ -128,6 +137,10 @@ public class ScrabbleWords {
 				new Tooltip("Words must start with these letter(s)"));
 		col = 1;
 		grid.add(startsWith, col, row);
+		Button clearStartsWith = new Button("Clear");
+		clearStartsWith.setOnAction(event -> startsWith.clear());
+		col = 2;
+		grid.add(clearStartsWith, col, row);
 
 		// Ends with
 		col = 0;
@@ -136,6 +149,10 @@ public class ScrabbleWords {
 		endsWith.setTooltip(new Tooltip("Words must end with these letter(s)"));
 		col = 1;
 		grid.add(endsWith, col, row);
+		Button clearEndsWith = new Button("Clear");
+		clearEndsWith.setOnAction(event -> endsWith.clear());
+		col = 2;
+		grid.add(clearEndsWith, col, row);
 
 		// ScrabbleDictionary
 		col = 0;
@@ -153,12 +170,11 @@ public class ScrabbleWords {
 		checkBoxLabel.setContentDisplay(ContentDisplay.RIGHT);
 		grid.add(checkBoxLabel, col, row);
 		crossword.setTooltip(new Tooltip("unchecked = Scrabble mode, checked = crossword mode"));
-		crossword.setOnAction((event) -> {
-			if (crossword.isSelected()) {
-				numOfLetters.setDisable(false);
-			} else {
-				numOfLetters.setDisable(true);
-			}
+		Button clearNumOfLetters = new Button("Clear");
+		clearNumOfLetters.setDisable(true);
+		crossword.setOnAction(event -> {
+			numOfLetters.setDisable(!crossword.isSelected());
+			clearNumOfLetters.setDisable(!crossword.isSelected());
 		});
 		
 		// Progress bar
@@ -175,7 +191,10 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(numOfLetters, col, row);
 		numOfLetters.setTooltip(new Tooltip(
-				"The exact number of letters in a word.  Zero or blank mean unlimited"));
+				"The exact number of letters in a word.  Zero or blank means unlimited"));
+		col = 2;
+		clearNumOfLetters.setOnAction(event -> numOfLetters.clear());
+		grid.add(clearNumOfLetters, col, row);
 		
 		// <Enter> = Submit, <Esc> = Quit
 		grid.setOnKeyPressed(keyEvent -> {
@@ -193,9 +212,11 @@ public class ScrabbleWords {
 
 		// Add buttons to box
 		HBox hbox = buildButtons(stage);
+		colSpan = 2;
+		rowSpan = 1;
 		col = 1;
 		row += rowSpan;
-		grid.add(hbox, col, row);
+		grid.add(hbox, col, row, colSpan, rowSpan);
 
 		return grid;
 	}
@@ -212,7 +233,7 @@ public class ScrabbleWords {
 		submit.setOnAction(event -> searchForWords(stage));
 
 		// Clear button
-		Button clear = new Button("Clear");
+		Button clear = new Button("Clear All");
 		clear.setOnAction((ActionEvent event) -> clearText());
 		hbox.getChildren().add(clear);
 		top = 0; right = 5; bottom = 0; left = 0;
@@ -276,9 +297,9 @@ public class ScrabbleWords {
 
 		// Create task for word searching
 		WordSearcher ws = new WordSearcher(data, progress);
-		Task<Set<ScrabbleWord>> searchWords = new Task<Set<ScrabbleWord>>() {
+		Task<Set<ScrabbleWord>> searchWords = new Task<>() {
 			@Override
-			protected Set<ScrabbleWord> call() throws Exception {
+			protected Set<ScrabbleWord> call() {
 				return ws.getWords();
 			}
 		};
