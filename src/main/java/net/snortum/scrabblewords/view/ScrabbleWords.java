@@ -111,7 +111,10 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(letters, col, row);
 		Button clearLetters = new Button("Clear");
-		clearLetters.setOnAction(event -> letters.clear());
+		clearLetters.setOnAction(event -> {
+			letters.clear();
+			letters.requestFocus();
+		});
 		col = 2;
 		grid.add(clearLetters, col, row);
 
