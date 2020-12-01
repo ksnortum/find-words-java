@@ -43,7 +43,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.5.1
+ * @version 2.5.2
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -128,7 +128,10 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(contains, col, row);
 		Button clearContains = new Button("Clear");
-		clearContains.setOnAction(event -> contains.clear());
+		clearContains.setOnAction(event -> {
+			contains.clear();
+			contains.requestFocus();
+		});
 		col = 2;
 		grid.add(clearContains, col, row);
 
@@ -141,7 +144,10 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(startsWith, col, row);
 		Button clearStartsWith = new Button("Clear");
-		clearStartsWith.setOnAction(event -> startsWith.clear());
+		clearStartsWith.setOnAction(event -> {
+			startsWith.clear();
+			startsWith.requestFocus();
+		});
 		col = 2;
 		grid.add(clearStartsWith, col, row);
 
@@ -153,7 +159,10 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(endsWith, col, row);
 		Button clearEndsWith = new Button("Clear");
-		clearEndsWith.setOnAction(event -> endsWith.clear());
+		clearEndsWith.setOnAction(event -> {
+			endsWith.clear();
+			endsWith.requestFocus();
+		});
 		col = 2;
 		grid.add(clearEndsWith, col, row);
 
@@ -196,7 +205,10 @@ public class ScrabbleWords {
 		numOfLetters.setTooltip(new Tooltip(
 				"The exact number of letters in a word.  Zero or blank means unlimited"));
 		col = 2;
-		clearNumOfLetters.setOnAction(event -> numOfLetters.clear());
+		clearNumOfLetters.setOnAction(event -> {
+			numOfLetters.clear();
+			numOfLetters.requestFocus();
+		});
 		grid.add(clearNumOfLetters, col, row);
 		
 		// <Enter> = Submit, <Esc> = Quit

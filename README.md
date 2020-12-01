@@ -29,7 +29,8 @@ Or, if you have Java in your PATH, you can execute the jar file from the command
 * faster processing, in general
 * wildcards are scored correctly
 * ability to have two wildcards in a hand	
-* Crossword mode
+* crossword mode
+* clear buttons on fields
 
 # TODO
 * possibly use FXML files
