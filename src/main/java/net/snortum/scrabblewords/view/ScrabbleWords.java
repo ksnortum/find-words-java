@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,7 +42,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.5.2
+ * @version 2.5.3
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -170,7 +169,7 @@ public class ScrabbleWords {
 		col = 0;
 		row++;
 		grid.add(new Label("Dictionary: "), col, row);
-		dictionary.setValue(DictionaryName.OSPD);
+		dictionary.setValue(DictionaryName.COLLINS);
 		col = 1;
 		grid.add(dictionary, col, row);
 		
@@ -318,9 +317,7 @@ public class ScrabbleWords {
 				return ws.getWords();
 			}
 		};
-		searchWords.setOnSucceeded((WorkerStateEvent wse) -> {
-			new FoundWords(searchWords.getValue(), stage).display();
-		});
+		searchWords.setOnSucceeded(event -> new FoundWords(searchWords.getValue(), stage).display());
 		searchWords.setOnFailed(wse -> {
 			LOG.error("Word Search Task got an error:");
 			StackTraceElement[] errs = wse.getSource().getException().getStackTrace();
