@@ -10,50 +10,49 @@ import org.junit.Test;
  */
 public class InputDataTest {
 	private final String letters = "ABC";
-	private final String contains = "A";
-	private final String startsWith = "A";
-	private final String endsWith = "A";
-	private final String numOfLetters = "5";
 
 	@Test
 	public void testGetLetters() {
 		InputData data = new InputData.Builder( letters ).build();
-		assertTrue( data.getLetters().equals( letters.toLowerCase() ) );
+		assertEquals(data.getLetters(), letters.toLowerCase());
 	}
 
 	@Test
 	public void testGetContains() {
+		String contains = "A";
 		InputData data = new InputData.Builder( letters )
-				.contains( contains )
+				.contains(contains)
 				.build();
-		assertTrue( data.getContains().equals( contains ) );
+		assertEquals(data.getContains(), contains);
 	}
 
 	@Test
 	public void testGetDictionaryName() {
 		InputData data = new InputData.Builder( letters ).build();
-		assertTrue( DictionaryName.OSPD.equals( data.getDictionaryName() ) );
+		assertEquals(DictionaryName.OSPD, data.getDictionaryName());
 		data = new InputData.Builder( letters )
-				.dictionaryName( DictionaryName.SOWPODS )
+				.dictionaryName( DictionaryName.TWL )
 				.build();
-		assertTrue( DictionaryName.SOWPODS.equals( data.getDictionaryName() ) );
+		assertEquals(DictionaryName.TWL, data.getDictionaryName());
 	}
 	
 
 	@Test
 	public void testStartsWith() {
+		String startsWith = "A";
 		InputData data = new InputData.Builder( letters )
-				.startsWith( startsWith )
+				.startsWith(startsWith)
 				.build();
-		assertTrue( data.getStartsWith().equals( startsWith ) );
+		assertEquals(data.getStartsWith(), startsWith);
 	}
 	
 	@Test
 	public void testEndsWith() {
+		String endsWith = "A";
 		InputData data = new InputData.Builder( letters )
-				.endsWith( endsWith )
+				.endsWith(endsWith)
 				.build();
-		assertTrue( data.getEndsWith().equals( endsWith ) );
+		assertEquals(data.getEndsWith(), endsWith);
 	}
 	
 	@Test
@@ -64,9 +63,10 @@ public class InputDataTest {
 	
 	@Test
 	public void testNumOfLetters() {
+		String numOfLetters = "5";
 		InputData data = new InputData.Builder( letters )
-				.numOfLetters( numOfLetters )
+				.numOfLetters(numOfLetters)
 				.build();
-		assertTrue( data.getNumOfLetters().equals( numOfLetters ) );
+		assertEquals(data.getNumOfLetters(), numOfLetters);
 	}
 }
