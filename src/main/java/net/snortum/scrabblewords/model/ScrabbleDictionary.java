@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 public class ScrabbleDictionary {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleDictionary.class);
 	static final String DICTIONARY_NULL = "Dictionary name cannot be null";
-	private static final Map<DictionaryName, List<String>> words = new HashMap<>();
+	private static final Map<DictionaryName, List<DictionaryElement>> words = new HashMap<>();
 
 	private final DictionaryName dictionaryName;
 
@@ -53,7 +53,7 @@ public class ScrabbleDictionary {
 	 *
 	 * @return list of words from a text dictionary (uses Map for faster access)
 	 */
-	public List<String> getValidWords() {
+	public List<DictionaryElement> getValidWords() {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Getting dictionary words");
 		}
@@ -68,12 +68,25 @@ public class ScrabbleDictionary {
 
 		String dictionaryFile = "/dicts/" + dictionaryName.toString().toLowerCase() + ".txt";
 		InputStream in = getClass().getResourceAsStream(dictionaryFile);
-		List<String> validWords = new ArrayList<>();
+		List<DictionaryElement> validWords = new ArrayList<>();
 
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-			validWords = br.lines()
-					.map(String::toLowerCase)
-					.collect(Collectors.toList());
+			String line;
+			String definition = null;
+			String word = "";
+
+			while ((line = br.readLine()) != null) {
+				String[] parts = line.split("\t");
+				word = parts[0].toLowerCase();
+
+				if (parts.length > 1) {
+					definition = parts[1];
+				} else {
+					definition = null;
+				}
+
+				validWords.add(new DictionaryElement(word, definition));
+			}
 		} catch (IOException e) {
 			LOG.error(e.toString());
 		}

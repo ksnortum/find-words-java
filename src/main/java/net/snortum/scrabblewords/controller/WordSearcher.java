@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import net.snortum.scrabblewords.model.DictionaryElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +64,7 @@ public class WordSearcher {
 
 		// Get valid words from dictionary
 		ScrabbleDictionary dict = new ScrabbleDictionary(data.getDictionaryName());
-		List<String> validWords = dict.getValidWords();
+		List<DictionaryElement> validWords = dict.getValidWords();
 
 		// Compile regex once for speed
 		Pattern pattern = buildPattern();
@@ -83,12 +84,13 @@ public class WordSearcher {
 			progress.setVisible(true);
 		}
 
-		for (String word : validWords) {
+		for (DictionaryElement element : validWords) {
 			if (progress != null) {
 				progress.setProgress(thusFar);
 			}
 
 			thusFar += inc;
+			String word = element.getWord();
 			StringBuilder valueLetters = new StringBuilder();
 
 			// Skip if dictionary word is longer than all possible letters
@@ -141,7 +143,7 @@ public class WordSearcher {
 					isBingo = true;
 				}
 
-				words.add(new ScrabbleWord(word, valueLetters.toString(), isBingo));
+				words.add(new ScrabbleWord(word, valueLetters.toString(), isBingo, element.getDefinition()));
 
 			}
 

@@ -8,7 +8,7 @@ import java.util.Map;
  * Holds a word and its Scrabble value. Immutable. Comparable.
  * 
  * @author Knute Snortum
- * @version 1.0
+ * @version 2.6.0
  */
 public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	private static final Map<String, Integer> LETTER_VALUE;
@@ -49,17 +49,19 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 	private final String word;
 	private final String valueWord;
 	private final int value;
+	private final String definition;
 
 	/**
-	 * Create a Scrabble word, optionally adding 50 points for a bingo
+	 * Create a Scrabble word and definition, optionally adding 50 points for a bingo
 	 * 
-	 * @param word      the word formed by the Scrabble tiles for display
-	 * @param valueWord the word that carries the value of the ScrabbleWord, that
-	 *                  is, it has no wildcards (which have zero value)
-	 * @param isBingo   true if this word created a bingo
+	 * @param word       the word formed by the Scrabble tiles for display
+	 * @param valueWord  the word that carries the value of the ScrabbleWord, that
+	 *                   is, it has no wildcards (which have zero value)
+	 * @param isBingo    true if this word created a bingo
+	 * @param definition the definition of the word
 	 * @throws IllegalArgumentException if word is null or empty
 	 */
-	public ScrabbleWord(String word, String valueWord, boolean isBingo) {
+	public ScrabbleWord(String word, String valueWord, boolean isBingo, String definition) {
 		if (word == null) {
 			throw new IllegalArgumentException(WORD_NULL);
 		}
@@ -75,6 +77,14 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 		this.word = word.toLowerCase();
 		this.valueWord = valueWord.toLowerCase();
 		this.value = calculateValue() + (isBingo ? 50 : 0);
+		this.definition = definition;
+	}
+
+	/**
+	 * Create a Scrabble word without a definition
+	 */
+	public ScrabbleWord(String word, String valueWord, boolean isBingo) {
+		this(word, valueWord, isBingo, null);
 	}
 
 	/*
@@ -104,6 +114,10 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 
 	public int getValue() {
 		return value;
+	}
+
+	public String getDefinition() {
+		return definition;
 	}
 
 	/**
@@ -155,7 +169,16 @@ public class ScrabbleWord implements Comparable<ScrabbleWord> {
 
 	@Override
 	public String toString() {
-		return this.word + ": " + this.value;
+		StringBuilder sb = new StringBuilder(this.word);
+		sb.append(": ");
+		sb.append(this.value);
+
+		if (definition != null && !definition.isEmpty()) {
+			sb.append(", ");
+			sb.append(definition);
+		}
+
+		return sb.toString();
 	}
 
 }
