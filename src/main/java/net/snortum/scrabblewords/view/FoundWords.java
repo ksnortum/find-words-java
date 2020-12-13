@@ -17,7 +17,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
 
 /**
  * Displays the words that are found after the user enters data
- * and presses "submit."
+ * and presses "submit"
  * 
  * @author Knute Snortum
  * @version 2.1.0
@@ -57,7 +57,7 @@ public class FoundWords {
 		if (words.isEmpty()) {
 			data.add("Nothing found");
 		} else {
-			words.stream().forEach(word -> data.add(word.toString()));
+			words.forEach(word -> data.add(word.toString()));
 		}
 
 		ListView<String> listView = new ListView<>(data);

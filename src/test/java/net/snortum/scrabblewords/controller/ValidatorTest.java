@@ -1,13 +1,11 @@
 package net.snortum.scrabblewords.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import net.snortum.scrabblewords.model.InputData;
+import org.junit.Test;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import net.snortum.scrabblewords.model.InputData;
+import static org.junit.Assert.assertEquals;
 
 public class ValidatorTest {
 
@@ -16,7 +14,7 @@ public class ValidatorTest {
 		InputData data = new InputData.Builder( "abc" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 0 );
+		assertEquals(0, message.size());
 	}
 	
 	@Test
@@ -24,7 +22,7 @@ public class ValidatorTest {
 		InputData data = new InputData.Builder( "ab.c" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 0 );
+		assertEquals(0, message.size());
 	}
 	
 	@Test
@@ -32,7 +30,7 @@ public class ValidatorTest {
 		InputData data = new InputData.Builder( "a.b.c" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 0 );
+		assertEquals(0, message.size());
 	}
 	
 	@Test
@@ -40,7 +38,7 @@ public class ValidatorTest {
 		InputData data = new InputData.Builder( "a.b.c." ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
+		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.NO_MORE_THAN_TWO_DOTS );
 	}
 	
@@ -54,7 +52,7 @@ public class ValidatorTest {
 		InputData data = new InputData.Builder( "" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
+		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.TOO_FEW_LETTERS );
 	}
 	
@@ -63,7 +61,7 @@ public class ValidatorTest {
 		InputData data = new InputData.Builder( "abc5e" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
+		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.LETTERS_OR_DOTS );
 	}
 	
@@ -74,7 +72,7 @@ public class ValidatorTest {
 				.build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
+		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.CONTAINS_TOO_LONG );
 	}
 	
@@ -85,7 +83,7 @@ public class ValidatorTest {
 				.build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
+		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.STARTSWITH_NONLETTERS );
 	}
 	
@@ -96,7 +94,7 @@ public class ValidatorTest {
 				.build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
-		assertTrue( message.size() == 1 );
+		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.ENDSWITH_NONLETTERS );
 	}
 	
@@ -107,7 +105,7 @@ public class ValidatorTest {
 				.build();
 		Validator validator = new Validator(data);
 		List<String> message = validator.validate();
-		assertTrue(message.size() == 0);
+		assertEquals(0, message.size());
 	}
 	
 	@Test
@@ -118,7 +116,7 @@ public class ValidatorTest {
 				.build();
 		Validator validator = new Validator(data);
 		List<String> message = validator.validate();
-		assertTrue(message.size() == 1);
+		assertEquals(1, message.size());
 		assertEquals(message.get(0), Validator.INVALID_NUMBER);
 	}
 	
@@ -130,7 +128,7 @@ public class ValidatorTest {
 				.build();
 		Validator validator = new Validator(data);
 		List<String> message = validator.validate();
-		assertTrue(message.size() == 1);
+		assertEquals(1, message.size());
 		assertEquals(message.get(0), Validator.TOO_MANY_NUM_OF_LETTERS);
 	}
 }

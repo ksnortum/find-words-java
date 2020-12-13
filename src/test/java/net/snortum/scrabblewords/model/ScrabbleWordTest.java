@@ -15,25 +15,21 @@ import org.junit.Test;
 public class ScrabbleWordTest {
 	private final String testWord = "punjabi";
 	private final String testValueWord = "punjbi";
-	private final int testValue = 17;
-	private final int bingoValue = 67;
 
 	@Test
 	public void testScrabbleWord() {
-		boolean isBingo = false;
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, isBingo);
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
 		assertEquals(testWord, thisWord.getWord());
 		assertEquals(testValueWord, thisWord.getValueWord());
-		assertEquals(testValue, thisWord.getValue());
+		assertEquals(17, thisWord.getValue());
 	}
 
 	@Test
 	public void testBingo() {
-		boolean isBingo = true;
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, isBingo);
+		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, true);
 		assertEquals(testWord, thisWord.getWord());
 		assertEquals(testValueWord, thisWord.getValueWord());
-		assertEquals(bingoValue, thisWord.getValue());
+		assertEquals(67, thisWord.getValue());
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
@@ -55,28 +51,28 @@ public class ScrabbleWordTest {
 	public void testEqualsObject() {
 		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
 		ScrabbleWord thatWord = new ScrabbleWord(testWord, testValueWord, false);
-		assertTrue(thisWord.equals(thatWord));
+		assertEquals(thisWord, thatWord);
 	}
 	
 	@Test
 	public void testEqualsObjectNotIsBingo() {
 		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
 		ScrabbleWord thatWord = new ScrabbleWord(testWord, testValueWord, true);
-		assertFalse(thisWord.equals(thatWord));
+		assertNotEquals(thisWord, thatWord);
 	}
 	
 	@Test
 	public void testEqualsObjectNotValueWord() {
 		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
 		ScrabbleWord thatWord = new ScrabbleWord(testWord, testWord, false);
-		assertFalse(thisWord.equals(thatWord));
+		assertNotEquals(thisWord, thatWord);
 	}
 
 	@Test
 	public void testEqualsObjectNotWord() {
 		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
 		ScrabbleWord thatWord = new ScrabbleWord(testValueWord, testValueWord, false);
-		assertFalse(thisWord.equals(thatWord));
+		assertNotEquals(thisWord, thatWord);
 	}
 	
 	@Test

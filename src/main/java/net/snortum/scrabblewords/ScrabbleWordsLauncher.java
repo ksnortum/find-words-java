@@ -17,7 +17,7 @@ public class ScrabbleWordsLauncher extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		new ScrabbleWords().buildAndShowGui(primaryStage);
 	}
 

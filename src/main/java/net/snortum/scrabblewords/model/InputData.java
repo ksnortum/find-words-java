@@ -22,7 +22,7 @@ public class InputData {
 	public static class Builder {
 
 		// Mandatory
-		private String letters;
+		private final String letters;
 
 		// Optional, set default values
 		private String contains = "";
@@ -98,6 +98,7 @@ public class InputData {
 		 * the word must be
 		 * 
 		 * @param numOfLetters
+		 * 				the number of letters
 		 * @return this object
 		 */
 		public Builder numOfLetters(String numOfLetters) {
@@ -114,7 +115,7 @@ public class InputData {
 		}
 	}
 	
-	private Builder builder;
+	private final Builder builder;
 
 	// Create InputData object from builder
 	private InputData(Builder builder) {

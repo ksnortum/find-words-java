@@ -17,33 +17,31 @@ import org.apache.logging.log4j.Logger;
  * This immutable class retrieves a list of words from a Scrabble Dictionary
  * text file. The text file must be in the ClassPath with one word per line.
  * Words will be down-cased.
- * 
+ *
  * @author Knute Snortum
  * @version 2.1.1
  */
 public class ScrabbleDictionary {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleDictionary.class);
-	static final String INPUTDATA_NULL = "Input Data cannot be null";
 	static final String DICTIONARY_NULL = "Dictionary name cannot be null";
-
-	private static Map<DictionaryName, List<String>> words = new HashMap<>();
+	private static final Map<DictionaryName, List<String>> words = new HashMap<>();
 
 	private final DictionaryName dictionaryName;
 
 	/**
 	 * Create a new ScrabbleDictionary object. Uses data to get the
 	 * {@link DictionaryName}.
-	 * 
+	 *
 	 * @param dictionaryName
-	 *            the dictionary name to use
+	 *				the dictionary name to use
 	 * @throws IllegalArgumentException
-	 *             if data or data.getDictionaryName() are null
+	 *              if data or data.getDictionaryName() are null
 	 */
 	public ScrabbleDictionary(DictionaryName dictionaryName) {
 		if (dictionaryName == null) {
 			throw new IllegalArgumentException(DICTIONARY_NULL);
 		}
-		
+
 		this.dictionaryName = dictionaryName;
 	}
 
@@ -52,7 +50,7 @@ public class ScrabbleDictionary {
 	 * calls. ScrabbleDictionary file name comes from the {@link InputData}
 	 * field entered at object creation. ScrabbleDictionary name must be in the
 	 * class path.
-	 * 
+	 *
 	 * @return list of words from a text dictionary (uses Map for faster access)
 	 */
 	public List<String> getValidWords() {
@@ -74,7 +72,7 @@ public class ScrabbleDictionary {
 
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			validWords = br.lines()
-					.map(word -> word.toLowerCase())
+					.map(String::toLowerCase)
 					.collect(Collectors.toList());
 		} catch (IOException e) {
 			LOG.error(e.toString());
@@ -83,7 +81,7 @@ public class ScrabbleDictionary {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Size of valid word list: " + validWords.size());
 		}
-		
+
 		words.put(dictionaryName, validWords);
 
 		return validWords;

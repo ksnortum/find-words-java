@@ -22,8 +22,8 @@ import net.snortum.scrabblewords.controller.Validator;
  * @see Validator
  */
 public class Errors {
-	private List<String> errors;
-	private Stage stage;
+	private final List<String> errors;
+	private final Stage stage;
 	
 	/**
 	 * @param errors
@@ -56,7 +56,7 @@ public class Errors {
 		title.setStyle("-fx-font-weight: bold;");
 		grid.add(title, 0, 0);
 
-		Label errorLabel = new Label(message.toString());
+		Label errorLabel = new Label(message);
 		errorLabel.setWrapText(true);
 		grid.add(errorLabel, 0, 2);
 

@@ -22,11 +22,8 @@ public class WordSearcherTest {
 	
 	ProgressBar progress;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		progress = null;
 	}
 
