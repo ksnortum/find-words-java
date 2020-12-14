@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -97,7 +99,7 @@ public class ScrabbleWords {
 		// Title
 		Text title = new Text("Find Scrabble Words");
 		title.setId("title");
-		title.setStyle("-fx-font-size:30; -fx-font-weight:bold");
+		title.setFont(Font.font(null, FontWeight.BOLD, 30));
 		int col = 0, row = 0, colSpan = 2, rowSpan = 1;
 		grid.add(title, col, row, colSpan, rowSpan);
 
