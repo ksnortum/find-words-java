@@ -1,9 +1,11 @@
 package net.snortum.scrabblewords.view;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +46,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.5.3
+ * @version 2.6.1
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -77,6 +79,16 @@ public class ScrabbleWords {
 		Scene scene = new Scene(box);
 		stage.setScene(scene);
 		stage.setTitle("ScrabbleWords");
+		InputStream imageStream = getClass().getResourceAsStream("/image/letter-S.png");
+
+		if (imageStream == null) {
+			if (LOG.isWarnEnabled()) {
+				LOG.warn("Image stream for icon is null");
+			}
+		} else {
+			stage.getIcons().add(new Image(imageStream));
+		}
+
 		stage.show();
 	}
 
