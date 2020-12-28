@@ -6,20 +6,24 @@ import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import net.snortum.scrabblewords.controller.Validator;
 
 /**
  * Display errors from validation.
  * 
  * @author Knute Snortum
- * @version 2017.07.07
- * @see Validator
+ * @version 2.7.0
+ * @see {@link Validator}
  */
 public class Errors {
 	private final List<String> errors;
@@ -47,21 +51,26 @@ public class Errors {
 		dialog.setTitle("Errors");
 
 		VBox box = new VBox();
-		GridPane grid = new GridPane();
-		box.getChildren().add(grid);
-		int top = 10, right = 10, bottom = 10, left = 10;
-		grid.setPadding(new Insets(top, right, bottom, left));
+		box.setPadding(new Insets(10));
+		box.setSpacing(10);
 
 		Text title = new Text("Please correct these errors");
-		title.setStyle("-fx-font-weight: bold;");
-		grid.add(title, 0, 0);
+		title.setFont(Font.font(null, FontWeight.BOLD, -1));
+		box.getChildren().add(title);
 
 		Label errorLabel = new Label(message);
 		errorLabel.setWrapText(true);
-		grid.add(errorLabel, 0, 2);
+		box.getChildren().add(errorLabel);
+
+		Button exitButton = new Button("OK");
+		exitButton.setOnAction(event -> dialog.close());
+		ButtonBar buttonBar = new ButtonBar();
+		buttonBar.getButtons().add(exitButton);
+		box.getChildren().add(buttonBar);
 
 		Scene dialogScene = new Scene(box);
 		dialog.setScene(dialogScene);
+		dialog.initStyle(StageStyle.UNDECORATED);
 		dialog.show();
 	}
 

@@ -46,7 +46,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.6.1
+ * @version 2.7.0
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -331,7 +331,10 @@ public class ScrabbleWords {
 				return ws.getWords();
 			}
 		};
-		searchWords.setOnSucceeded(event -> new FoundWords(searchWords.getValue(), stage).display());
+		boolean dictionaryDefinitions = data.getDictionaryName().toString().contains("DEFINE");
+		searchWords.setOnSucceeded(event ->
+				new FoundWords(searchWords.getValue(), stage, dictionaryDefinitions).display()
+		);
 		searchWords.setOnFailed(wse -> {
 			LOG.error("Word Search Task got an error:");
 			StackTraceElement[] errs = wse.getSource().getException().getStackTrace();

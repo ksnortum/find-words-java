@@ -1,0 +1,7 @@
+.table-cell {
+    -fx-alignment: center-left;
+}
+
+.table-view .column-header .label {
+    -fx-alignment: center-left;
+}

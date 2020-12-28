@@ -1,44 +1,50 @@
 package net.snortum.scrabblewords.view;
 
-import java.util.Set;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.snortum.scrabblewords.model.ScrabbleWord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Set;
 
 /**
  * Displays the words that are found after the user enters data
  * and presses "submit"
  * 
  * @author Knute Snortum
- * @version 2.1.0
+ * @version 2.7.0
  */
 public class FoundWords {
 	private static final Logger LOG = LogManager.getLogger(FoundWords.class);
-	private static final int VIEW_WIDTH = 200;
+	private static final int VIEW_WIDTH = 150;
+	private static final int VIEW_WIDTH_DEFINE = 600;
 	private static final int VIEW_HEIGHT = 300;
 	
 	private final Set<ScrabbleWord> words;
 	private final Stage stage;
+	private final boolean dictionaryDefinitions;
 	
 	/**
 	 * @param words
 	 *            a set of {@link ScrabbleWord}s
 	 * @param stage
 	 *            the {@link Stage} to create a modal dialogue on
+	 * @param dictionaryDefinitions
+	 *            does the dictionary that these words are based on have definitions?
 	 */
-	public FoundWords(Set<ScrabbleWord> words, Stage stage) {
+	public FoundWords(Set<ScrabbleWord> words, Stage stage, boolean dictionaryDefinitions) {
 		this.words = words;
 		this.stage = stage;
+		this.dictionaryDefinitions = dictionaryDefinitions;
 	}
 	
 	/**
@@ -49,26 +55,39 @@ public class FoundWords {
 			LOG.debug("In display()");
 		}
 
+		if (words.isEmpty()) {
+			new NothingFound(stage).display();
+			return;
+		}
+
 		Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(stage);
-		ObservableList<String> data = FXCollections.observableArrayList();
+		ObservableList<ScrabbleWord> data = FXCollections.observableArrayList(words);
+		TableView<ScrabbleWord> tableView = new TableView<>(data);
+		tableView.setPrefSize(dictionaryDefinitions ? VIEW_WIDTH_DEFINE : VIEW_WIDTH, VIEW_HEIGHT);
 
-		if (words.isEmpty()) {
-			data.add("Nothing found");
-		} else {
-			words.forEach(word -> data.add(word.toString()));
+		TableColumn<ScrabbleWord, String> wordColumn = new TableColumn<>("Word");
+		wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
+		tableView.getColumns().add(wordColumn);
+
+		TableColumn<ScrabbleWord, Integer> valueColumn = new TableColumn<>("Score");
+		valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+		tableView.getColumns().add(valueColumn);
+
+		if (dictionaryDefinitions) {
+			TableColumn<ScrabbleWord, String> definitionColumn = new TableColumn<>("Definition");
+			definitionColumn.setCellValueFactory(new PropertyValueFactory<>("definition"));
+			tableView.getColumns().add(definitionColumn);
 		}
 
-		ListView<String> listView = new ListView<>(data);
-		listView.setPrefSize(VIEW_WIDTH, VIEW_HEIGHT); 
-		Scene dialogScene = new Scene(listView);
-
+		Scene dialogScene = new Scene(tableView);
 		dialogScene.setOnKeyPressed((KeyEvent keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ESCAPE) {
 				dialog.close();
 			}
 		});
+		dialogScene.getStylesheets().add("/css/found-words.css");
 
 		dialog.setScene(dialogScene);
 		dialog.show();
