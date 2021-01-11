@@ -132,5 +132,12 @@
 			<artifactId>javafx-web</artifactId>
 			<version>${javafxVersion}</version>
 		</dependency>
+
+		<!-- Only needed in testing to initialize JX for a UI element -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
+			<version>${javafxVersion}</version>
+		</dependency>
 	</dependencies>
 </project>

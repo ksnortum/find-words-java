@@ -1,22 +1,25 @@
 package net.snortum.scrabblewords.controller;
 
-import static org.junit.Assert.*;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.ProgressBar;
+
+import junit.framework.AssertionFailedError;
+
+import net.snortum.scrabblewords.model.InputData;
+import net.snortum.scrabblewords.model.ScrabbleWord;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import javafx.scene.control.ProgressBar;
-import junit.framework.AssertionFailedError;
-import net.snortum.scrabblewords.model.InputData;
-import net.snortum.scrabblewords.model.ScrabbleWord;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Knute Snortum 
- * @version 2.4.0
+ * @version 2.7.1
  */
 public class WordSearcherTest {
 	
@@ -24,7 +27,8 @@ public class WordSearcherTest {
 
 	@Before
 	public void setUp() {
-		progress = null;
+		JFXPanel fxPanel = new JFXPanel(); // to initialize JX
+		progress = new ProgressBar();
 	}
 
 	@Test
