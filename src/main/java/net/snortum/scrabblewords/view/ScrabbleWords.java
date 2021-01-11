@@ -1,47 +1,37 @@
 package net.snortum.scrabblewords.view;
 
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import javafx.event.Event;
-import javafx.scene.image.Image;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import net.snortum.scrabblewords.event.ProgressEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import net.snortum.scrabblewords.controller.Validator;
 import net.snortum.scrabblewords.controller.WordSearcher;
+import net.snortum.scrabblewords.event.ProgressEvent;
 import net.snortum.scrabblewords.model.DictionaryName;
 import net.snortum.scrabblewords.model.InputData;
 import net.snortum.scrabblewords.model.ScrabbleWord;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Display possible Scrabble words to play based on your "tile" letters, a
@@ -74,11 +64,17 @@ public class ScrabbleWords {
 			LOG.debug("Starting application");
 		}
 
-		GridPane grid = buildGrid(stage);
 		MenuBar menuBar = buildMenu();
-		VBox box = new VBox();
-		box.getChildren().addAll(menuBar, grid);
-		Scene scene = new Scene(box);
+		GridPane grid = buildGrid(stage);
+		ButtonBar buttonBar = buildButtons(stage);
+		VBox box = new VBox(10);
+		int top = 5, right = 25, bottom = 15, left = 25;
+		box.setPadding(new Insets(top, right, bottom, left));
+		box.getChildren().addAll(grid, buttonBar);
+
+		VBox root = new VBox();
+		root.getChildren().addAll(menuBar, box);
+		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.setTitle("ScrabbleWords");
 		InputStream imageStream = getClass().getResourceAsStream("/image/letter-S.png");
@@ -107,8 +103,6 @@ public class ScrabbleWords {
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-		int top = 5, right = 25, bottom = 15, left = 25;
-		grid.setPadding(new Insets(top, right, bottom, left));
 
 		// Title
 		Text title = new Text("Find Scrabble Words");
@@ -246,41 +240,28 @@ public class ScrabbleWords {
 			}
 		});
 
-		// Add buttons to box
-		HBox hbox = buildButtons(stage);
-		colSpan = 2;
-		rowSpan = 1;
-		col = 1;
-		row += rowSpan;
-		grid.add(hbox, col, row, colSpan, rowSpan);
-
 		return grid;
 	}
 	
-	private HBox buildButtons(final Stage stage) {
+	private ButtonBar buildButtons(final Stage stage) {
 		
 		// Submit button and action
-		HBox hbox = new HBox();
-		hbox.setAlignment(Pos.BASELINE_RIGHT);
+		ButtonBar buttonBar = new ButtonBar();
 		Button submit = new Button("Submit");
-		hbox.getChildren().add(submit);
-		int top = 0, right = 5, bottom = 0, left = 5;
-		HBox.setMargin(submit, new Insets(top, right, bottom, left));
+		buttonBar.getButtons().add(submit);
 		submit.setOnAction(event -> searchForWords(stage));
 
 		// Clear button
-		Button clear = new Button("Clear All");
+		Button clear = new Button("Clear");
 		clear.setOnAction((ActionEvent event) -> clearText());
-		hbox.getChildren().add(clear);
-		top = 0; right = 5; bottom = 0; left = 0;
-		HBox.setMargin(clear, new Insets(top, right, bottom, left));
+		buttonBar.getButtons().add(clear);
 
-		// Clear except Letters button
-		Button clearExcept = new Button("Clear Except Avail");
-		clearExcept.setOnAction(event -> clearTextExceptLetters());
-		hbox.getChildren().add(clearExcept);
+		// Exit app
+		Button exit = new Button("Exit");
+		exit.setOnAction(event -> Platform.exit());
+		buttonBar.getButtons().add(exit);
 
-		return hbox;
+		return buttonBar;
 	}
 
 	private MenuBar buildMenu() {
@@ -291,14 +272,10 @@ public class ScrabbleWords {
 		clearItem.setAccelerator(KeyCombination.keyCombination("Ctrl+L"));
 		clearItem.setOnAction(event -> clearText());
 
-		MenuItem clearExceptItem = new MenuItem("Clear Except Avail");
-		clearExceptItem.setAccelerator(KeyCombination.keyCombination("Ctrl+R"));
-		clearExceptItem.setOnAction(event -> clearTextExceptLetters());
-
 		MenuItem exitItem = new MenuItem("Quit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
 		exitItem.setOnAction(event -> Platform.exit());
-		menuFile.getItems().addAll(clearItem, clearExceptItem, exitItem);
+		menuFile.getItems().addAll(clearItem, exitItem);
 
 		// Menu Help
 		Menu menuHelp = new Menu("Help");
@@ -391,17 +368,6 @@ public class ScrabbleWords {
 		}
 		
 		return data;
-	}
-
-	/**
-	 * Clear all text fields, except letters
-	 */
-	private void clearTextExceptLetters() {
-		contains.clear();
-		startsWith.clear();
-		endsWith.clear();
-		numOfLetters.clear();
-		contains.requestFocus();
 	}
 
 	/**
