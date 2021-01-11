@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javafx.event.Event;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import net.snortum.scrabblewords.event.ProgressEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,7 +48,7 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.7.0
+ * @version 2.7.1
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
@@ -206,6 +208,12 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(progress, col, row);
 		progress.setVisible(false);
+		progress.addEventFilter(Event.ANY, event -> {
+			if (event.getSource() instanceof WordSearcher && event.getTarget() instanceof ProgressBar) {
+				ProgressEvent progressEvent = (ProgressEvent) event;
+				progress.setProgress(progressEvent.getThusFar());
+			}
+		});
 		
 		// Number of Letters to Match
 		col = 0;
@@ -328,16 +336,20 @@ public class ScrabbleWords {
 		Task<Set<ScrabbleWord>> searchWords = new Task<>() {
 			@Override
 			protected Set<ScrabbleWord> call() {
+				progress.setVisible(true);
 				return ws.getWords();
 			}
 		};
 		boolean dictionaryDefinitions = data.getDictionaryName().toString().contains("DEFINE");
-		searchWords.setOnSucceeded(event ->
-				new FoundWords(searchWords.getValue(), stage, dictionaryDefinitions).display()
-		);
+		searchWords.setOnSucceeded(event -> {
+			progress.setVisible(false);
+			new FoundWords(searchWords.getValue(), stage, dictionaryDefinitions).display();
+		});
 		searchWords.setOnFailed(wse -> {
-			LOG.error("Word Search Task got an error:");
-			StackTraceElement[] errs = wse.getSource().getException().getStackTrace();
+			LOG.error("Error in WordSearcher.getWords():");
+			Throwable error = wse.getSource().getException();
+			LOG.error(error);
+			StackTraceElement[] errs = error.getStackTrace();
 			Arrays.asList(errs).forEach(err -> LOG.error(err.toString()));
 		});
 

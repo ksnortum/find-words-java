@@ -1,54 +1,50 @@
 package net.snortum.scrabblewords.controller;
 
+import javafx.event.Event;
+import javafx.event.EventTarget;
+
+import net.snortum.scrabblewords.event.ProgressEvent;
+import net.snortum.scrabblewords.model.DictionaryElement;
+import net.snortum.scrabblewords.model.InputData;
+import net.snortum.scrabblewords.model.ScrabbleDictionary;
+import net.snortum.scrabblewords.model.ScrabbleWord;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import net.snortum.scrabblewords.model.DictionaryElement;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javafx.scene.control.ProgressBar;
-
-import net.snortum.scrabblewords.model.InputData;
-import net.snortum.scrabblewords.model.ScrabbleDictionary;
-import net.snortum.scrabblewords.model.ScrabbleWord;
 
 /**
  * This immutable class will roll through the selected word dictionary, checking
  * if the available "tiles" (letters) and patterns match the dictionary word
  *
  * @author Knute Snortum
- * @version 2.4.0
+ * @version 2.7.1
  */
 public class WordSearcher {
 	private static final Logger LOG = LogManager.getLogger(WordSearcher.class);
 
 	private final InputData data;
-	private final ProgressBar progress;
+	private final EventTarget eventTarget;
 
 	/**
-	 * Create a WordSearcher object, passing in a progress bar to update as work is
-	 * done
+	 * Search for words based on the {@link InputData} passed in.  An event
+	 * is fired to show the progress of the task.
 	 *
-	 * @param data     the {@link InputData} to use
-	 * @param progress the {@link ProgressBar} to update, or null
+	 * @param data the InputData to use
+	 * @param eventTarget the {@link EventTarget} for the {@link ProgressEvent}
 	 */
-	public WordSearcher(InputData data, ProgressBar progress) {
-		if (data == null) {
-			throw new IllegalArgumentException("InputData cannot be null");
-		}
+	public WordSearcher(InputData data, EventTarget eventTarget) {
+		Objects.requireNonNull(data, "InputData cannot be null");
+		Objects.requireNonNull(eventTarget, "EventTarget cannot be null");
 
 		this.data = data;
-
-		// ProgressBar can be null
-		this.progress = progress;
-
-		if (progress != null) {
-			progress.setVisible(false);
-		}
+		this.eventTarget = eventTarget;
 	}
 
 	/**
@@ -76,18 +72,15 @@ public class WordSearcher {
 		String wildcards = getWildcards();
 		Set<ScrabbleWord> words = new TreeSet<>();
 
-		// ProgressBar variables
+		// Progress variables
 		double inc = 1.0 / validWords.size();
 		double thusFar = 0.0;
 
-		if (progress != null) {
-			progress.setVisible(true);
-		}
-
 		for (DictionaryElement element : validWords) {
-			if (progress != null) {
-				progress.setProgress(thusFar);
-			}
+
+			// Fire an event that follows the progress of the task
+			Event event = new ProgressEvent(this, eventTarget, Event.ANY, thusFar);
+			Event.fireEvent(eventTarget, event);
 
 			thusFar += inc;
 			String word = element.getWord();
@@ -147,10 +140,6 @@ public class WordSearcher {
 
 			}
 
-		}
-
-		if (progress != null) {
-			progress.setVisible(false);
 		}
 
 		return words;
