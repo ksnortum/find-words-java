@@ -13,6 +13,10 @@ import net.snortum.scrabblewords.controller.WordSearcher;
  * @version 2.7.1
  */
 public class ProgressEvent extends Event {
+    public static final EventType<ProgressEvent> ANY = new EventType<>(Event.ANY, "PROGRESS");
+    public static final EventType<ProgressEvent> PROGRESS =
+            new EventType<>(ProgressEvent.ANY, "PROGRESS_INDICATOR");
+
     private final Object source;
     private final EventTarget target;
     private final EventType<? extends Event> eventType;

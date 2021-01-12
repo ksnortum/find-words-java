@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -202,12 +201,8 @@ public class ScrabbleWords {
 		col = 1;
 		grid.add(progress, col, row);
 		progress.setVisible(false);
-		progress.addEventFilter(Event.ANY, event -> {
-			if (event.getSource() instanceof WordSearcher && event.getTarget() instanceof ProgressBar) {
-				ProgressEvent progressEvent = (ProgressEvent) event;
-				progress.setProgress(progressEvent.getThusFar());
-			}
-		});
+		progress.addEventFilter(ProgressEvent.PROGRESS, progressEvent ->
+				progress.setProgress(progressEvent.getThusFar()));
 		
 		// Number of Letters to Match
 		col = 0;

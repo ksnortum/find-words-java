@@ -79,7 +79,7 @@ public class WordSearcher {
 		for (DictionaryElement element : validWords) {
 
 			// Fire an event that follows the progress of the task
-			Event event = new ProgressEvent(this, eventTarget, Event.ANY, thusFar);
+			Event event = new ProgressEvent(this, eventTarget, ProgressEvent.PROGRESS, thusFar);
 			Event.fireEvent(eventTarget, event);
 
 			thusFar += inc;
