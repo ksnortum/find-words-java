@@ -63,7 +63,7 @@ public class ScrabbleWords {
 			LOG.debug("Starting application");
 		}
 
-		MenuBar menuBar = buildMenu();
+		MenuBar menuBar = buildMenu(stage);
 		GridPane grid = buildGrid(stage);
 		ButtonBar buttonBar = buildButtons(stage);
 		VBox box = new VBox(10);
@@ -259,7 +259,7 @@ public class ScrabbleWords {
 		return buttonBar;
 	}
 
-	private MenuBar buildMenu() {
+	private MenuBar buildMenu(final Stage mainStage) {
 		
 		// Menu File
 		Menu menuFile = new Menu("File");
@@ -276,9 +276,9 @@ public class ScrabbleWords {
 		Menu menuHelp = new Menu("Help");
 		MenuItem helpItem = new MenuItem("Help");
 		helpItem.setAccelerator(KeyCombination.keyCombination("Ctrl+H"));
-		helpItem.setOnAction(event -> new HelpPage().display());
+		helpItem.setOnAction(event -> new HelpPage().display(mainStage));
 		MenuItem aboutItem = new MenuItem("About");
-		aboutItem.setOnAction(event -> new AboutPage().display());
+		aboutItem.setOnAction(event -> new AboutPage().display(mainStage));
 		menuHelp.getItems().addAll(helpItem, aboutItem);
 
 		// Create menus

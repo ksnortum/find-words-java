@@ -61,8 +61,8 @@ public class FoundWords {
 		}
 
 		Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(stage);
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(stage.getScene().getWindow());
 		ObservableList<ScrabbleWord> data = FXCollections.observableArrayList(words);
 		TableView<ScrabbleWord> tableView = new TableView<>(data);
 		tableView.setPrefSize(dictionaryDefinitions ? VIEW_WIDTH_DEFINE : VIEW_WIDTH, VIEW_HEIGHT);

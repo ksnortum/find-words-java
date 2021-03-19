@@ -2,6 +2,7 @@ package net.snortum.scrabblewords.view;
 
 import java.net.URL;
 
+import javafx.stage.Modality;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +36,7 @@ public class WebPage {
 	/**
 	 * Create web browser to display HTML
 	 */
-	public void display() {
-		Stage stage = new Stage();
-		stage.setTitle(title);
+	public void display(final Stage mainStage) {
 		LOG.debug("resource = " + resource);
 		URL url = getClass().getResource(resource);
 
@@ -61,6 +60,10 @@ public class WebPage {
 					.setUserStyleSheetLocation(styleSheetUrl.toString());
 		}
 
+		Stage stage = new Stage();
+		stage.setTitle(title);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(mainStage.getScene().getWindow());
 		Scene scene = new Scene(browser, width, height);
 		stage.setScene(scene);
 		stage.show();
