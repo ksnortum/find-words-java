@@ -1,5 +1,7 @@
 package net.snortum.scrabblewords.model;
 
+import java.util.Objects;
+
 /**
  * This class immutable holds to data inputed by the user from the form. It uses
  * an internal {@link Builder} class to create the object. For instance:
@@ -127,13 +129,11 @@ public class InputData {
 	 * 
 	 * @param data
 	 *            the object to be copied
-	 * @throws IllegalArgumentException
+	 * @throws NullPointerException
 	 *             if data is null
 	 */
 	public InputData(InputData data) {
-		if (data == null) {
-			throw new IllegalArgumentException("Data cannot be null");
-		}
+		Objects.requireNonNull(data, "Data cannot be null");
 
 		builder = data.getBuilder();
 	}

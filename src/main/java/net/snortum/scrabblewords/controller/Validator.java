@@ -107,7 +107,7 @@ public class Validator {
 	}
 
 	/*
-	 * True if letters has no more than two dots
+	 * False if letters has no more than two dots
 	 */
 	private boolean noMoreThanTwoDots(String letters) {
 		String dots = Arrays.stream(letters.split(""))

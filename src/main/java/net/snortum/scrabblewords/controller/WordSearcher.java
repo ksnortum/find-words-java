@@ -96,7 +96,7 @@ public class WordSearcher {
 				continue;
 			}
 			
-			// Skip if this is crossword mode and length the the word is not equal to numOfLetters
+			// Skip if this is crossword mode and length the word is not equal to numOfLetters
 			if (data.isCrosswordMode() 
 					&& !data.getNumOfLetters().isBlank()
 					&& Integer.parseInt(data.getNumOfLetters()) > 0
@@ -129,13 +129,8 @@ public class WordSearcher {
 			
 			// All the letters in the dict word have been accounted for, so make a ScrabbleWord
 			if (dictWord.isEmpty()) {
-				boolean isBingo = false;
-
-				if (word.length() - containsLetters.length() - data.getStartsWith().length()
-						- data.getEndsWith().length() >= 7) {
-					isBingo = true;
-				}
-
+				boolean isBingo = word.length() - containsLetters.length() - data.getStartsWith().length()
+						- data.getEndsWith().length() >= 7;
 				words.add(new ScrabbleWord(word, valueLetters.toString(), isBingo, element.getDefinition()));
 
 			}
@@ -221,7 +216,8 @@ public class WordSearcher {
 				pattern = Pattern.compile(patternString);
 			} catch (PatternSyntaxException e) {
 				String alertText = String.format(
-						"Error compiling regex from contains, starts-with, and ends-with%nPattern: %s", patternString);
+						"Error compiling regex from contains, starts-with, and ends-with%n" +
+						"Pattern: %s", patternString);
 				LOG.error(alertText, e);
 			}
 		}

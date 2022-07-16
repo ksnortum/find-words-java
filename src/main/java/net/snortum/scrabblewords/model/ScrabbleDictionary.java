@@ -1,17 +1,13 @@
 package net.snortum.scrabblewords.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.*;
 
 /**
  * This immutable class retrieves a list of words from a Scrabble Dictionary
@@ -34,14 +30,11 @@ public class ScrabbleDictionary {
 	 *
 	 * @param dictionaryName
 	 *				the dictionary name to use
-	 * @throws IllegalArgumentException
-	 *              if data or data.getDictionaryName() are null
+	 * @throws NullPointerException
+	 *              if dictionaryName is null
 	 */
 	public ScrabbleDictionary(DictionaryName dictionaryName) {
-		if (dictionaryName == null) {
-			throw new IllegalArgumentException(DICTIONARY_NULL);
-		}
-
+		Objects.requireNonNull(dictionaryName, DICTIONARY_NULL);
 		this.dictionaryName = dictionaryName;
 	}
 
@@ -67,13 +60,18 @@ public class ScrabbleDictionary {
 		}
 
 		String dictionaryFile = "/dicts/" + dictionaryName.toString().toLowerCase() + ".txt";
-		InputStream in = getClass().getResourceAsStream(dictionaryFile);
 		List<DictionaryElement> validWords = new ArrayList<>();
+		InputStream in = getClass().getResourceAsStream(dictionaryFile);
+
+		if (in == null) {
+			LOG.error(String.format("Could not find resource \"%s\"", dictionaryName));
+			return validWords;
+		}
 
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			String line;
-			String definition = null;
-			String word = "";
+			String definition;
+			String word;
 
 			while ((line = br.readLine()) != null) {
 				String[] parts = line.split("\t");
