@@ -38,6 +38,7 @@ public class WordSearcher {
 	 *
 	 * @param data the InputData to use
 	 * @param eventTarget the {@link EventTarget} for the {@link ProgressEvent}
+	 * @throws NullPointerException if either parameter is null
 	 */
 	public WordSearcher(InputData data, EventTarget eventTarget) {
 		Objects.requireNonNull(data, "InputData cannot be null");

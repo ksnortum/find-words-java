@@ -97,7 +97,7 @@ public class ScrabbleWords {
 	 */
 	private GridPane buildGrid(final Stage stage) {
 		
-		// Setup the grid pane
+		// Set up the grid pane
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
