@@ -115,7 +115,7 @@ public class ScrabbleWords {
 		row++;
 		grid.add(new Label("Available Letters:"), col, row);
 		letters.setTooltip(new Tooltip(
-				"Enter the tile letters you have available, a dot for a blank tile"));
+				"Enter the tile letters you have available, or a dot for a blank tile"));
 		col = 1;
 		grid.add(letters, col, row);
 		Button clearLetters = new Button("Clear");

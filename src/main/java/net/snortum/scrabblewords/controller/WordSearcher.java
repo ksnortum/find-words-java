@@ -172,7 +172,7 @@ public class WordSearcher {
 		dataLetters = dataLetters.replaceAll("\\.", "");
 
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Valid data letters = " + dataLetters);
+			LOG.debug(String.format("Valid data letters: \"%s\"", dataLetters));
 		}
 
 		return dataLetters;
@@ -215,10 +215,13 @@ public class WordSearcher {
 		if (!patternString.isEmpty()) {
 			try {
 				pattern = Pattern.compile(patternString);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(String.format("Built pattern: \"%s\"", patternString));
+				}
 			} catch (PatternSyntaxException e) {
 				String alertText = String.format(
 						"Error compiling regex from contains, starts-with, and ends-with%n" +
-						"Pattern: %s", patternString);
+						"Pattern: \"%s\"", patternString);
 				LOG.error(alertText, e);
 			}
 		}

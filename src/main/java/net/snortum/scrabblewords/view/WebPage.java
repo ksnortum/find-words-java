@@ -52,8 +52,7 @@ public class WebPage {
 			LOG.error("Could not find \"" + css + "\"");
 		} else {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug(title + " page style sheet location: "
-						+ styleSheetUrl.toString());
+				LOG.debug(title + " page style sheet location = " + styleSheetUrl);
 			}
 
 			browser.getWebEngine()

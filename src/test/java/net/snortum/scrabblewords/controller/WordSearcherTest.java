@@ -27,7 +27,7 @@ public class WordSearcherTest {
 
 	@Before
 	public void setUp() {
-		JFXPanel fxPanel = new JFXPanel(); // to initialize JX
+		JFXPanel fxPanel = new JFXPanel(); // needed to initialize JavaFX
 		progress = new ProgressBar();
 	}
 

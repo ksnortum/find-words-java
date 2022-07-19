@@ -23,7 +23,7 @@ import net.snortum.scrabblewords.controller.Validator;
  * 
  * @author Knute Snortum
  * @version 2.7.0
- * @see {@link Validator}
+ * @see Validator
  */
 public class Errors {
 	private final List<String> errors;
