@@ -15,7 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mainClass>net.snortum.scrabblewords.ScrabbleWordsMain</mainClass>
 		<javafxVersion>11.0.2</javafxVersion>
-		<log4jVersion>2.15.0</log4jVersion>
+		<log4jVersion>2.17.0</log4jVersion>
 	</properties>
 
 	<build>
