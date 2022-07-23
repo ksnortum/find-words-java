@@ -2,6 +2,8 @@
 
 **scrabble-words-java** is a JavaFX implementation of my project [scrabble-words](https://github.com/ksnortum/scrabble-words), originally written in Perl as a command line program.  It takes the information you supply about the tiles in your hand and returns a list of possible words to play, sorted by highest score.
 
+The app now has crossword and Wordle modes where it will suggest words for those games too. 
+
 ## Requirements
 
 * Java 11 or greater.  For Java 1.8, see the `java8` branch.
@@ -21,11 +23,11 @@ If you want to run with the current source files, use Maven:
 
     mvn exec:java
 
-If you've build the project (see above) you can find this file with your system's file browser: 
+If you've built the project (see above) you can find this file with your system's file browser: 
 
-    /<install-directory>/target/ScrabbleWords-2.*.*.jar
+    /<install-directory>/target/ScrabbleWords-2.x.x.jar
     
-where `2.*.*` is the version number.  Try double-clicking the file.  If it doesn't execute in a few seconds, try one of these suggestions:
+where `2.x.x` is the version number.  Try double-clicking the file.  If it doesn't execute in a few seconds, try one of these suggestions:
 
 * in Windows, try associating Java with `.jar` files
 * in Linux-like systems, try making the jar file executable with `chmod 755` or the like
@@ -38,5 +40,5 @@ Or, if you have Java in your PATH, you can execute the jar file from the command
 * faster processing, in general
 * wildcards are scored correctly
 * ability to have two wildcards in a hand	
-* crossword mode
+* crossword and Wordle modes
 * clear buttons on fields

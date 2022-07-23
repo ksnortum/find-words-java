@@ -1,30 +1,34 @@
 <!DOCTYPE html>
+<!-- version 2.8.0 -->
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <title>Help for ScrabbleWords</title>
 </head>
 <body>
+
 <h1>ScrabbleWords Help</h1>
+
 <h2 id="top">Contents</h2>
 <ul>
 	<li><a href="#overview">Overview</a></li>
+	<li><a href="#typeofgame">Type of game</a></li>
 	<li><a href="#available">Available letters</a></li>
 	<li><a href="#contains">Contains letters</a></li>
 	<li><a href="#startswith">Starts with these letters</a></li>
 	<li><a href="#endswith">Ends with these letters</a></li>
 	<li><a href="#capitals">Use of capital letters</a></li>
 	<li><a href="#dictionary">Select a dictionary</a></li>
-	<li><a href="#crossword">Crossword mode</a></li>
-	<li><a href="#lengthlen">Number of Letters</a></li>
+	<li><a href="#numofletters">Number of Letters</a></li>
 </ul>
 
 <h2 id="overview">Overview</h2>
 <p><a href=#top>Top</a></p>
 <p>
 	<span class="emphasis">ScrabbleWords</span> will help you find words to play in 
-	the game of Scrabble.
-	You enter letters of the tiles you have in your hand.  Optionally, you can enter
+	the game of Scrabble, Wordle, or help with crossword puzzles.
+	You enter letters of the tiles you have in your hand (but see
+	<a href="#available">Available letters</a>).  Optionally, you can enter
 	a letter or letters on the board that the suggested word must contain.  You can 
 	also enter the letters the suggested word must start with and end with.  Four
 	dictionaries are supported: The Official Scrabble Players Dictionary, or OSPD;
@@ -36,15 +40,13 @@
 </p>
 <p>
 	If you are familiar with <a href="https://en.wikipedia.org/wiki/Regular_expression">
-	Regular Expressions</a> you can use them in <span class="quote">Contains Letters</span>
+	regular expressions</a> you can use them in <a href="#contains">Contains letters</a>
 	to limit your search.  
 </p>
 <p>
 	A list of suggested words is displayed when you press <span class="button">
 	Submit</span> or press the <span class="key">Enter</span> key.  All entered data 
-	is cleared when the <span class="button">Clear</span> button is pressed.  
-	The <span class="button">Clear Except Avail</span> button will clear all fields
-	except the <span class="quote">Available Letters</span> field.
+	is cleared when the <span class="button">Clear</span> button is pressed.
 	The application can be closed with the <span class="key">Escape</span> button.
 	The suggested words are displayed first by highest value first and then if the 
 	values are the same, by alphabetical order. 
@@ -52,24 +54,40 @@
 <p>
 	<span class="emphasis">ScrabbleWords</span> has a limited ability to detect
 	whether a word is a bingo (with an extra 50 points).  Specifically, it may fail
-	to catch bingos if <span class="quote">Contains Letters</span> contains certain 
+	to catch bingos if <a href="#contains">Contains Letters</a> contains certain
 	regular expressions.  This means it is possible (but not
 	likely) that a bingo word may not display first in the suggested word list. 
 </p>
 
-<h2 id="available">Available Letters</h2>
+<h2 id="typeofgame">Type Of Game</h2>
+<p><a href=#top>Top</a></p>
+<p>
+	Select the type of game you would like words suggested for.  Selecting
+	<span class="quote">Crossword</span> disables
+	the "two dots only" check in the <span class="quote">Available Letters</span> and enables a
+	new field, <a href="#numofletters">Number of Letters</a>.  You may also want to use the WORDS
+	dictionary, but any of them will work.  Selecting <span class="quote">Wordle</span> sets
+	the <span class="quote">Number of Letters</span> to 5 and changes
+	<span class="quote">Available Letters</span> to <span class="quote">Can't Have Letters</span>
+	(see below).
+</p>
+
+<h2 id="available">Available Letters/Can't Have Letters</h2>
 <p><a href=#top>Top</a></p>
 <p>
 	Enter the letters of the tiles in your hand.  If you have blank tiles, enter these as
-	dots (.). 
+	dots (.).  If the type of game is <span class="quote">Wordle</span>, this becomes
+	<span class="quote"> Can't Have Letters</span> entry.  With this type of game, the available
+	letters are determined by removing the letters from a complete alphabet.
 </p>
 
 <h2 id="contains">Contains Letters</h2>
 <p><a href=#top>Top</a></p>
 <p>	
 	Enter letters on the board that the suggested word will intersect.  
-	Regular expressions are allowed.  The regex will be tested to make sure it is a
-	valid Java regular expression.  
+	Regular expressions are allowed.  For instance, if you know you want a letter "a"
+	as the third letter, enter "^..a".
+	The regex will be tested to make sure it is a valid Java regular expression.
 </p>
 
 <h2 id="startswith">Starts With</h2>
@@ -105,28 +123,21 @@
 	field means, I want to see a list of all words that contain "ma", but first remove one
 	"a" from the <span class="quote">Available Letters</span> field.
 </p>
+
 <h2 id="dictionary">Dictionary</h2>
 <p><a href=#top>Top</a></p>
 <p>
 	Select the dictionary to use.  The default is COLLINS.  Selecting the COLLINS_DEFINE
 	dictionary will display definitions after the suggested word and score.
+</p>
 
-</p>
+<h2 id="numofletters">Number of Letters</h2>
+<p><a href="#top">Top</a></p>
 <p>
-<h2 id="crossword">Crossword Mode</h2>
-<p><a href=#top>Top</a></p>
-<p>
-	ScrabbleWords can also help while playing crosswords.  Selecting Crossword Mode disables 
-	the "two dots only" check in the Available Letters and enables a new field, Number Of
-	Letters (see below).  You may also want to use the WORDS dictionary,
-	but any of them will work. 
-</p>
-<h2 id="lengthlen">Number of Letters</h2>
-<p><a href="top">Top</a></p>
-<p>
-	The Number of Letters field holds the exact number of letters the suggested words should
-	contain. It's value can be 0 - 20, or blank, which is the same as zero.  Zero or blank
-	mean no restriction is applied.
+	This field holds the exact number of letters the suggested words should
+	contain.  It's value can be 0 - 20, or blank, which is the same as zero.  Zero or blank
+	mean no restriction is applied.  If the <span class="quote">Type of Game</span> is
+	<span class="quote">Wordle</span>, the length is set to 5.
 </p>
 </body>
 </html>

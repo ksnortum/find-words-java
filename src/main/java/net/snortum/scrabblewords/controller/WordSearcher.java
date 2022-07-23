@@ -12,22 +12,21 @@ import net.snortum.scrabblewords.model.ScrabbleWord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 /**
  * This immutable class will roll through the selected word dictionary, checking
  * if the available "tiles" (letters) and patterns match the dictionary word
  *
  * @author Knute Snortum
- * @version 2.7.1
+ * @version 2.8.0
  */
 public class WordSearcher {
 	private static final Logger LOG = LogManager.getLogger(WordSearcher.class);
+	private static final String ALL_LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
 	private final InputData data;
 	private final EventTarget eventTarget;
@@ -98,7 +97,7 @@ public class WordSearcher {
 			}
 			
 			// Skip if this is crossword mode and length the word is not equal to numOfLetters
-			if (data.isCrosswordMode() 
+			if ((data.isCrossword() || data.isWordle())
 					&& !data.getNumOfLetters().isBlank()
 					&& Integer.parseInt(data.getNumOfLetters()) > 0
 					&& word.length() != Integer.parseInt(data.getNumOfLetters())) {
@@ -165,7 +164,17 @@ public class WordSearcher {
 	 * StartsWith, EndsWith or wildcards (.)
 	 */
 	private String getValidDataLetters(String containsLetters) {
-		String dataLetters = data.getLetters();
+		String dataLetters;
+
+		// If the game type is Wordle, available letters is treated as "can't have" letters
+		if (data.isWordle()) {
+			dataLetters = Arrays.stream(ALL_LETTERS.split(""))
+					.filter(x -> !data.getLetters().contains(x))
+					.collect(Collectors.joining());
+		} else {
+			dataLetters = data.getLetters();
+		}
+
 		dataLetters = removeCapitals(containsLetters, dataLetters);
 		dataLetters = removeCapitals(data.getStartsWith(), dataLetters);
 		dataLetters = removeCapitals(data.getEndsWith(), dataLetters);

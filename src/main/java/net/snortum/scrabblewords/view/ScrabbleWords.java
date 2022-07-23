@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -24,6 +25,7 @@ import net.snortum.scrabblewords.model.DictionaryName;
 import net.snortum.scrabblewords.model.InputData;
 import net.snortum.scrabblewords.model.ScrabbleWord;
 
+import net.snortum.scrabblewords.model.TypeOfGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,10 +39,12 @@ import java.util.Set;
  * Scrabble dictionary, and certain restrictions.
  * 
  * @author Knute Snortum
- * @version 2.7.1
+ * @version 2.8.0
  */
 public class ScrabbleWords {
 	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
+	private static final String AVAILABLE_LETTERS_TEXT = "Available Letters:";
+	private static final String CANT_HAVE_LETTERS_TEXT = "Can't Have Letters:";
 
 	private final TextField letters = new TextField();
 	private final TextField contains = new TextField();
@@ -49,8 +53,8 @@ public class ScrabbleWords {
 	private final ProgressBar progress = new ProgressBar(0.0);
 	private final ChoiceBox<DictionaryName> dictionary = new ChoiceBox<>(
 			FXCollections.observableArrayList(DictionaryName.values()));
-	private final CheckBox crossword = new CheckBox();
 	private final TextField numOfLetters = new TextField();
+	private final ToggleGroup typeOfGameTG = new ToggleGroup();
 
 	/**
 	 * Build the main GUI form and display
@@ -110,12 +114,34 @@ public class ScrabbleWords {
 		int col = 0, row = 0, colSpan = 2, rowSpan = 1;
 		grid.add(title, col, row, colSpan, rowSpan);
 
-		// Available
+		// Type of Game
+		RadioButton scrabbleRB = new RadioButton("Scrabble");
+		scrabbleRB.setSelected(true);
+		RadioButton crosswordRB = new RadioButton("Crossword");
+		RadioButton wordleRB = new RadioButton("Wordle");
+
+		scrabbleRB.setToggleGroup(typeOfGameTG);
+		crosswordRB.setToggleGroup(typeOfGameTG);
+		wordleRB.setToggleGroup(typeOfGameTG);
+		HBox radioButtonBox = new HBox(10);
+		radioButtonBox.getChildren().addAll(scrabbleRB, crosswordRB, wordleRB);
+
 		col = 0;
 		row++;
-		grid.add(new Label("Available Letters:"), col, row);
-		letters.setTooltip(new Tooltip(
-				"Enter the tile letters you have available, or a dot for a blank tile"));
+		colSpan = 3;
+		rowSpan = 1;
+		grid.add(radioButtonBox, col, row, colSpan, rowSpan);
+
+		// Available, Can't Have
+		col = 0;
+		row++;
+		Label availableLabel = new Label(AVAILABLE_LETTERS_TEXT);
+		grid.add(availableLabel, col, row);
+		Tooltip availableTooltip = new Tooltip(
+				"Enter the tile letters you have available, or a dot for a blank tile");
+		Tooltip cantHaveTooltip = new Tooltip(
+				"Enter the letters that these words can't have in them");
+		letters.setTooltip(availableTooltip);
 		col = 1;
 		grid.add(letters, col, row);
 		Button clearLetters = new Button("Clear");
@@ -174,36 +200,6 @@ public class ScrabbleWords {
 		col = 2;
 		grid.add(clearEndsWith, col, row);
 
-		// ScrabbleDictionary
-		col = 0;
-		row++;
-		grid.add(new Label("Dictionary: "), col, row);
-		dictionary.setValue(DictionaryName.COLLINS);
-		col = 1;
-		grid.add(dictionary, col, row);
-		
-		// Crossword Mode
-		col = 0;
-		row++;
-		Label checkBoxLabel = new Label("Crossword Mode:");
-		checkBoxLabel.setGraphic(crossword);
-		checkBoxLabel.setContentDisplay(ContentDisplay.RIGHT);
-		grid.add(checkBoxLabel, col, row);
-		crossword.setTooltip(new Tooltip("unchecked = Scrabble mode, checked = crossword mode"));
-		Button clearNumOfLetters = new Button("Clear");
-		clearNumOfLetters.setDisable(true);
-		crossword.setOnAction(event -> {
-			numOfLetters.setDisable(!crossword.isSelected());
-			clearNumOfLetters.setDisable(!crossword.isSelected());
-		});
-		
-		// Progress bar
-		col = 1;
-		grid.add(progress, col, row);
-		progress.setVisible(false);
-		progress.addEventFilter(ProgressEvent.PROGRESS, progressEvent ->
-				progress.setProgress(progressEvent.getThusFar()));
-		
 		// Number of Letters to Match
 		col = 0;
 		row++;
@@ -215,12 +211,57 @@ public class ScrabbleWords {
 		numOfLetters.setTooltip(new Tooltip(
 				"The exact number of letters in a word.  Zero or blank means unlimited"));
 		col = 2;
+		Button clearNumOfLetters = new Button("Clear");
+		clearNumOfLetters.setDisable(true);
 		clearNumOfLetters.setOnAction(event -> {
 			numOfLetters.clear();
 			numOfLetters.requestFocus();
 		});
 		grid.add(clearNumOfLetters, col, row);
-		
+
+		// ScrabbleDictionary
+		col = 0;
+		row++;
+		grid.add(new Label("Dictionary: "), col, row);
+		dictionary.setValue(DictionaryName.COLLINS);
+		col = 1;
+		grid.add(dictionary, col, row);
+
+		// Add radio button event listener
+		typeOfGameTG.selectedToggleProperty().addListener((ob, o, n) -> {
+			switch (getTypeOfGame()) {
+				case SCRABBLE:
+					numOfLetters.clear();
+					numOfLetters.setDisable(true);
+					clearNumOfLetters.setDisable(true);
+					availableLabel.setText(AVAILABLE_LETTERS_TEXT);
+					letters.setTooltip(availableTooltip);
+					break;
+				case CROSSWORD:
+					numOfLetters.clear();
+					numOfLetters.setDisable(false);
+					clearNumOfLetters.setDisable(false);
+					availableLabel.setText(AVAILABLE_LETTERS_TEXT);
+					letters.setTooltip(availableTooltip);
+					break;
+				case WORDLE:
+					numOfLetters.setText("5");
+					numOfLetters.setDisable(false);
+					clearNumOfLetters.setDisable(false);
+					availableLabel.setText(CANT_HAVE_LETTERS_TEXT);
+					letters.setTooltip(cantHaveTooltip);
+					break;
+			}
+		});
+
+		// Progress bar
+		col = 1;
+		row++;
+		grid.add(progress, col, row);
+		progress.setVisible(false);
+		progress.addEventFilter(ProgressEvent.PROGRESS, progressEvent ->
+				progress.setProgress(progressEvent.getThusFar()));
+
 		// <Enter> = Submit, <Esc> = Quit
 		grid.setOnKeyPressed(keyEvent -> {
 			switch (keyEvent.getCode()) {
@@ -334,20 +375,20 @@ public class ScrabbleWords {
 	/**
 	 * Validate the entered data, returning an {@link InputData} object, or
 	 * displaying errors, if any
-	 * 
+	 *
 	 * @param stage
 	 *            the stage to display the errors on
 	 * @return the validated {@link InputData}
 	 */
 	private InputData validateInputData(final Stage stage) {
 
-		// Get data a validate
+		// Build data and validate
 		InputData data = new InputData.Builder(letters.getText())
+				.gameType(getTypeOfGame())
 				.contains(contains.getText())
 				.startsWith(startsWith.getText())
 				.endsWith(endsWith.getText())
 				.dictionaryName(dictionary.getValue())
-				.crosswordMode(crossword.isSelected())
 				.numOfLetters(numOfLetters.getText())
 				.build();
 		Validator validator = new Validator(data);
@@ -373,8 +414,26 @@ public class ScrabbleWords {
 		contains.clear();
 		startsWith.clear();
 		endsWith.clear();
-		numOfLetters.clear();
+
+		if (getTypeOfGame() != TypeOfGame.WORDLE) {
+			numOfLetters.clear();
+		}
+
 		letters.requestFocus();
 	}
 
+	/**
+	 * @return the {@link TypeOfGame}
+	 */
+	private TypeOfGame getTypeOfGame() {
+		TypeOfGame typeOfGame = TypeOfGame.SCRABBLE;
+		RadioButton selectedRB = (RadioButton)typeOfGameTG.getSelectedToggle();
+
+		if (selectedRB != null) {
+			String text = selectedRB.getText().toUpperCase();
+			typeOfGame = TypeOfGame.valueOf(text);
+		}
+
+		return typeOfGame;
+	}
 }

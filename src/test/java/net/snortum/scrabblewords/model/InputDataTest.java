@@ -69,4 +69,12 @@ public class InputDataTest {
 				.build();
 		assertEquals(data.getNumOfLetters(), numOfLetters);
 	}
+
+	@Test
+	public void testGameType() {
+		InputData data = new InputData.Builder(letters)
+				.gameType(TypeOfGame.CROSSWORD)
+				.build();
+		assertEquals(data.getGameType(), TypeOfGame.CROSSWORD);
+	}
 }

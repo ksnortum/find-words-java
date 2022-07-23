@@ -3,6 +3,7 @@ package net.snortum.scrabblewords.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
@@ -17,13 +18,13 @@ import net.snortum.scrabblewords.model.InputData;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2.4.0
+ * @version 2.8.0
  */
 public class Validator {
 	private static final Logger LOG = LogManager.getLogger(Validator.class);
 	private static final String INVALID_REGEX = "The regex is invalid";
 	static final String TOO_FEW_LETTERS = "You must have at least one available letter";
-	static final String CONTAINS_TOO_LONG = "Contains cannot have more that twenty letters";
+	static final String CONTAINS_TOO_LONG = "Contains cannot have more that 20 letters";
 	static final String LETTERS_OR_DOTS = "Letters can only be \"a\" thru \"z\" and one or two dots";
 	static final String NO_MORE_THAN_TWO_DOTS = "Letters can have no more than two dots";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters";
@@ -42,13 +43,11 @@ public class Validator {
 	 * 
 	 * @param data
 	 *            the {@link InputData} to validate
-	 * @throws IllegalArgumentException
+	 * @throws NullPointerException
 	 *             if data is null
 	 */
 	public Validator(InputData data) {
-		if (data == null) {
-			throw new IllegalArgumentException("Data cannot be null");
-		}
+		Objects.requireNonNull(data, "Data cannot be null");
 		this.data = data;
 	}
 
@@ -74,7 +73,7 @@ public class Validator {
 			errors.add(LETTERS_OR_DOTS);
 		}
 		
-		if (!data.isCrosswordMode() && !noMoreThanTwoDots(data.getLetters())) {
+		if (data.isScrabble() && !noMoreThanTwoDots(data.getLetters())) {
 			errors.add(NO_MORE_THAN_TWO_DOTS);
 		}
 		
@@ -95,11 +94,13 @@ public class Validator {
 			errors.add(reError);
 		}
 		
-		if (data.isCrosswordMode() && !data.getNumOfLetters().isBlank()) {
+		if ((data.isCrossword() || data.isWordle()) && !data.getNumOfLetters().isBlank()) {
 			if (!data.getNumOfLetters().matches("\\d*")) {
 				errors.add(INVALID_NUMBER);
-			} else if (Integer.parseInt(data.getNumOfLetters()) > 20) {
-				errors.add(TOO_MANY_NUM_OF_LETTERS);
+			} else {
+				if (Integer.parseInt(data.getNumOfLetters()) > 20) {
+					errors.add(TOO_MANY_NUM_OF_LETTERS);
+				}
 			}
 		}
 		

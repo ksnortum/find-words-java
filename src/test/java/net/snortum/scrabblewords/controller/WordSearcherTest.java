@@ -8,6 +8,7 @@ import junit.framework.AssertionFailedError;
 import net.snortum.scrabblewords.model.InputData;
 import net.snortum.scrabblewords.model.ScrabbleWord;
 
+import net.snortum.scrabblewords.model.TypeOfGame;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -254,12 +255,28 @@ public class WordSearcherTest {
 	@Test
 	public void whenInputData_anm_and_numOfWords_3_ReturnListOfTwoWords() {
 		InputData data = new InputData.Builder("anm")
-				.crosswordMode(true)
+				.gameType(TypeOfGame.CROSSWORD)
 				.numOfLetters("3")
 				.build();
 		Set<ScrabbleWord> expectedWords = new TreeSet<>();
 		expectedWords.add(new ScrabbleWord("man", "man", false));
 		expectedWords.add(new ScrabbleWord("nam", "nam", false));
+		WordSearcher searcher = new WordSearcher(data, progress);
+		Set<ScrabbleWord> actualWords = searcher.getWords();
+		assertSetsAreEqual(expectedWords, actualWords);
+	}
+
+	// can't have: qwertyasdfghcpvzjm, contains ^..a, expected: blank blain
+	@Test
+	public void whenWordleTestOne_ReturnListOfTwoWords() {
+		InputData data = new InputData.Builder("qwertyasdfghcpvzjm")
+				.gameType(TypeOfGame.WORDLE)
+				.contains("^..a")
+				.numOfLetters("5")
+				.build();
+		Set<ScrabbleWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new ScrabbleWord("blank", "blank", false));
+		expectedWords.add(new ScrabbleWord("blain", "blain", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
 		Set<ScrabbleWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);

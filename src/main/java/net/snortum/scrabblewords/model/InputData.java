@@ -7,12 +7,12 @@ package net.snortum.scrabblewords.model;
  * <pre>
  * InputData data = new InputData.Builder("abc")
  * 		.contains("d")
- * 		.dictionaryName(DictionaryName.twl)
+ * 		.dictionaryName(DictionaryName.TWL)
  * 		.build();
  * </pre>
  * 
  * @author Knute Snortum
- * @version 2.4.0
+ * @version 2.8.0
  */
 public class InputData {
 
@@ -29,8 +29,8 @@ public class InputData {
 		private String startsWith = "";
 		private String endsWith = "";
 		private DictionaryName dictName = DictionaryName.OSPD;
-		private boolean crosswordMode = false;
 		private String numOfLetters = "";
+		private TypeOfGame gameType = TypeOfGame.SCRABBLE;
 
 		/**
 		 * Create a Builder object to build an {@link InputData} object.
@@ -84,16 +84,6 @@ public class InputData {
 		}
 		
 		/**
-		 * @param crosswordMode
-		 * 				the crossword mode -- false = Scrabble, true = Crossword
-		 * @return this object
-		 */
-		public Builder crosswordMode(boolean crosswordMode) {
-			this.crosswordMode = crosswordMode;
-			return this;
-		}
-		
-		/**
 		 * In crossword mode, this contains the number of letters long
 		 * the word must be
 		 * 
@@ -107,9 +97,15 @@ public class InputData {
 		}
 
 		/**
-		 * @return an {@link InputData} object built from {@link Builder}
-		 *         options.
+		 * @param gameType the type of game this program is finding words for
+		 * @return this object
 		 */
+		public Builder gameType(TypeOfGame gameType) {
+			this.gameType = gameType;
+			return this;
+		}
+
+		/** @return an {@link InputData} object built from {@link Builder} options. */
 		public InputData build() {
 			return new InputData(this);
 		}
@@ -128,54 +124,57 @@ public class InputData {
 		return builder;
 	}
 
-	/**
-	 * @return the letters of your "tiles"
-	 */
+	/** @return the letters of your "tiles" */
 	public String getLetters() {
 		return getBuilder().letters;
 	}
 
-	/**
-	 * @return the letters the suggested words must contain
-	 */
+	/** @return the letters the suggested words must contain */
 	public String getContains() {
 		return getBuilder().contains;
 	}
 
-	/**
-	 * @return the letters the suggested word must start with
-	 */
+	/** @return the letters the suggested word must start with */
 	public String getStartsWith() {
 		return getBuilder().startsWith;
 	}
 
-	/**
-	 * @return the letters the suggested word must end with
-	 */
+	/** @return the letters the suggested word must end with */
 	public String getEndsWith() {
 		return getBuilder().endsWith;
 	}
 
-	/**
-	 * @return the {@link DictionaryName} used to check valid words
-	 */
+	/** @return the {@link DictionaryName} used to check valid words */
 	public DictionaryName getDictionaryName() {
 		return getBuilder().dictName;
 	}
 	
-	/** @return the crossword mode -- false = Scrabble, true = Crossword */
-	public boolean isCrosswordMode() {
-		return getBuilder().crosswordMode;
-	}
-	
-	/** @return the number of letters the word is supposed to have. */
+	/** @return the number of letters the word is supposed to have */
 	public String getNumOfLetters() {
 		return getBuilder().numOfLetters;
 	}
 
-	/**
-	 * @return true if all text fields are empty, otherwise return false
-	 */
+	/** @return the type of game this program is finding words for */
+	public TypeOfGame getGameType() {
+		return getBuilder().gameType;
+	}
+
+	/** @return {@code true} if this game is Scrabble */
+	public boolean isScrabble() {
+		return getBuilder().gameType == TypeOfGame.SCRABBLE;
+	}
+
+	/** @return {@code true} if this game is a crossword */
+	public boolean isCrossword() {
+		return getBuilder().gameType == TypeOfGame.CROSSWORD;
+	}
+
+	/** @return {@code true} if this game is Wordle */
+	public boolean isWordle() {
+		return getBuilder().gameType == TypeOfGame.WORDLE;
+	}
+
+	/** @return {@code true} if all text fields are empty, otherwise return {@code false} */
 	public boolean isEmpty() {
 		return getBuilder().letters.isEmpty() &&
 				getBuilder().contains.isEmpty() &&

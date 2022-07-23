@@ -1,6 +1,7 @@
 package net.snortum.scrabblewords.controller;
 
 import net.snortum.scrabblewords.model.InputData;
+import net.snortum.scrabblewords.model.TypeOfGame;
 import org.junit.Test;
 
 import java.util.List;
@@ -32,9 +33,29 @@ public class ValidatorTest {
 		List<String> message = validator.validate();
 		assertEquals(0, message.size());
 	}
-	
+
 	@Test
-	public void testValidatorMoreThanTwoDots() {
+	public void testValidatorMoreThanTwoDotsAndCrossword() {
+		InputData data = new InputData.Builder( "a.b.c" )
+				.gameType(TypeOfGame.CROSSWORD)
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertEquals(0, message.size());
+	}
+
+	@Test
+	public void testValidatorMoreThanTwoDotsAndWordle() {
+		InputData data = new InputData.Builder( "a.b.c" )
+				.gameType(TypeOfGame.WORDLE)
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertEquals(0, message.size());
+	}
+
+	@Test
+	public void testValidatorMoreThanTwoDotsAndScrabble() {
 		InputData data = new InputData.Builder( "a.b.c." ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
@@ -42,7 +63,7 @@ public class ValidatorTest {
 		assertEquals( message.get( 0 ), Validator.NO_MORE_THAN_TWO_DOTS );
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=NullPointerException.class)
 	public void testNullDataValidate() {
 		new Validator( null );
 	}
@@ -111,7 +132,7 @@ public class ValidatorTest {
 	@Test
 	public void testNumOfLettersIsNumeric() {
 		InputData data = new InputData.Builder("abc")
-				.crosswordMode(true)
+				.gameType(TypeOfGame.CROSSWORD)
 				.numOfLetters("X")
 				.build();
 		Validator validator = new Validator(data);
@@ -123,7 +144,7 @@ public class ValidatorTest {
 	@Test
 	public void testNumOfLettersLessThanTwenty() {
 		InputData data = new InputData.Builder("abc")
-				.crosswordMode(true)
+				.gameType(TypeOfGame.CROSSWORD)
 				.numOfLetters("21")
 				.build();
 		Validator validator = new Validator(data);
@@ -131,4 +152,5 @@ public class ValidatorTest {
 		assertEquals(1, message.size());
 		assertEquals(message.get(0), Validator.TOO_MANY_NUM_OF_LETTERS);
 	}
+
 }
