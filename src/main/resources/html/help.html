@@ -87,7 +87,10 @@
 	Enter letters on the board that the suggested word will intersect.  
 	Regular expressions are allowed.  For instance, if you know you want a letter "a"
 	as the third letter, enter "^..a".
-	The regex will be tested to make sure it is a valid Java regular expression.
+	The regex will be tested to make sure it is a valid Java regular expression.  Note
+	that if you use "^", any letters in the <span class="quote">Starts With</span>
+	field are illegal, and if you use "$", any letters in the
+	<span class="quote">Ends With</span> field are illegal.
 </p>
 
 <h2 id="startswith">Starts With</h2>

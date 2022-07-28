@@ -32,6 +32,8 @@ public class Validator {
 	static final String INVALID_NUMBER = "You must enter only non-negative digits in the number of letters field";
 	static final String TOO_MANY_LETTERS = "You cannot have over 20 number of letters";
 	static final String TOO_MANY_NUM_OF_LETTERS = "The Number of Letters field can't be more then 20";
+	static final String NO_ANCHOR_AND_STARTSWITH = "Can't have \"^\" anchor and letters in \"Starts With\"";
+	static final String NO_ANCHOR_AND_ENDSWITH = "Can't have \"$\" anchor and letters in \"Ends With\"";
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
 	private static final String LETTERS_RE = "[a-zA-Z]*";
 
@@ -102,6 +104,16 @@ public class Validator {
 					errors.add(TOO_MANY_NUM_OF_LETTERS);
 				}
 			}
+		}
+
+		if (data.getContains().startsWith("^") && !data.getStartsWith().isEmpty()) {
+			errors.add(INVALID_REGEX);
+			errors.add(NO_ANCHOR_AND_STARTSWITH);
+		}
+
+		if (data.getContains().endsWith("$") && !data.getEndsWith().isEmpty()) {
+			errors.add(INVALID_REGEX);
+			errors.add(NO_ANCHOR_AND_ENDSWITH);
 		}
 		
 		return errors;
