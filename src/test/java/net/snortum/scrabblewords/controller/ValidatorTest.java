@@ -36,7 +36,7 @@ public class ValidatorTest {
 
 	@Test
 	public void testValidatorMoreThanTwoDotsAndCrossword() {
-		InputData data = new InputData.Builder( "a.b.c" )
+		InputData data = new InputData.Builder( "a.b.c." )
 				.gameType(TypeOfGame.CROSSWORD)
 				.build();
 		Validator validator = new Validator( data );
@@ -46,7 +46,7 @@ public class ValidatorTest {
 
 	@Test
 	public void testValidatorMoreThanTwoDotsAndWordle() {
-		InputData data = new InputData.Builder( "a.b.c" )
+		InputData data = new InputData.Builder( "a.b.c." )
 				.gameType(TypeOfGame.WORDLE)
 				.build();
 		Validator validator = new Validator( data );
@@ -75,6 +75,15 @@ public class ValidatorTest {
 		List<String> message = validator.validate();
 		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.TOO_FEW_LETTERS );
+	}
+
+	@Test
+	public void testValidatorTooManyLettersError() {
+		InputData data = new InputData.Builder( "abcdefghijklmnopqrstuvwxyz" ).build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertEquals(1, message.size());
+		assertEquals( message.get( 0 ), Validator.TOO_MANY_LETTERS );
 	}
 	
 	@Test
@@ -153,4 +162,42 @@ public class ValidatorTest {
 		assertEquals(message.get(0), Validator.TOO_MANY_NUM_OF_LETTERS);
 	}
 
+	@Test
+	public void testContainsRegexIsInvalid() {
+		InputData data = new InputData.Builder("abc")
+				.contains("ab(de")
+				.build();
+		Validator validator = new Validator(data);
+		List<String> message = validator.validate();
+		assertEquals(2, message.size());
+		assertEquals(message.get(0), Validator.INVALID_REGEX);
+		assertEquals(message.get(1), "java.util.regex.PatternSyntaxException: Unclosed group near index 5\n" +
+				"ab(de");
+	}
+
+	@Test
+	public void testContainsRegexHasAnchorAndStartsWith() {
+		InputData data = new InputData.Builder("abc")
+				.contains("^abcde")
+				.startsWith("a")
+				.build();
+		Validator validator = new Validator(data);
+		List<String> message = validator.validate();
+		assertEquals(2, message.size());
+		assertEquals(message.get(0), Validator.INVALID_REGEX);
+		assertEquals(message.get(1), Validator.NO_ANCHOR_AND_STARTSWITH);
+	}
+
+	@Test
+	public void testContainsRegexHasAnchorAndEndsWith() {
+		InputData data = new InputData.Builder("abc")
+				.contains("abcde$")
+				.endsWith("a")
+				.build();
+		Validator validator = new Validator(data);
+		List<String> message = validator.validate();
+		assertEquals(2, message.size());
+		assertEquals(message.get(0), Validator.INVALID_REGEX);
+		assertEquals(message.get(1), Validator.NO_ANCHOR_AND_ENDSWITH);
+	}
 }

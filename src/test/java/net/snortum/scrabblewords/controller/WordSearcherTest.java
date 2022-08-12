@@ -13,10 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Knute Snortum 
@@ -242,6 +243,20 @@ public class WordSearcherTest {
 		Set<ScrabbleWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
+
+	@Test
+	public void whenInputData_am_AndContains_abackslashb_ReturnListOfThreeWords() {
+		InputData data = new InputData.Builder("am")
+				.contains("a\\b")
+				.build();
+		Set<ScrabbleWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new ScrabbleWord("ama", "ama", false));
+		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		expectedWords.add(new ScrabbleWord("aa", "aa", false));
+		WordSearcher searcher = new WordSearcher(data, progress);
+		Set<ScrabbleWord> actualWords = searcher.getWords();
+		assertSetsAreEqual(expectedWords, actualWords);
+	}
 	
 	@Test
 	public void whenInputData_managed_ReturnFirstInListIsBingo() {
@@ -250,6 +265,15 @@ public class WordSearcherTest {
 		WordSearcher searcher = new WordSearcher(data, progress);
 		Set<ScrabbleWord> actualWords = searcher.getWords();
 		assertTrue(actualWords.contains(bingoWord));
+		Optional<ScrabbleWord> actualBingo = actualWords.stream()
+				.filter(word -> word.equals(bingoWord))
+				.findFirst();
+
+		if (actualBingo.isPresent()) {
+			assertEquals(actualBingo.get().getValue(), bingoWord.getValue());
+		} else {
+			fail();
+		}
 	}
 	
 	@Test
@@ -285,6 +309,11 @@ public class WordSearcherTest {
 	private <T> void assertSetsAreEqual(Set<T> expectedSet, Set<T> actualSet) {
 		if (expectedSet == null || actualSet == null) {
 			throw new AssertionFailedError("Neither expectedSet nor actualSet can be null");
+		}
+
+		if (expectedSet.size() != actualSet.size()) {
+			System.out.println(actualSet);
+			throw new AssertionFailedError("Sets are not the same size");
 		}
 		
 		Iterator<T> it = expectedSet.iterator();

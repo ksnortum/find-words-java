@@ -22,7 +22,7 @@ import net.snortum.scrabblewords.model.InputData;
  */
 public class Validator {
 	private static final Logger LOG = LogManager.getLogger(Validator.class);
-	private static final String INVALID_REGEX = "The regex is invalid";
+	static final String INVALID_REGEX = "The regex is invalid";
 	static final String TOO_FEW_LETTERS = "You must have at least one available letter";
 	static final String CONTAINS_TOO_LONG = "Contains cannot have more that 20 letters";
 	static final String LETTERS_OR_DOTS = "Letters can only be \"a\" thru \"z\" and one or two dots";

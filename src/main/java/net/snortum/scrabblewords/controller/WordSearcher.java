@@ -104,37 +104,34 @@ public class WordSearcher {
 				continue;
 			}
 			
-			String dictWord = word; // make copy of word
+			String wordCopy = word;
 
 			// Loop through letters to see if they can make up the dict word
 			for (String letter : searchLetters.split("")) {
-				if (dictWord.contains(letter)) {
-					dictWord = dictWord.replaceFirst(letter, "");
+				if (wordCopy.contains(letter)) {
+					wordCopy = wordCopy.replaceFirst(letter, "");
 					valueLetters.append(letter);
 				}
 
-				if (dictWord.isEmpty()) {
+				if (wordCopy.isEmpty()) {
 					break;
 				}
 			}
 
 			// Loop through the wildcards, if any, and match any dict letter
 			int i = 0;
-			while (!dictWord.isEmpty() && i < wildcards.length()) {
+			while (!wordCopy.isEmpty() && i < wildcards.length()) {
 				// remove any character
-				dictWord = dictWord.substring(1);
+				wordCopy = wordCopy.substring(1);
 				i++;
 			}
-
 			
 			// All the letters in the dict word have been accounted for, so make a ScrabbleWord
-			if (dictWord.isEmpty()) {
+			if (wordCopy.isEmpty()) {
 				boolean isBingo = word.length() - containsLetters.length() - data.getStartsWith().length()
 						- data.getEndsWith().length() >= 7;
 				words.add(new ScrabbleWord(word, valueLetters.toString(), isBingo, element.getDefinition()));
-
 			}
-
 		}
 
 		return words;
@@ -142,7 +139,8 @@ public class WordSearcher {
 
 	/**
 	 * Return only letters. Since a regex can contain escaped characters, return
-	 * only non-escaped
+	 * only non-escaped letters.  Note: this is similar to {@code lowerCaseNonEscapedLetters()},
+	 * but not the same.
 	 */
 	private String getLettersFromContains() {
 		StringBuilder letters = new StringBuilder();
@@ -232,6 +230,7 @@ public class WordSearcher {
 						"Error compiling regex from contains, starts-with, and ends-with%n" +
 						"Pattern: \"%s\"", patternString);
 				LOG.error(alertText, e);
+				return null;
 			}
 		}
 
@@ -239,7 +238,8 @@ public class WordSearcher {
 	}
 
 	/**
-	 * Return the lower case of any non-escaped letters
+	 * Return the lower case of any non-escaped letters.  Note: is similar to {@code getLettersFromContains()}
+	 * but not the same.
 	 */
 	private String lowerCaseNonEscapedLetters(String input) {
 		StringBuilder result = new StringBuilder();
