@@ -2,20 +2,8 @@ body {
 	font-family: Arial, Helvetica, san-serif;
 }
 
-h1 {
-	background-color: #d0d0d0;
-	border-radius: 5px;
-}
-
 h2 {
-	background-color: #e0e0e0;
 	font-style: italic;
-	border-radius: 5px;
-}
-
-h3 {
-	background-color: #f0f0f0;
-	border-radius: 5px;
 }
 
 a {
@@ -31,8 +19,10 @@ a:hover {
 }
 
 .quote {
+    background-color: #f0f0f0;
 	font-family: Courier, fixed;
 	font-style: italic;
+	border-radius: 5px;
 }
 
 .button {
