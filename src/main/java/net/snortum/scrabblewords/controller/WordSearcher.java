@@ -169,6 +169,7 @@ public class WordSearcher {
 			dataLetters = Arrays.stream(ALL_LETTERS.split(""))
 					.filter(x -> !data.getLetters().contains(x))
 					.collect(Collectors.joining());
+			dataLetters += dataLetters; // word may have double letters
 		} else {
 			dataLetters = data.getLetters();
 		}
