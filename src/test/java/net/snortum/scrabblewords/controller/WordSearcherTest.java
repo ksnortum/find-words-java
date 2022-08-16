@@ -299,8 +299,10 @@ public class WordSearcherTest {
 				.numOfLetters("5")
 				.build();
 		Set<ScrabbleWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new ScrabbleWord("biali", "biali", false));
 		expectedWords.add(new ScrabbleWord("blank", "blank", false));
 		expectedWords.add(new ScrabbleWord("blain", "blain", false));
+		expectedWords.add(new ScrabbleWord("llano", "llano", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
 		Set<ScrabbleWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
