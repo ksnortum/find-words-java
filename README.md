@@ -4,6 +4,8 @@
 
 The app now has crossword and Wordle modes where it will suggest words for those games too. 
 
+The app has now been re-rewritten in Python ([find-words-python](https://github.com/ksnortum/find-words-python)).  The intent is that the Java and Python projects will stay functionally in sync (we'll see). 
+
 ## Requirements
 
 * Java 11 or greater.  For Java 1.8, see the `java8` branch.

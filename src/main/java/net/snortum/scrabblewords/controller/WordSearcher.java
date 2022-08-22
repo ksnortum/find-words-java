@@ -169,7 +169,7 @@ public class WordSearcher {
 			dataLetters = Arrays.stream(ALL_LETTERS.split(""))
 					.filter(x -> !data.getLetters().contains(x))
 					.collect(Collectors.joining());
-			dataLetters += dataLetters; // word may have double letters
+			dataLetters += dataLetters; // word may have double or triple repeating letters
 		} else {
 			dataLetters = data.getLetters();
 		}
