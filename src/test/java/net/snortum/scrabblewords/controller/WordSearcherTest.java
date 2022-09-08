@@ -277,14 +277,18 @@ public class WordSearcherTest {
 	}
 	
 	@Test
-	public void whenInputData_anm_and_numOfWords_3_ReturnListOfTwoWords() {
-		InputData data = new InputData.Builder("anm")
+	public void whenCrosswordInput_and_numOfWords_3_ReturnListOfFourWords() {
+		InputData data = new InputData.Builder("")
 				.gameType(TypeOfGame.CROSSWORD)
+				.startsWith("m")
+				.endsWith("n")
 				.numOfLetters("3")
 				.build();
 		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
+		expectedWords.add(new ScrabbleWord("man", "", false));
+		expectedWords.add(new ScrabbleWord("men", "", false));
+		expectedWords.add(new ScrabbleWord("mon", "", false));
+		expectedWords.add(new ScrabbleWord("mun", "", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
 		Set<ScrabbleWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);

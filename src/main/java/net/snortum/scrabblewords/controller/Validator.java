@@ -36,6 +36,7 @@ public class Validator {
 	static final String NO_ANCHOR_AND_ENDSWITH = "Can't have \"$\" anchor and letters in \"Ends With\"";
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
 	private static final String LETTERS_RE = "[a-zA-Z]*";
+	private static final String DIGITS_OR_EMPTY_RE = "\\d*";
 
 	private final InputData data;
 	private String reError = "";
@@ -64,11 +65,13 @@ public class Validator {
 		}
 		
 		List<String> errors = new ArrayList<>();
-		
-		if (data.getLetters().length() < 1) {
-			errors.add(TOO_FEW_LETTERS);
-		} else if (data.getLetters().length() > 20) {
-			errors.add(TOO_MANY_LETTERS);
+
+		if (!data.isCrossword()) {
+			if (data.getLetters().length() < 1) {
+				errors.add(TOO_FEW_LETTERS);
+			} else if (data.getLetters().length() > 20) {
+				errors.add(TOO_MANY_LETTERS);
+			}
 		}
 		
 		if (!data.getLetters().matches(LETTERS_DOT_RE)) {
@@ -97,7 +100,7 @@ public class Validator {
 		}
 		
 		if ((data.isCrossword() || data.isWordle()) && !data.getNumOfLetters().isBlank()) {
-			if (!data.getNumOfLetters().matches("\\d*")) {
+			if (!data.getNumOfLetters().matches(DIGITS_OR_EMPTY_RE)) {
 				errors.add(INVALID_NUMBER);
 			} else {
 				if (Integer.parseInt(data.getNumOfLetters()) > 20) {

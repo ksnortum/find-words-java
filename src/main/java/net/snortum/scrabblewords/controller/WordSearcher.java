@@ -87,7 +87,7 @@ public class WordSearcher {
 			StringBuilder valueLetters = new StringBuilder();
 
 			// Skip if dictionary word is longer than all possible letters
-			if (word.length() > searchLetters.length() + wildcards.length()) {
+			if (!data.isCrossword() && word.length() > searchLetters.length() + wildcards.length()) {
 				continue;
 			}
 
@@ -101,6 +101,11 @@ public class WordSearcher {
 					&& !data.getNumOfLetters().isBlank()
 					&& Integer.parseInt(data.getNumOfLetters()) > 0
 					&& word.length() != Integer.parseInt(data.getNumOfLetters())) {
+				continue;
+			}
+
+			if (data.isCrossword()) {
+				words.add(new ScrabbleWord(word, "", false, element.getDefinition()));
 				continue;
 			}
 			

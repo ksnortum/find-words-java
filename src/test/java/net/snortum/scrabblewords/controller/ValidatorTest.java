@@ -78,12 +78,32 @@ public class ValidatorTest {
 	}
 
 	@Test
+	public void testValidatorNoLettersOkayInCrossword() {
+		InputData data = new InputData.Builder( "" )
+				.gameType(TypeOfGame.CROSSWORD)
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertEquals(0, message.size());
+	}
+
+	@Test
 	public void testValidatorTooManyLettersError() {
 		InputData data = new InputData.Builder( "abcdefghijklmnopqrstuvwxyz" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertEquals(1, message.size());
 		assertEquals( message.get( 0 ), Validator.TOO_MANY_LETTERS );
+	}
+
+	@Test
+	public void testValidatorManyLettersOkayInCrossword() {
+		InputData data = new InputData.Builder( "abcdefghijklmnopqrstuvwxyz" )
+				.gameType(TypeOfGame.CROSSWORD)
+				.build();
+		Validator validator = new Validator( data );
+		List<String> message = validator.validate();
+		assertEquals(0, message.size());
 	}
 	
 	@Test

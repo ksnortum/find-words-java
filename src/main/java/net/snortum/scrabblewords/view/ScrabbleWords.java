@@ -55,6 +55,7 @@ public class ScrabbleWords {
 			FXCollections.observableArrayList(DictionaryName.values()));
 	private final TextField numOfLetters = new TextField();
 	private final ToggleGroup typeOfGameTG = new ToggleGroup();
+	private final Button clearLetters = new Button("Clear");
 
 	/**
 	 * Build the main GUI form and display
@@ -144,7 +145,6 @@ public class ScrabbleWords {
 		letters.setTooltip(availableTooltip);
 		col = 1;
 		grid.add(letters, col, row);
-		Button clearLetters = new Button("Clear");
 		clearLetters.setOnAction(event -> {
 			letters.clear();
 			letters.requestFocus();
@@ -236,13 +236,17 @@ public class ScrabbleWords {
 					clearNumOfLetters.setDisable(true);
 					availableLabel.setText(AVAILABLE_LETTERS_TEXT);
 					letters.setTooltip(availableTooltip);
+					letters.setDisable(false);
+					clearLetters.setDisable(false);
 					break;
 				case CROSSWORD:
 					numOfLetters.clear();
 					numOfLetters.setDisable(false);
 					clearNumOfLetters.setDisable(false);
-					availableLabel.setText(AVAILABLE_LETTERS_TEXT);
-					letters.setTooltip(availableTooltip);
+					availableLabel.setText("");
+					letters.clear();
+					letters.setDisable(true);
+					clearLetters.setDisable(true);
 					break;
 				case WORDLE:
 					numOfLetters.setText("5");
@@ -250,6 +254,8 @@ public class ScrabbleWords {
 					clearNumOfLetters.setDisable(false);
 					availableLabel.setText(CANT_HAVE_LETTERS_TEXT);
 					letters.setTooltip(cantHaveTooltip);
+					letters.setDisable(false);
+					clearLetters.setDisable(false);
 					break;
 			}
 		});
