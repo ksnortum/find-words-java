@@ -21,7 +21,7 @@ import java.util.Set;
  * and presses "submit"
  * 
  * @author Knute Snortum
- * @version 2.7.0
+ * @version 2.10.0
  */
 public class FoundWords {
 	private static final Logger LOG = LogManager.getLogger(FoundWords.class);
@@ -32,6 +32,7 @@ public class FoundWords {
 	private final Set<ScrabbleWord> words;
 	private final Stage stage;
 	private final boolean dictionaryDefinitions;
+	private final boolean isScrabble;
 	
 	/**
 	 * @param words
@@ -41,10 +42,11 @@ public class FoundWords {
 	 * @param dictionaryDefinitions
 	 *            does the dictionary that these words are based on have definitions?
 	 */
-	public FoundWords(Set<ScrabbleWord> words, Stage stage, boolean dictionaryDefinitions) {
+	public FoundWords(Set<ScrabbleWord> words, Stage stage, boolean dictionaryDefinitions, boolean isScrabble) {
 		this.words = words;
 		this.stage = stage;
 		this.dictionaryDefinitions = dictionaryDefinitions;
+		this.isScrabble = isScrabble;
 	}
 	
 	/**
@@ -71,9 +73,11 @@ public class FoundWords {
 		wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
 		tableView.getColumns().add(wordColumn);
 
-		TableColumn<ScrabbleWord, Integer> valueColumn = new TableColumn<>("Score");
-		valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
-		tableView.getColumns().add(valueColumn);
+		if (isScrabble) {
+			TableColumn<ScrabbleWord, Integer> valueColumn = new TableColumn<>("Score");
+			valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+			tableView.getColumns().add(valueColumn);
+		}
 
 		if (dictionaryDefinitions) {
 			TableColumn<ScrabbleWord, String> definitionColumn = new TableColumn<>("Definition");

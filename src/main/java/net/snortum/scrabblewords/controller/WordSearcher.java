@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * if the available "tiles" (letters) and patterns match the dictionary word
  *
  * @author Knute Snortum
- * @version 2.8.0
+ * @version 2.10.0
  */
 public class WordSearcher {
 	private static final Logger LOG = LogManager.getLogger(WordSearcher.class);

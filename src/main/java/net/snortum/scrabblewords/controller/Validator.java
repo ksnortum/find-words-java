@@ -18,7 +18,7 @@ import net.snortum.scrabblewords.model.InputData;
  * errors, if any.
  * 
  * @author Knute Snortum
- * @version 2.8.0
+ * @version 2.10.0
  */
 public class Validator {
 	private static final Logger LOG = LogManager.getLogger(Validator.class);

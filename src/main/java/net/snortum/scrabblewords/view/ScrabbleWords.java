@@ -360,9 +360,10 @@ public class ScrabbleWords {
 			}
 		};
 		boolean dictionaryDefinitions = data.getDictionaryName().toString().contains("DEFINE");
+		boolean isScrabble = data.getGameType() == TypeOfGame.SCRABBLE;
 		searchWords.setOnSucceeded(event -> {
 			progress.setVisible(false);
-			new FoundWords(searchWords.getValue(), stage, dictionaryDefinitions).display();
+			new FoundWords(searchWords.getValue(), stage, dictionaryDefinitions, isScrabble).display();
 		});
 		searchWords.setOnFailed(wse -> {
 			LOG.error("Error in WordSearcher.getWords():");
