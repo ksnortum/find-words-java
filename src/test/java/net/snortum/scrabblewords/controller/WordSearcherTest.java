@@ -5,8 +5,8 @@ import javafx.scene.control.ProgressBar;
 
 import junit.framework.AssertionFailedError;
 
+import net.snortum.scrabblewords.model.CustomWord;
 import net.snortum.scrabblewords.model.InputData;
-import net.snortum.scrabblewords.model.ScrabbleWord;
 
 import net.snortum.scrabblewords.model.TypeOfGame;
 import org.junit.Before;
@@ -37,22 +37,22 @@ public class WordSearcherTest {
 	public void whenInputDataIsEmptyThenReturnEmptyList() {
 		InputData data = new InputData.Builder("").build();
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> words = searcher.getWords();
+		Set<CustomWord> words = searcher.getWords();
 		assertTrue(words.isEmpty());
 	}
 	
 	@Test
 	public void whenInputData_anm_ReturnListOfSixWords() {
 		InputData data = new InputData.Builder("anm").build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
-		expectedWords.add(new ScrabbleWord("am", "am", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
-		expectedWords.add(new ScrabbleWord("an", "an", false));
-		expectedWords.add(new ScrabbleWord("na", "na", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "man", false));
+		expectedWords.add(new CustomWord("nam", "nam", false));
+		expectedWords.add(new CustomWord("am", "am", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
+		expectedWords.add(new CustomWord("an", "an", false));
+		expectedWords.add(new CustomWord("na", "na", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -61,13 +61,13 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("an")
 				.contains("m")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
-		expectedWords.add(new ScrabbleWord("am", "am", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "man", false));
+		expectedWords.add(new CustomWord("nam", "nam", false));
+		expectedWords.add(new CustomWord("am", "am", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -76,11 +76,11 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("an")
 				.startsWith("m")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "man", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -89,11 +89,11 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("an")
 				.endsWith("m")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
-		expectedWords.add(new ScrabbleWord("am", "am", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("nam", "nam", false));
+		expectedWords.add(new CustomWord("am", "am", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -102,13 +102,13 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("anm")
 				.contains("M")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
-		expectedWords.add(new ScrabbleWord("am", "am", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "man", false));
+		expectedWords.add(new CustomWord("nam", "nam", false));
+		expectedWords.add(new CustomWord("am", "am", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -117,11 +117,11 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("as")
 				.contains("mA")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("mas", "mas", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("mas", "mas", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -130,11 +130,11 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("anm")
 				.startsWith("M")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "man", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -143,11 +143,11 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("anm")
 				.endsWith("M")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
-		expectedWords.add(new ScrabbleWord("am", "am", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("nam", "nam", false));
+		expectedWords.add(new CustomWord("am", "am", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -157,10 +157,10 @@ public class WordSearcherTest {
 				.startsWith("m")
 				.endsWith("n")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "man", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "man", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -170,10 +170,10 @@ public class WordSearcherTest {
 				.startsWith("m")
 				.contains("a")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("ma", "ma", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -183,10 +183,10 @@ public class WordSearcherTest {
 				.endsWith("m")
 				.contains("a")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("am", "am", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("am", "am", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -197,24 +197,24 @@ public class WordSearcherTest {
 				.endsWith("a")
 				.contains("n")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("mana", "mana", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("mana", "mana", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
 	@Test
 	public void whenInputData_bdot_ReturnListOfFiveWords() {
 		InputData data = new InputData.Builder("b.").build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("ba", "b", false));
-		expectedWords.add(new ScrabbleWord("be", "b", false));
-		expectedWords.add(new ScrabbleWord("bi", "b", false));
-		expectedWords.add(new ScrabbleWord("bo", "b", false));
-		expectedWords.add(new ScrabbleWord("by", "b", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("ba", "b", false));
+		expectedWords.add(new CustomWord("be", "b", false));
+		expectedWords.add(new CustomWord("bi", "b", false));
+		expectedWords.add(new CustomWord("bo", "b", false));
+		expectedWords.add(new CustomWord("by", "b", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -223,10 +223,10 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("b.")
 				.endsWith("z")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("biz", "bz", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("biz", "bz", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
@@ -235,12 +235,12 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("anm")
 				.contains(".a.")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("mana", "mana", false));
-		expectedWords.add(new ScrabbleWord("man", "man", false));
-		expectedWords.add(new ScrabbleWord("nam", "nam", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("mana", "mana", false));
+		expectedWords.add(new CustomWord("man", "man", false));
+		expectedWords.add(new CustomWord("nam", "nam", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 
@@ -249,23 +249,23 @@ public class WordSearcherTest {
 		InputData data = new InputData.Builder("am")
 				.contains("a\\b")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("ama", "ama", false));
-		expectedWords.add(new ScrabbleWord("ma", "ma", false));
-		expectedWords.add(new ScrabbleWord("aa", "aa", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("ama", "ama", false));
+		expectedWords.add(new CustomWord("ma", "ma", false));
+		expectedWords.add(new CustomWord("aa", "aa", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	
 	@Test
 	public void whenInputData_managed_ReturnFirstInListIsBingo() {
 		InputData data = new InputData.Builder("managed").build();
-		ScrabbleWord bingoWord = new ScrabbleWord("managed", "managed", true);
+		CustomWord bingoWord = new CustomWord("managed", "managed", true);
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertTrue(actualWords.contains(bingoWord));
-		Optional<ScrabbleWord> actualBingo = actualWords.stream()
+		Optional<CustomWord> actualBingo = actualWords.stream()
 				.filter(word -> word.equals(bingoWord))
 				.findFirst();
 
@@ -284,13 +284,13 @@ public class WordSearcherTest {
 				.endsWith("n")
 				.numOfLetters("3")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("man", "", false));
-		expectedWords.add(new ScrabbleWord("men", "", false));
-		expectedWords.add(new ScrabbleWord("mon", "", false));
-		expectedWords.add(new ScrabbleWord("mun", "", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("man", "", false));
+		expectedWords.add(new CustomWord("men", "", false));
+		expectedWords.add(new CustomWord("mon", "", false));
+		expectedWords.add(new CustomWord("mun", "", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 
@@ -302,13 +302,13 @@ public class WordSearcherTest {
 				.contains("^..a")
 				.numOfLetters("5")
 				.build();
-		Set<ScrabbleWord> expectedWords = new TreeSet<>();
-		expectedWords.add(new ScrabbleWord("biali", "biali", false));
-		expectedWords.add(new ScrabbleWord("blank", "blank", false));
-		expectedWords.add(new ScrabbleWord("blain", "blain", false));
-		expectedWords.add(new ScrabbleWord("llano", "llano", false));
+		Set<CustomWord> expectedWords = new TreeSet<>();
+		expectedWords.add(new CustomWord("biali", "biali", false));
+		expectedWords.add(new CustomWord("blank", "blank", false));
+		expectedWords.add(new CustomWord("blain", "blain", false));
+		expectedWords.add(new CustomWord("llano", "llano", false));
 		WordSearcher searcher = new WordSearcher(data, progress);
-		Set<ScrabbleWord> actualWords = searcher.getWords();
+		Set<CustomWord> actualWords = searcher.getWords();
 		assertSetsAreEqual(expectedWords, actualWords);
 	}
 	

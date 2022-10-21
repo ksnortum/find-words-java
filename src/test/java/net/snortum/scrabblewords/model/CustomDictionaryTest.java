@@ -12,7 +12,7 @@ import org.junit.Test;
  * @author Knute Snortum
  * @version 2.6.0
  */
-public class ScrabbleDictionaryTest {
+public class CustomDictionaryTest {
 	
 	private final List<DictionaryElement> testWords = new ArrayList<>();
 	private final List<DictionaryElement> testWordsWithDefinitions = new ArrayList<>();
@@ -33,7 +33,7 @@ public class ScrabbleDictionaryTest {
 		InputData data = new InputData.Builder("")
 				.dictionaryName(DictionaryName.TWL)
 				.build();
-		ScrabbleDictionary dictionary = new ScrabbleDictionary(data.getDictionaryName());
+		CustomDictionary dictionary = new CustomDictionary(data.getDictionaryName());
 		List<DictionaryElement> validWords = dictionary.getValidWords();
 		assertEquals(testWords, validWords);
 	}
@@ -43,7 +43,7 @@ public class ScrabbleDictionaryTest {
 		InputData data = new InputData.Builder("")
 				.dictionaryName(DictionaryName.COLLINS_DEFINE)
 				.build();
-		ScrabbleDictionary dictionary = new ScrabbleDictionary(data.getDictionaryName());
+		CustomDictionary dictionary = new CustomDictionary(data.getDictionaryName());
 		List<DictionaryElement> validWords = dictionary.getValidWords();
 		assertEquals(testWordsWithDefinitions, validWords);
 	}

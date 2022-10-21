@@ -23,7 +23,7 @@ import net.snortum.scrabblewords.controller.WordSearcher;
 import net.snortum.scrabblewords.event.ProgressEvent;
 import net.snortum.scrabblewords.model.DictionaryName;
 import net.snortum.scrabblewords.model.InputData;
-import net.snortum.scrabblewords.model.ScrabbleWord;
+import net.snortum.scrabblewords.model.CustomWord;
 
 import net.snortum.scrabblewords.model.TypeOfGame;
 import org.apache.logging.log4j.LogManager;
@@ -41,8 +41,8 @@ import java.util.Set;
  * @author Knute Snortum
  * @version 2.8.0
  */
-public class ScrabbleWords {
-	private static final Logger LOG = LogManager.getLogger(ScrabbleWords.class);
+public class FindWords {
+	private static final Logger LOG = LogManager.getLogger(FindWords.class);
 	private static final String AVAILABLE_LETTERS_TEXT = "Available Letters:";
 	private static final String CANT_HAVE_LETTERS_TEXT = "Can't Have Letters:";
 
@@ -80,7 +80,7 @@ public class ScrabbleWords {
 		root.getChildren().addAll(menuBar, box);
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
-		stage.setTitle("ScrabbleWords");
+		stage.setTitle("Find Words");
 		InputStream imageStream = getClass().getResourceAsStream("/image/letter-S.png");
 
 		if (imageStream == null) {
@@ -109,7 +109,7 @@ public class ScrabbleWords {
 		grid.setVgap(10);
 
 		// Title
-		Text title = new Text("Find Scrabble Words");
+		Text title = new Text("Find Words");
 		title.setId("title");
 		title.setFont(Font.font(null, FontWeight.BOLD, 30));
 		int col = 0, row = 0, colSpan = 2, rowSpan = 1;
@@ -219,7 +219,7 @@ public class ScrabbleWords {
 		});
 		grid.add(clearNumOfLetters, col, row);
 
-		// ScrabbleDictionary
+		// CustomDictionary
 		col = 0;
 		row++;
 		grid.add(new Label("Dictionary: "), col, row);
@@ -243,7 +243,6 @@ public class ScrabbleWords {
 					numOfLetters.clear();
 					numOfLetters.setDisable(false);
 					clearNumOfLetters.setDisable(false);
-					availableLabel.setText("");
 					letters.clear();
 					letters.setDisable(true);
 					clearLetters.setDisable(true);
@@ -352,9 +351,9 @@ public class ScrabbleWords {
 
 		// Create task for word searching
 		WordSearcher ws = new WordSearcher(data, progress);
-		Task<Set<ScrabbleWord>> searchWords = new Task<>() {
+		Task<Set<CustomWord>> searchWords = new Task<>() {
 			@Override
-			protected Set<ScrabbleWord> call() {
+			protected Set<CustomWord> call() {
 				progress.setVisible(true);
 				return ws.getWords();
 			}

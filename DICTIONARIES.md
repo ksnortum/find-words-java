@@ -1,6 +1,6 @@
-# Notes on scrabble-words-java dictionaries
+# Notes on find-words-java dictionaries
 
-Much thought has gone into selecting Scrabble dictionaries for this app. The goal is to present reasonably current files that can be freely distributed. There is a tension between being up to date and licensing issues. But since this app is just for fun, the lack of being absolutely current and official should not be a problem.
+Much thought has gone into selecting Scrabble and other dictionaries for this app. The goal is to present reasonably current files that can be freely distributed. There is a tension between being up to date and licensing issues. But since this app is just for fun, the lack of being absolutely current and official should not be a problem.
 
 ## NASPA
 
@@ -20,7 +20,7 @@ The OSPD (Official Scrabble Players Dictionary) is an older version that NASPA w
 
 ## Words
 
-*scrabble-words-java* now has a crossword function. For this I thought I would include a standard dictionary to use. I found the *words* file on my Linux box (*/usr/share/dict/words*). I removed words with apostrophes as these would not be able to be processed by the app.
+*find-words-java* now has a crossword function. For this I thought I would include a standard dictionary to use. I found the *words* file on my Linux box (*/usr/share/dict/words*). I removed words with apostrophes as these would not be able to be processed by the app.
 
 ## Roll your own 
 

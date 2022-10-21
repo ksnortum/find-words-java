@@ -12,13 +12,13 @@ import org.junit.Test;
  * @author Knute
  * @version 2.0.0
  */
-public class ScrabbleWordTest {
+public class CustomWordTest {
 	private final String testWord = "punjabi";
 	private final String testValueWord = "punjbi";
 
 	@Test
 	public void testScrabbleWord() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
+		CustomWord thisWord = new CustomWord(testWord, testValueWord, false);
 		assertEquals(testWord, thisWord.getWord());
 		assertEquals(testValueWord, thisWord.getValueWord());
 		assertEquals(17, thisWord.getValue());
@@ -26,7 +26,7 @@ public class ScrabbleWordTest {
 
 	@Test
 	public void testBingo() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, true);
+		CustomWord thisWord = new CustomWord(testWord, testValueWord, true);
 		assertEquals(testWord, thisWord.getWord());
 		assertEquals(testValueWord, thisWord.getValueWord());
 		assertEquals(67, thisWord.getValue());
@@ -34,53 +34,53 @@ public class ScrabbleWordTest {
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testScrabbleWordNull() {
-		new ScrabbleWord(null, testValueWord, false);
+		new CustomWord(null, testValueWord, false);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testScrabbleValueWordNull() {
-		new ScrabbleWord(testWord, null, false);
+		new CustomWord(testWord, null, false);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testScrabbleWordEmpty() {
-		new ScrabbleWord("", testValueWord, false);
+		new CustomWord("", testValueWord, false);
 	}
 	
 	@Test
 	public void testEqualsObject() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
-		ScrabbleWord thatWord = new ScrabbleWord(testWord, testValueWord, false);
+		CustomWord thisWord = new CustomWord(testWord, testValueWord, false);
+		CustomWord thatWord = new CustomWord(testWord, testValueWord, false);
 		assertEquals(thisWord, thatWord);
 	}
 	
 	@Test
 	public void testEqualsObjectNotIsBingo() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
-		ScrabbleWord thatWord = new ScrabbleWord(testWord, testValueWord, true);
+		CustomWord thisWord = new CustomWord(testWord, testValueWord, false);
+		CustomWord thatWord = new CustomWord(testWord, testValueWord, true);
 		assertNotEquals(thisWord, thatWord);
 	}
 	
 	@Test
 	public void testEqualsObjectNotValueWord() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
-		ScrabbleWord thatWord = new ScrabbleWord(testWord, testWord, false);
+		CustomWord thisWord = new CustomWord(testWord, testValueWord, false);
+		CustomWord thatWord = new CustomWord(testWord, testWord, false);
 		assertNotEquals(thisWord, thatWord);
 	}
 
 	@Test
 	public void testEqualsObjectNotWord() {
-		ScrabbleWord thisWord = new ScrabbleWord(testWord, testValueWord, false);
-		ScrabbleWord thatWord = new ScrabbleWord(testValueWord, testValueWord, false);
+		CustomWord thisWord = new CustomWord(testWord, testValueWord, false);
+		CustomWord thatWord = new CustomWord(testValueWord, testValueWord, false);
 		assertNotEquals(thisWord, thatWord);
 	}
 	
 	@Test
 	public void testScrabbleWordSort() {
-		ScrabbleWord word1 = new ScrabbleWord("trick", "trick", false);
-		ScrabbleWord word2 = new ScrabbleWord("pat", "pat", false);
-		ScrabbleWord word3 = new ScrabbleWord("tap", "tap", false);
-		List<ScrabbleWord> list = Arrays.asList(word2, word1, word3);
+		CustomWord word1 = new CustomWord("trick", "trick", false);
+		CustomWord word2 = new CustomWord("pat", "pat", false);
+		CustomWord word3 = new CustomWord("tap", "tap", false);
+		List<CustomWord> list = Arrays.asList(word2, word1, word3);
 		Collections.sort(list);
 		assertEquals(word1, list.get(0));
 		assertEquals(word2, list.get(1));

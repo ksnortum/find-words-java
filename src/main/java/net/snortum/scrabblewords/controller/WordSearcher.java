@@ -4,10 +4,10 @@ import javafx.event.Event;
 import javafx.event.EventTarget;
 
 import net.snortum.scrabblewords.event.ProgressEvent;
+import net.snortum.scrabblewords.model.CustomDictionary;
+import net.snortum.scrabblewords.model.CustomWord;
 import net.snortum.scrabblewords.model.DictionaryElement;
 import net.snortum.scrabblewords.model.InputData;
-import net.snortum.scrabblewords.model.ScrabbleDictionary;
-import net.snortum.scrabblewords.model.ScrabbleWord;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,13 +53,13 @@ public class WordSearcher {
 	 *
 	 * @return a sorted Set containing the words that are found
 	 */
-	public Set<ScrabbleWord> getWords() {
+	public Set<CustomWord> getWords() {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("In getWords()");
 		}
 
 		// Get valid words from dictionary
-		ScrabbleDictionary dict = new ScrabbleDictionary(data.getDictionaryName());
+		CustomDictionary dict = new CustomDictionary(data.getDictionaryName());
 		List<DictionaryElement> validWords = dict.getValidWords();
 
 		// Compile regex once for speed
@@ -70,7 +70,7 @@ public class WordSearcher {
 		String searchLetters = dataLetters + containsLetters + data.getStartsWith() + data.getEndsWith();
 		searchLetters = searchLetters.toLowerCase();
 		String wildcards = getWildcards();
-		Set<ScrabbleWord> words = new TreeSet<>();
+		Set<CustomWord> words = new TreeSet<>();
 
 		// Progress variables
 		double inc = 1.0 / validWords.size();
@@ -110,7 +110,7 @@ public class WordSearcher {
 			}
 
 			if (data.isCrossword()) {
-				words.add(new ScrabbleWord(word, "", false, element.getDefinition()));
+				words.add(new CustomWord(word, "", false, element.getDefinition()));
 				continue;
 			}
 			
@@ -136,11 +136,11 @@ public class WordSearcher {
 				i++;
 			}
 			
-			// All the letters in the dict word have been accounted for, so make a ScrabbleWord
+			// All the letters in the dict word have been accounted for, so make a CustomWord
 			if (wordCopy.isEmpty()) {
 				boolean isBingo = word.length() - containsLetters.length() - data.getStartsWith().length()
 						- data.getEndsWith().length() >= 7;
-				words.add(new ScrabbleWord(word, valueLetters.toString(), isBingo, element.getDefinition()));
+				words.add(new CustomWord(word, valueLetters.toString(), isBingo, element.getDefinition()));
 			}
 		}
 

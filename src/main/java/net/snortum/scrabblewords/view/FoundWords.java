@@ -10,7 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import net.snortum.scrabblewords.model.ScrabbleWord;
+import net.snortum.scrabblewords.model.CustomWord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,20 +29,20 @@ public class FoundWords {
 	private static final int VIEW_WIDTH_DEFINE = 600;
 	private static final int VIEW_HEIGHT = 300;
 	
-	private final Set<ScrabbleWord> words;
+	private final Set<CustomWord> words;
 	private final Stage stage;
 	private final boolean dictionaryDefinitions;
 	private final boolean isScrabble;
 	
 	/**
 	 * @param words
-	 *            a set of {@link ScrabbleWord}s
+	 *            a set of {@link CustomWord}s
 	 * @param stage
 	 *            the {@link Stage} to create a modal dialogue on
 	 * @param dictionaryDefinitions
 	 *            does the dictionary that these words are based on have definitions?
 	 */
-	public FoundWords(Set<ScrabbleWord> words, Stage stage, boolean dictionaryDefinitions, boolean isScrabble) {
+	public FoundWords(Set<CustomWord> words, Stage stage, boolean dictionaryDefinitions, boolean isScrabble) {
 		this.words = words;
 		this.stage = stage;
 		this.dictionaryDefinitions = dictionaryDefinitions;
@@ -65,22 +65,22 @@ public class FoundWords {
 		Stage dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(stage.getScene().getWindow());
-		ObservableList<ScrabbleWord> data = FXCollections.observableArrayList(words);
-		TableView<ScrabbleWord> tableView = new TableView<>(data);
+		ObservableList<CustomWord> data = FXCollections.observableArrayList(words);
+		TableView<CustomWord> tableView = new TableView<>(data);
 		tableView.setPrefSize(dictionaryDefinitions ? VIEW_WIDTH_DEFINE : VIEW_WIDTH, VIEW_HEIGHT);
 
-		TableColumn<ScrabbleWord, String> wordColumn = new TableColumn<>("Word");
+		TableColumn<CustomWord, String> wordColumn = new TableColumn<>("Word");
 		wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
 		tableView.getColumns().add(wordColumn);
 
 		if (isScrabble) {
-			TableColumn<ScrabbleWord, Integer> valueColumn = new TableColumn<>("Score");
+			TableColumn<CustomWord, Integer> valueColumn = new TableColumn<>("Score");
 			valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
 			tableView.getColumns().add(valueColumn);
 		}
 
 		if (dictionaryDefinitions) {
-			TableColumn<ScrabbleWord, String> definitionColumn = new TableColumn<>("Definition");
+			TableColumn<CustomWord, String> definitionColumn = new TableColumn<>("Definition");
 			definitionColumn.setCellValueFactory(new PropertyValueFactory<>("definition"));
 			tableView.getColumns().add(definitionColumn);
 		}

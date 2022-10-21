@@ -8,10 +8,10 @@ package net.snortum.scrabblewords;
  * @author Knute Snortum
  * @version 2.1.0
  */
-public class ScrabbleWordsMain {
+public class FindWordsMain {
 
 	public static void main(String[] args) {
-		ScrabbleWordsLauncher.main(args);
+		FindWordsLauncher.main(args);
 	}
 
 }
