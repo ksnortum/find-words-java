@@ -1,10 +1,10 @@
-# README for scrabble-words-java
+# README for find-words-java
 
-**scrabble-words-java** is a JavaFX implementation of my project [scrabble-words](https://github.com/ksnortum/scrabble-words), originally written in Perl as a command line program.  It takes the information you supply about the tiles in your hand and returns a list of possible words to play, sorted by highest score.
+**find-words-java** is a JavaFX implementation of my project [scrabble-words](https://github.com/ksnortum/scrabble-words), originally written in Perl as a command line program.  It takes the information you supply about the tiles in your hand and returns a list of possible words to play, sorted by highest score.
 
 The app now has crossword and Wordle modes where it will suggest words for those games too. 
 
-The app has now been re-rewritten in Python ([find-words-python](https://github.com/ksnortum/find-words-python)).  The intent is that the Java and Python projects will stay functionally in sync (we'll see). 
+The app has now been re-rewritten in Python ([find-words-python](https://github.com/ksnortum/find-words-python)) and for a live website [find-words-web](https://github.com/ksnortum/find-words-web).  The intent is that all projects will stay functionally in sync (we'll see). 
 
 ## Requirements
 
@@ -27,7 +27,7 @@ If you want to run with the current source files, use Maven:
 
 If you've built the project (see above) you can find this file with your system's file browser: 
 
-    /<install-directory>/target/ScrabbleWords-2.x.x.jar
+    /<install-directory>/target/FindWords-2.x.x.jar
     
 where `2.x.x` is the version number.  Try double-clicking the file.  If it doesn't execute in a few seconds, try one of these suggestions:
 
@@ -36,7 +36,7 @@ where `2.x.x` is the version number.  Try double-clicking the file.  If it doesn
 
 Or, if you have Java in your PATH, you can execute the jar file from the command line:
 
-    java -jar /<install-directory>/target/ScrabbleWords-2.x.x.jar
+    java -jar /<install-directory>/target/FindWords-2.x.x.jar
 
 ## New in version 2
 * faster processing, in general
