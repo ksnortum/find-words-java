@@ -92,6 +92,16 @@
 	field are illegal, and if you use "$", any letters in the
 	<span class="quote">Ends With</span> field are illegal.
 </p>
+<p>
+	You may also use commas to separate the letters.  Here's how it works:  If you enter
+	letters into <span class="quote">Contains Letters</span> without commas, then
+	<span class="emphasis">ScrabbleWords</span> will search for that exact pattern.  But if
+	you enter letters separated by commas, then all the letters must in the word in any
+	position.  For instance, if you enter the letters "ore" into <span class="quote">Contains Letters</span>,
+	then you get words that have those letters in the same place, for instance, "store", but not
+	"reorder".  But if you enter "o,r,e", then the word "reorder" would be found since it has
+	each one of those letters.
+</p>
 
 <h2 id="startswith">Starts With</h2>
 <p><a href=#top>Top</a></p>

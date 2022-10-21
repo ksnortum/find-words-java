@@ -104,6 +104,11 @@ public class WordSearcher {
 				continue;
 			}
 
+			// If "contains" is a list of letters and not all the letters are in the word, skip
+			if (data.getContains().contains(",") && !allLettersInWord(word)) {
+				continue;
+			}
+
 			if (data.isCrossword()) {
 				words.add(new ScrabbleWord(word, "", false, element.getDefinition()));
 				continue;
@@ -152,6 +157,10 @@ public class WordSearcher {
 		boolean isEscapeCharacter = false;
 
 		for (String letter : data.getContains().split("")) {
+			if (letter.equals(",")) {
+				continue;
+			}
+
 			if (letter.matches("[a-zA-Z]") && !isEscapeCharacter) {
 				letters.append(letter);
 			}
@@ -211,7 +220,12 @@ public class WordSearcher {
 	 */
 	private Pattern buildPattern() {
 		Pattern pattern = null;
-		String patternString = lowerCaseNonEscapedLetters(data.getContains());
+		String patternString = "";
+
+		// If string contains commas, it's not a pattern, it's a list of letters
+		if (!data.getContains().contains(",")) {
+			patternString = lowerCaseNonEscapedLetters(data.getContains());
+		}
 
 		if (!data.getStartsWith().isEmpty()) {
 			patternString = "^" + data.getStartsWith().toLowerCase() + ".*" + patternString;
@@ -277,5 +291,24 @@ public class WordSearcher {
 		}
 
 		return wildcards.toString();
+	}
+
+	/**
+	 * Return true only if all letters in the "contains" list are in word
+	 *
+	 * @param word The word to search
+	 * @return true if all letters are in word
+	 */
+	private boolean allLettersInWord(String word) {
+		boolean allLettersAreInWord = true;
+
+		for (String letter : data.getContains().split(",")) {
+			if (!word.contains(letter)) {
+				allLettersAreInWord = false;
+				break;
+			}
+		}
+
+		return allLettersAreInWord;
 	}
 }

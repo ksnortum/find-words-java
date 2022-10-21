@@ -24,14 +24,16 @@ public class Validator {
 	private static final Logger LOG = LogManager.getLogger(Validator.class);
 	static final String INVALID_REGEX = "The regex is invalid";
 	static final String TOO_FEW_LETTERS = "You must have at least one available letter";
-	static final String CONTAINS_TOO_LONG = "Contains cannot have more that 20 letters";
+	private static final int MAX_NUMBER_OF_LETTERS = 26;
+	static final String CONTAINS_TOO_LONG = "Contains cannot have more than " + MAX_NUMBER_OF_LETTERS + " letters";
 	static final String LETTERS_OR_DOTS = "Letters can only be \"a\" thru \"z\" and one or two dots";
 	static final String NO_MORE_THAN_TWO_DOTS = "Letters can have no more than two dots";
 	static final String STARTSWITH_NONLETTERS = "StartsWith must only be letters";
 	static final String ENDSWITH_NONLETTERS = "EndsWith must only be letters";
 	static final String INVALID_NUMBER = "You must enter only non-negative digits in the number of letters field";
-	static final String TOO_MANY_LETTERS = "You cannot have over 20 number of letters";
-	static final String TOO_MANY_NUM_OF_LETTERS = "The Number of Letters field can't be more then 20";
+	static final String TOO_MANY_LETTERS = "You cannot have over " + MAX_NUMBER_OF_LETTERS + " number of letters";
+	static final String TOO_MANY_NUM_OF_LETTERS = "The Number of Letters field can't be more than " +
+			MAX_NUMBER_OF_LETTERS;
 	static final String NO_ANCHOR_AND_STARTSWITH = "Can't have \"^\" anchor and letters in \"Starts With\"";
 	static final String NO_ANCHOR_AND_ENDSWITH = "Can't have \"$\" anchor and letters in \"Ends With\"";
 	private static final String LETTERS_DOT_RE = "[a-z.]*";
@@ -69,7 +71,7 @@ public class Validator {
 		if (!data.isCrossword()) {
 			if (data.getLetters().length() < 1) {
 				errors.add(TOO_FEW_LETTERS);
-			} else if (data.getLetters().length() > 20) {
+			} else if (data.getLetters().length() > MAX_NUMBER_OF_LETTERS) {
 				errors.add(TOO_MANY_LETTERS);
 			}
 		}
@@ -82,7 +84,7 @@ public class Validator {
 			errors.add(NO_MORE_THAN_TWO_DOTS);
 		}
 		
-		if (data.getContains().length() > 20) {
+		if (data.getContains().length() > MAX_NUMBER_OF_LETTERS) {
 			errors.add(CONTAINS_TOO_LONG);
 		}
 		
@@ -103,7 +105,7 @@ public class Validator {
 			if (!data.getNumOfLetters().matches(DIGITS_OR_EMPTY_RE)) {
 				errors.add(INVALID_NUMBER);
 			} else {
-				if (Integer.parseInt(data.getNumOfLetters()) > 20) {
+				if (Integer.parseInt(data.getNumOfLetters()) > MAX_NUMBER_OF_LETTERS) {
 					errors.add(TOO_MANY_NUM_OF_LETTERS);
 				}
 			}
