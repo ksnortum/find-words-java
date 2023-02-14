@@ -89,7 +89,7 @@ public class ValidatorTest {
 
 	@Test
 	public void testValidatorTooManyLettersError() {
-		InputData data = new InputData.Builder( "abcdefghijklmnopqrstuvwxyz" ).build();
+		InputData data = new InputData.Builder( "abcdefghijklmnopqrstuvwxyza" ).build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
 		assertEquals(1, message.size());
@@ -118,7 +118,7 @@ public class ValidatorTest {
 	@Test
 	public void testValidatorContainsError() {
 		InputData data = new InputData.Builder( "abc" )
-				.contains( "abcdefghijklmnopqrstuvwxyz" )
+				.contains( "abcdefghijklmnopqrstuvwxyza" )
 				.build();
 		Validator validator = new Validator( data );
 		List<String> message = validator.validate();
@@ -174,7 +174,7 @@ public class ValidatorTest {
 	public void testNumOfLettersLessThanTwenty() {
 		InputData data = new InputData.Builder("abc")
 				.gameType(TypeOfGame.CROSSWORD)
-				.numOfLetters("21")
+				.numOfLetters("27")
 				.build();
 		Validator validator = new Validator(data);
 		List<String> message = validator.validate();
