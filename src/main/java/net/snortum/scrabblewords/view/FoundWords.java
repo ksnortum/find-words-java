@@ -1,13 +1,18 @@
 package net.snortum.scrabblewords.view;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.snortum.scrabblewords.model.CustomWord;
@@ -85,7 +90,16 @@ public class FoundWords {
 			tableView.getColumns().add(definitionColumn);
 		}
 
-		Scene dialogScene = new Scene(tableView);
+		VBox root = new VBox(10);
+		root.setPadding(new Insets(10));
+
+		ButtonBar buttonBar = new ButtonBar();
+		Button exit = new Button("OK");
+		exit.setOnAction(event -> Platform.exit());
+		buttonBar.getButtons().add(exit);
+
+		root.getChildren().addAll(tableView, buttonBar);
+		Scene dialogScene = new Scene(root);
 		dialogScene.setOnKeyPressed((KeyEvent keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ESCAPE) {
 				dialog.close();
