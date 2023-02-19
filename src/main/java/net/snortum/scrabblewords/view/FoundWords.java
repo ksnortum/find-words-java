@@ -1,6 +1,5 @@
 package net.snortum.scrabblewords.view;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -95,7 +94,7 @@ public class FoundWords {
 
 		ButtonBar buttonBar = new ButtonBar();
 		Button exit = new Button("OK");
-		exit.setOnAction(event -> Platform.exit());
+		exit.setOnAction(event -> dialog.close());
 		buttonBar.getButtons().add(exit);
 
 		root.getChildren().addAll(tableView, buttonBar);
