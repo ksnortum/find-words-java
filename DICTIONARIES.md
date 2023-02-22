@@ -20,7 +20,7 @@ The OSPD (Official Scrabble Players Dictionary) is an older version that NASPA w
 
 ## Words
 
-*find-words-java* now has a crossword function. For this I thought I would include a standard dictionary to use. I found the *words* file on my Linux box (*/usr/share/dict/words*). I removed words with apostrophes as these would not be able to be processed by the app.
+*find-words-java* now has a crossword function. For this I thought I would include a standard dictionary to use. I found the *words* file on my Linux box (*/usr/share/dict/words*). I removed words with apostrophes as these would not be able to be processed by the app. I also removed words that differed only by a capital letter, so for instance, if the words "Ant" and "ant" were both in the dictionary, only "ant" would remain. I have written a Python script that will perform these tasks for you, called `clean_words.py`.
 
 ## Roll your own 
 
