@@ -44,3 +44,9 @@ Or, if you have Java in your PATH, you can execute the jar file from the command
 * ability to have two wildcards in a hand	
 * crossword and Wordle modes
 * clear buttons on fields
+
+## Other Find-Words Projects
+* https://github.com/ksnortum/find-words-web
+* https://github.com/ksnortum/find-words-java (this site)
+* https://github.com/ksnortum/find-words-python
+* https://github.com/ksnortum/wordle-kotlin (A Wordle game)
